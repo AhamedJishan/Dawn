@@ -1,8 +1,14 @@
 #include <iostream>
 
+#include "Core/Application.h"
+
 int main(int argc, char* argv)
 {
-	std::cout << "Hello World\n";
+	Dawn::Application application;
+	// TODO: Push layers to app
+	application.Run();
+
+
 	std::cin.get();
 
 	return 0;
