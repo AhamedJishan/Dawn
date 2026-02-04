@@ -1,6 +1,6 @@
--- APPLICATION
+-- GAME
 
-project "Application"
+project "Game"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"

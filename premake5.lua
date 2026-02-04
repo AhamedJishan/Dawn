@@ -4,9 +4,9 @@ workspace "Dawn"
     configurations {"Debug", "Release"}
     architecture "x86_64"
     
-    startproject "Application"
+    startproject "Game"
 
     include "Engine"
-    include "Application"
+    include "Game"
 
     -- Engine for now, will be Application later
