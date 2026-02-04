@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Utils/Log.h"
 
 namespace Dawn
 {
@@ -16,6 +17,6 @@ namespace Dawn
 	{
 		// TODO: Actual lifecyle
 
-		printf("Application running\n");
+		LOG_INFO("Application Running");
 	}
 }
