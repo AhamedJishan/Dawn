@@ -5,9 +5,12 @@
 int main(int argc, char* argv)
 {
 	Dawn::Application application;
-	// TODO: Push layers to app
-	application.Run();
-
+	
+	if (application.Init(1280, 720))
+	{
+		// TODO: Push layers to app
+		application.Run();
+	}
 
 	std::cin.get();
 

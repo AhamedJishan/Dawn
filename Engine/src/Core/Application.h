@@ -13,13 +13,20 @@ namespace Dawn
 		Application();
 		~Application();
 
+		bool Init(int screenWidth, int screenHeight);
+
 		void Run();
 		
 		// TODO: Add functionality for Layers
 
+		class Window* GetWindow() { return mWindow; }
+
 	private:
 
-
 	private:
+		class Window* mWindow;
+		class Renderer* mRenderer;
+
+		bool mIsRunning;
 	};
 }

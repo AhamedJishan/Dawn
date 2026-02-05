@@ -18,11 +18,15 @@ project "Engine"
         "vendor/lib"
     }
 
-    --links {}  TBDL
+    links {
+        "glfw3",
+        "opengl32"
+    }
 
     files {
         "src/**.h",
-        "src/**.cpp"
+        "src/**.cpp",
+        "src/**.c"
     }
 
     filter "configurations:Debug"
