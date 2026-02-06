@@ -19,6 +19,9 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 ### Rendering
 - [ ] Texture
 - [ ] Model/Mesh
+- [ ] Shader
 - [ ] MeshRenderer
 - [ ] SpriteRenderer
 - [ ] SkinnedMeshRenderer
+
+### GUI

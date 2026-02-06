@@ -3,7 +3,7 @@
 #include <functional>
 
 // Forward declaration
-typedef struct GLFWwindow GLFWwindow;
+struct GLFWwindow;
 
 namespace Dawn
 {
@@ -24,6 +24,8 @@ namespace Dawn
 
 		void SetFrameBufferSizeCallback(FrameBufferSizeCallbackFn callback) { mFrameBufferSizeCallback = callback; }
 		void GetFrameBufferSize(int& width, int& height) const;
+
+		double GetTime();
 
 	private:
 		static void OnFrameBufferResize(GLFWwindow* glfwWindow, int width, int height);

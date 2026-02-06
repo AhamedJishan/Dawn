@@ -22,11 +22,14 @@ namespace Dawn
 		class Window* GetWindow() { return mWindow; }
 
 	private:
+		void Update();
+		void GenerateOutput();
 
 	private:
 		class Window* mWindow;
 		class Renderer* mRenderer;
 
 		bool mIsRunning;
+		double mTime;
 	};
 }

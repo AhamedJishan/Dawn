@@ -3,12 +3,14 @@
 
 #include "Platform/Window.h"
 #include "Rendering/Renderer.h"
+#include "Platform/Input.h"
 
 namespace Dawn
 {
 	// TODO: Application takes in init parameters like screen size
 	Application::Application()
 		:mIsRunning(true)
+		,mTime(0.0)
 	{
 	}
 
@@ -39,14 +41,34 @@ namespace Dawn
 		// TODO: Actual lifecyle
 		while (mIsRunning)
 		{
-			if (mWindow->ShouldClose())
-				mIsRunning = false;
+			mWindow->PollEvents();
+			Input::Update();
 
-			LOG_INFO("Application Running");
+			Update();
+			GenerateOutput();
 
-			// TODOD: Move this call to GenerateOutput
-			mRenderer->Draw();
+			mWindow->SwapBuffers();
 		}
 
+	}
+
+	void Application::Update()
+	{
+		if (mWindow->ShouldClose())
+			mIsRunning = false;
+
+		double currentTime = mWindow->GetTime();
+		double deltaTime = currentTime - mTime;
+		mTime = currentTime;
+		// Makes sure time dependent stuff doesn't go haywire with too big of a deltaTime
+		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
+
+		if (Input::GetKeyDown(Key::Space))
+			LOG_INFO("Application Running: %f", 1/deltaTime);
+	}
+
+	void Application::GenerateOutput()
+	{
+		mRenderer->Draw();
 	}
 }
