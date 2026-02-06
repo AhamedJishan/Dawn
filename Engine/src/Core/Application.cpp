@@ -25,17 +25,11 @@ namespace Dawn
 	{
 		mWindow = new Window();
 		if (!mWindow->Init(screenWidth, screenHeight))
-		{
-			delete mWindow;
 			return false;
-		}
 
 		mRenderer = new Renderer(this);
 		if (!mRenderer->Init())
-		{
-			delete mRenderer;
 			return false;
-		}
 
 		return true;
 	}

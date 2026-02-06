@@ -11,8 +11,5 @@ int main(int argc, char* argv)
 		// TODO: Push layers to app
 		application.Run();
 	}
-
-	std::cin.get();
-
 	return 0;
 }
