@@ -26,6 +26,7 @@ namespace Dawn
 		void GetFrameBufferSize(int& width, int& height) const;
 
 		double GetTime();
+		void* GetNativeWindow() { return mWindow; }
 
 	private:
 		static void OnFrameBufferResize(GLFWwindow* glfwWindow, int width, int height);

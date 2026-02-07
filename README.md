@@ -5,7 +5,6 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ### Applicaiton
 - Make Application globally accesible (soft singleton)
-- Reword app startup
 
 ### InputSystem
 - Keyboard

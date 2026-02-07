@@ -2,12 +2,11 @@
 
 #include <glad/glad.h>
 #include "Core/Application.h"
-#include "Platform/Window.h"
+#include "Core/Window.h"
 
 namespace Dawn
 {
-	Renderer::Renderer(class Application* application)
-		:mApplication(application)
+	Renderer::Renderer()
 	{
 	}
 
@@ -18,13 +17,13 @@ namespace Dawn
 	bool Renderer::Init()
 	{
 		// Assumes a valid Opengl context is already initialised
-		// This was done in Window::Init()
+		// which was done in Window::Init()
 
 		int x, y;
-		mApplication->GetWindow()->GetFrameBufferSize(x, y);
+		Application::Get()->GetWindow()->GetFrameBufferSize(x, y);
 		glViewport(0, 0, x, y);
 
-		mApplication->GetWindow()->SetFrameBufferSizeCallback([this](int width, int height) { glViewport(0, 0, width, height);});
+		Application::Get()->GetWindow()->SetFrameBufferSizeCallback([this](int width, int height) { glViewport(0, 0, width, height);});
 
 		// TODO: Set Opengl state, like depth testing, etc.
 

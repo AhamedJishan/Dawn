@@ -1,9 +1,10 @@
 #include "Application.h"
 #include "Utils/Log.h"
 
-#include "Platform/Window.h"
+#include "Window.h"
 #include "Rendering/Renderer.h"
-#include "Platform/Input.h"
+#include "Input/InputSystem.h"
+#include "Input/Input.h"
 
 namespace Dawn
 {
@@ -30,12 +31,14 @@ namespace Dawn
 			return;
 		}
 
-		mRenderer = new Renderer(this);
+		mRenderer = new Renderer();
 		if (!mRenderer->Init())
 		{
 			mIsRunning = false;
 			return;
 		}
+
+		mInputSystem = new InputSystem();
 	}
 
 	Application::~Application()
@@ -53,7 +56,7 @@ namespace Dawn
 		while (mIsRunning)
 		{
 			mWindow->PollEvents();
-			Input::Update();
+			mInputSystem->Update();
 
 			Update();
 			GenerateOutput();
@@ -74,6 +77,7 @@ namespace Dawn
 		// Prevent large deltaTime jumps
 		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
 
+		// Input system test
 		if (Input::GetKeyDown(Key::Space))
 			LOG_INFO("Application Running: %f", 1/deltaTime);
 	}

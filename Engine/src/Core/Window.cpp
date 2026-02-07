@@ -4,7 +4,6 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-#include "Input.h"
 
 namespace Dawn
 {
@@ -14,6 +13,7 @@ namespace Dawn
 	{
 		LOG_ERROR("[GLFW] %s", description);
 	}
+
 
 	Window::Window()
 		:mScreenWidth(1280)
@@ -64,8 +64,6 @@ namespace Dawn
 		glfwSetWindowUserPointer(mWindow, this);
 		glfwSetFramebufferSizeCallback(mWindow, OnFrameBufferResize);
 
-		Input::Init(mWindow);
-
 		return true;
 	}
 
@@ -87,13 +85,17 @@ namespace Dawn
 	void Window::GetFrameBufferSize(int& width, int& height) const
 	{
 		glfwGetFramebufferSize(mWindow, &width, &height);
-		GLFW_KEY_0;
 	}
 
 	double Window::GetTime()
 	{
 		return glfwGetTime();
 	}
+
+
+	// =====================================================
+	//					CallBacks
+	// =====================================================
 
 	void Window::OnFrameBufferResize(GLFWwindow* glfwWindow, int width, int height)
 	{

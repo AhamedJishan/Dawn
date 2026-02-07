@@ -5,7 +5,7 @@ namespace Dawn
 	class Renderer
 	{
 	public:
-		Renderer(class Application* application);
+		Renderer();
 		~Renderer();
 
 		bool Init();
@@ -13,6 +13,5 @@ namespace Dawn
 		void Draw();
 
 	private:
-		class Application* mApplication;
 	};
 }

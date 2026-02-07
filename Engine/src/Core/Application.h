@@ -12,7 +12,9 @@ namespace Dawn
 
 		void Run();
 
+		static Application* Get() { return sInstance; }
 		class Window* GetWindow() { return mWindow; }
+		class InputSystem* GetInputSystem() { return mInputSystem; }
 
 	private:
 		void Update();
@@ -23,6 +25,7 @@ namespace Dawn
 
 		class Window* mWindow;
 		class Renderer* mRenderer;
+		class InputSystem* mInputSystem;
 
 		bool mIsRunning;
 		double mTime;
