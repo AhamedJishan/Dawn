@@ -7,11 +7,35 @@
 
 namespace Dawn
 {
+	Application* Application::sInstance = nullptr;
+
 	// TODO: Application takes in init parameters like screen size
-	Application::Application()
+	Application::Application(int screenWidth, int screenHeight)
 		:mIsRunning(true)
 		,mTime(0.0)
 	{
+		if (sInstance)
+		{
+			LOG_ERROR("Application already exists!");
+			mIsRunning = false;
+			return;
+		}
+
+		sInstance = this;
+
+		mWindow = new Window();
+		if (!mWindow->Init(screenWidth, screenHeight))
+		{
+			mIsRunning = false;
+			return;
+		}
+
+		mRenderer = new Renderer(this);
+		if (!mRenderer->Init())
+		{
+			mIsRunning = false;
+			return;
+		}
 	}
 
 	Application::~Application()
@@ -21,19 +45,6 @@ namespace Dawn
 
 		if (mRenderer)
 			delete mRenderer;
-	}
-
-	bool Application::Init(int screenWidth, int screenHeight)
-	{
-		mWindow = new Window();
-		if (!mWindow->Init(screenWidth, screenHeight))
-			return false;
-
-		mRenderer = new Renderer(this);
-		if (!mRenderer->Init())
-			return false;
-
-		return true;
 	}
 
 	void Application::Run()
@@ -60,7 +71,7 @@ namespace Dawn
 		double currentTime = mWindow->GetTime();
 		double deltaTime = currentTime - mTime;
 		mTime = currentTime;
-		// Makes sure time dependent stuff doesn't go haywire with too big of a deltaTime
+		// Prevent large deltaTime jumps
 		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
 
 		if (Input::GetKeyDown(Key::Space))

@@ -4,20 +4,13 @@
 
 namespace Dawn
 {
-	/// <summary>
-	/// Owns the main Application lifecycle, and runs the attached layer
-	/// </summary>
 	class Application
 	{
 	public:
-		Application();
-		~Application();
-
-		bool Init(int screenWidth, int screenHeight);
+		Application(int screenWidth, int screenHeight);
+		virtual ~Application();
 
 		void Run();
-		
-		// TODO: Add functionality for Layers
 
 		class Window* GetWindow() { return mWindow; }
 
@@ -26,10 +19,15 @@ namespace Dawn
 		void GenerateOutput();
 
 	private:
+		static Application* sInstance;
+
 		class Window* mWindow;
 		class Renderer* mRenderer;
 
 		bool mIsRunning;
 		double mTime;
 	};
+
+	// To be defined by the Client;
+	Application* CreateApplication();
 }
