@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Utils/Log.h"
 
+#include <glm/vec2.hpp>
 #include "Window.h"
 #include "Rendering/Renderer.h"
 #include "Input/InputSystem.h"
@@ -79,7 +80,13 @@ namespace Dawn
 
 		// Input system test
 		if (Input::GetKeyDown(Key::Space))
-			LOG_INFO("Application Running: %f", 1/deltaTime);
+			LOG_INFO("Application Running: %f", 1 / deltaTime);
+
+		if (Input::GetMouseButton(MouseButton::Left))
+		{
+			glm::vec2 pos = Input::GetCursorPos();
+			LOG_INFO("Mouse pos : %f, %f", pos.x, pos.y);
+		}
 	}
 
 	void Application::GenerateOutput()

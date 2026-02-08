@@ -8,8 +8,8 @@ namespace Dawn
 	{
 	public:
 		bool GetKey(Key key) const;
-		bool GetKeyDown(Key key) const;
 		bool GetKeyUp(Key key) const;
+		bool GetKeyDown(Key key) const;
 
 	private:
 		friend class InputSystem;
