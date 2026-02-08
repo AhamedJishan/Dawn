@@ -1,12 +1,21 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 
 // Forward declaration
 struct GLFWwindow;
 
 namespace Dawn
 {
+	struct WindowConfig
+	{
+		int Width = 1280;
+		int Height = 720;
+		const char* Title = "Window-Name";
+		const char* IconPath = nullptr;
+	};
+
 	class Window
 	{
 	public:
@@ -15,7 +24,7 @@ namespace Dawn
 		Window();
 		~Window();
 
-		bool Init(int screenWidth, int screenHeight);
+		bool Init(WindowConfig config);
 
 		bool ShouldClose();
 
@@ -29,14 +38,14 @@ namespace Dawn
 		void* GetNativeWindow() { return mWindow; }
 
 	private:
+		void SetIcon();
 		static void OnFrameBufferResize(GLFWwindow* glfwWindow, int width, int height);
 
 	private:
-		int mScreenWidth;
-		int mScreenHeight;
-
-		GLFWwindow* mWindow;
-
+		WindowConfig mWindowConfig;
+		GLFWwindow* mWindow = nullptr;
 		FrameBufferSizeCallbackFn mFrameBufferSizeCallback;
+
+		std::unique_ptr<class Image> mIcon = nullptr;
 	};
 }

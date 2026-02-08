@@ -7,7 +7,7 @@ namespace Dawn
 	class Application
 	{
 	public:
-		Application(int screenWidth, int screenHeight);
+		Application(struct WindowConfig windowConfig);
 		virtual ~Application();
 
 		void Run();

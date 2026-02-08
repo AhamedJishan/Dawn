@@ -12,7 +12,7 @@ namespace Dawn
 	Application* Application::sInstance = nullptr;
 
 	// TODO: Application takes in init parameters like screen size
-	Application::Application(int screenWidth, int screenHeight)
+	Application::Application(WindowConfig windowConfig)
 		:mIsRunning(true)
 		,mTime(0.0)
 	{
@@ -26,7 +26,7 @@ namespace Dawn
 		sInstance = this;
 
 		mWindow = new Window();
-		if (!mWindow->Init(screenWidth, screenHeight))
+		if (!mWindow->Init(windowConfig))
 		{
 			mIsRunning = false;
 			return;

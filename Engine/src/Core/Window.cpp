@@ -5,6 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include "Rendering/Image.h"
+
 namespace Dawn
 {
 	const char* TITLE = "Dawn";
@@ -16,8 +18,6 @@ namespace Dawn
 
 
 	Window::Window()
-		:mScreenWidth(1280)
-		,mScreenHeight(720)
 	{
 	}
 
@@ -29,10 +29,9 @@ namespace Dawn
 		glfwTerminate();
 	}
 	
-	bool Window::Init(int screenWidth, int screenHeight)
+	bool Window::Init(WindowConfig config)
 	{
-		mScreenWidth = screenWidth;
-		mScreenHeight = screenHeight;
+		mWindowConfig = config;
 
 		// GLFW Init
 		glfwSetErrorCallback(GLFWErrorCallback);
@@ -47,7 +46,7 @@ namespace Dawn
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		// Window Create
-		mWindow = glfwCreateWindow(mScreenWidth, mScreenHeight, TITLE, NULL, NULL);
+		mWindow = glfwCreateWindow(mWindowConfig.Width, mWindowConfig.Height, mWindowConfig.Title, NULL, NULL);
 		if (!mWindow)
 		{
 			LOG_ERROR("Failed to create window");
@@ -64,7 +63,24 @@ namespace Dawn
 		glfwSetWindowUserPointer(mWindow, this);
 		glfwSetFramebufferSizeCallback(mWindow, OnFrameBufferResize);
 
+		SetIcon();
+
 		return true;
+	}
+
+	void Window::SetIcon()
+	{
+		if (!mWindowConfig.IconPath)
+			return;
+
+		mIcon = std::make_unique<Image>(mWindowConfig.IconPath, 4);
+
+		GLFWimage icons[1];
+		icons[0].height = mIcon->GetHeight();
+		icons[0].width = mIcon->GetWidth();
+		icons[0].pixels = mIcon->GetData();
+
+		glfwSetWindowIcon(mWindow, 1, icons);
 	}
 
 	bool Window::ShouldClose()
@@ -92,11 +108,9 @@ namespace Dawn
 		return glfwGetTime();
 	}
 
-
 	// =====================================================
 	//					CallBacks
 	// =====================================================
-
 	void Window::OnFrameBufferResize(GLFWwindow* glfwWindow, int width, int height)
 	{
 		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(glfwWindow));
