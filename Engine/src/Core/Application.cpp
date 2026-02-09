@@ -6,6 +6,8 @@
 #include "Rendering/Renderer.h"
 #include "Input/InputSystem.h"
 #include "Input/Input.h"
+#include "LayerStack.h"
+#include "Layer.h"
 
 namespace Dawn
 {
@@ -40,35 +42,32 @@ namespace Dawn
 		}
 
 		mInputSystem = new InputSystem();
+		mLayerStack = new LayerStack();
 	}
 
 	Application::~Application()
 	{
-		if (mWindow)
-			delete mWindow;
-
-		if (mRenderer)
-			delete mRenderer;
+		if (mLayerStack)	delete mLayerStack;
+		if (mInputSystem)	delete mInputSystem;
+		if (mRenderer)		delete mRenderer;
+		if (mWindow)		delete mWindow;
+		sInstance = nullptr;
 	}
 
 	void Application::Run()
 	{
-		// TODO: Actual lifecyle
 		while (mIsRunning)
 		{
-			mWindow->PollEvents();
-			mInputSystem->Update();
-
 			Update();
 			GenerateOutput();
-
-			mWindow->SwapBuffers();
 		}
 
 	}
 
 	void Application::Update()
 	{
+		mWindow->PollEvents();
+
 		if (mWindow->ShouldClose())
 			mIsRunning = false;
 
@@ -78,19 +77,29 @@ namespace Dawn
 		// Prevent large deltaTime jumps
 		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
 
+		mInputSystem->Update();
+		mLayerStack->Update(deltaTime);
+
 		// Input system test
 		if (Input::GetKeyDown(Key::Space))
 			LOG_INFO("Application Running: %f", 1 / deltaTime);
-
-		if (Input::GetMouseButton(MouseButton::Left))
-		{
-			glm::vec2 pos = Input::GetCursorPos();
-			LOG_INFO("Mouse pos : %f, %f", pos.x, pos.y);
-		}
 	}
 
 	void Application::GenerateOutput()
 	{
 		mRenderer->Draw();
+
+		mWindow->SwapBuffers();
+	}
+
+
+	// Layer Functionality
+	void Application::PushLayer(Layer* layer)
+	{
+		mLayerStack->PushLayer(layer);
+	}
+	void Application::PopLayer()
+	{
+		mLayerStack->PopLayer();
 	}
 }

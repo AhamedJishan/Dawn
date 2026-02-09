@@ -5,6 +5,8 @@
 #include "Core/Application.h"
 #include "Core/Window.h"
 
+#include "ExampleLayer.h"
+
 namespace Dawn
 {
 	class Game : public Application
@@ -13,7 +15,8 @@ namespace Dawn
 		Game(WindowConfig windowConfig)
 			:Application(windowConfig)
 		{
-			// TODO: Push layers
+			// Push layers
+			PushLayer(new ExampleLayer());
 		}
 
 		~Game()
