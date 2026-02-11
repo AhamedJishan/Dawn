@@ -5,7 +5,7 @@
 #include "Core/Application.h"
 #include "Core/Window.h"
 
-#include "ExampleLayer.h"
+#include "ExampleGameLayer.h"
 
 namespace Dawn
 {
@@ -16,11 +16,12 @@ namespace Dawn
 			:Application(windowConfig)
 		{
 			// Push layers
-			PushLayer(new ExampleLayer());
+			PushLayer(new ExampleGameLayer());
 		}
 
 		~Game()
 		{
+			LOG_INFO("Destroying game");
 		}
 	};
 
