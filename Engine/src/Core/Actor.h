@@ -21,13 +21,11 @@ namespace Dawn
 
 		// For now, takes nothing as constructor.
 		// TODO: Take scene or layer as paramter and automatically register itself to the corresponding scene.
-		Actor();
+		Actor(class Scene* scene);
 		virtual ~Actor();
 
 		// To be called by Scene
 		void UpdateActor(float deltaTime);
-		// To be implemented by custom Actor
-		virtual void Update(float deltaTime) {}
 
 		// Component managment
 		void AddComponent(class Component* component);
@@ -47,11 +45,17 @@ namespace Dawn
 		void Rotate(float angle, const glm::vec3& axisOfRotation);
 
 	protected:
+		// To be implemented by custom Actor
+		virtual void Update(float deltaTime) {}
+
+	protected:
 		State mState = State::Active;
 		glm::vec3 mPosition = glm::vec3(0);
 		glm::vec3 mScale = glm::vec3(1);
 		glm::quat mRotation = glm::quat(1, 0, 0, 0);
 
 		std::vector<class Component*> mComponents;
+
+		class Scene* mScene = nullptr;
 	};
 }

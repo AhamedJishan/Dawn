@@ -4,20 +4,29 @@
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Component.h"
+#include "Scene.h"
 
 namespace Dawn
 {
-	Actor::Actor()
+	Actor::Actor(Scene* scene)
 	{
-		// TODO: Register itself with the scene
+		if (!scene)
+		{
+			LOG_ERROR("Invalid scene passed to the Actor");
+			return;
+		}
+
+		mScene = scene;
+		mScene->AddActor(this);
 	}
 
 	Actor::~Actor()
 	{
-		// TODO: Remove itself from the scene
+		if (mScene)
+			mScene->RemoveActor(this);
 
 		// Actor deletes Component
-		// Component destructor removes itself from Actor::mComponents
+		// ~Component() removes itself from Actor::mComponents
 		while (!mComponents.empty())
 			delete mComponents.back();
 	}

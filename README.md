@@ -2,7 +2,6 @@
 A small C++ game and custom engine built with OpenGL, focused on simplicity and completion.
 
 ## TODO
-- 11 Feb → Scene (list of actors, update loop only)
 - 12 Feb → Integrate Scene into Layers
 - 13 Feb → Rendering basics (Shader, Mesh, Texture)
 - 16 Feb → MeshRenderer component → first 3D draw
