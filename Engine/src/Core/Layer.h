@@ -5,11 +5,11 @@ namespace Dawn
 	class Layer
 	{
 	public:
-		Layer();
-		virtual ~Layer();
+		Layer() {}
+		virtual ~Layer() {}
 
-		virtual void OnAttach();
-		virtual void OnDetach();
-		virtual void OnUpdate(float deltaTime);
+		virtual void OnAttach() {}
+		virtual void OnDetach() {}
+		virtual void OnUpdate(float deltaTime) {}
 	};
 }
