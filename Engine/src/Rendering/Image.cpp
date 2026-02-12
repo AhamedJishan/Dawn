@@ -5,17 +5,24 @@
 
 namespace Dawn
 {
-	Image::Image(const char* filename, int desiredChannels)
+	Image::Image(const std::string& filePath, int desiredChannels)
 	{
-		mData = stbi_load(filename, &mWidth, &mHeight, &mNumChannels, desiredChannels);
+		mFilePath = filePath;
+
+		mData = stbi_load(mFilePath.c_str(), &mWidth, &mHeight, &mNumChannels, desiredChannels);
 
 		if (mData == nullptr)
-			LOG_ERROR("Failed to load image: %s", filename);
+			LOG_ERROR("Failed to load image: %s", filePath.c_str());
+		else
+			LOG_INFO("Loaded Image: %s", filePath.c_str());
 	}
 
 	Image::~Image()
 	{
 		if (mData)
+		{
 			stbi_image_free(mData);
+			LOG_INFO("Destroyed Image: %s", mFilePath.c_str());
+		}
 	}
 }

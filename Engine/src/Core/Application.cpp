@@ -6,6 +6,7 @@
 #include "Rendering/Renderer.h"
 #include "Input/InputSystem.h"
 #include "Input/Input.h"
+#include "AssetManager.h"
 #include "LayerStack.h"
 #include "Layer.h"
 
@@ -24,7 +25,6 @@ namespace Dawn
 			mIsRunning = false;
 			return;
 		}
-
 		sInstance = this;
 
 		mWindow = new Window();
@@ -42,15 +42,18 @@ namespace Dawn
 		}
 
 		mInputSystem = new InputSystem();
+		mAssetManager = new AssetManager();
 		mLayerStack = new LayerStack();
 	}
 
 	Application::~Application()
 	{
 		if (mLayerStack)	delete mLayerStack;
+		if (mAssetManager)	delete mAssetManager;
 		if (mInputSystem)	delete mInputSystem;
 		if (mRenderer)		delete mRenderer;
 		if (mWindow)		delete mWindow;
+
 		sInstance = nullptr;
 	}
 

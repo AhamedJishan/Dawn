@@ -11,8 +11,9 @@ namespace Dawn
 		void Run();
 
 		static Application* Get() { return sInstance; }
-		class Window* GetWindow() { return mWindow; }
-		class InputSystem* GetInputSystem() { return mInputSystem; }
+		class Window* GetWindow() const { return mWindow; }
+		class InputSystem* GetInputSystem() const { return mInputSystem; }
+		class AssetManager* GetAssetManager() const { return mAssetManager; }
 
 		// Pushes a layer and transfers ownership to the engine.
 		void PushLayer(class Layer* layer);
@@ -29,6 +30,7 @@ namespace Dawn
 		class Window* mWindow;
 		class Renderer* mRenderer;
 		class InputSystem* mInputSystem;
+		class AssetManager* mAssetManager;
 		class LayerStack* mLayerStack;
 
 		bool mIsRunning;

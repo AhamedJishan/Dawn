@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace Dawn
 {
 	/// Owns raw image data.
@@ -8,7 +10,7 @@ namespace Dawn
 	class Image
 	{
 	public:
-		Image(const char* filename, int desiredChannels = 0);
+		Image(const std::string& filePath, int desiredChannels = 0);
 		~Image();
 
 		// Delete copy and move
@@ -18,12 +20,15 @@ namespace Dawn
 		bool IsValid() const { return mData != nullptr; }
 		unsigned char* GetData() const { return mData; }
 
+		const std::string& GetFilePath() const { return mFilePath; }
+
 		int GetWidth() const { return mWidth; }
 		int GetHeight() const { return mHeight; }
 		int GetNumChannels() const { return mNumChannels; }
 
 	private:
 		unsigned char* mData = nullptr;
+		std::string mFilePath;
 
 		int mWidth = 0;
 		int mHeight = 0;
