@@ -3,6 +3,7 @@
 
 #include "Rendering/Image.h"
 #include "Rendering/Texture.h"
+#include "Rendering/Shader.h"
 
 namespace Dawn
 {
@@ -17,6 +18,11 @@ namespace Dawn
             delete it.second;
         mTextures.clear();
         LOG_INFO("Destroyed all Textures");
+
+        for (auto& it : mShaders)
+            delete it.second;
+        mShaders.clear();
+        LOG_INFO("Destroyed all Shaders");
     }
 
     Texture* AssetManager::GetTexture(const std::string& filePath)
@@ -40,5 +46,41 @@ namespace Dawn
         mTextures.emplace(filePath, texture);
 
         return texture;
+    }
+
+    Shader* AssetManager::GetShader(const std::string& shaderName)
+    {
+        auto it = mShaders.find(shaderName);
+        if (it != mShaders.end())
+            return it->second;
+
+        Shader* shader = CreateShaderByName(shaderName);
+
+        if (!shader)
+        {
+            LOG_ERROR("'%s' shader doesn't exist", shaderName.c_str());
+            return nullptr;
+        }
+            
+        mShaders[shaderName] = shader;
+        return shader;
+    }
+
+    Shader* AssetManager::CreateShaderByName(const std::string& name)
+    {
+        Shader* shader = nullptr;
+
+        if (name == "phong")
+        {
+            shader = new Shader("Assets/Shaders/phong.vert", "Assets/Shaders/phong.frag");
+        }
+
+        if (!shader || !shader->IsValid())
+        {
+            delete shader;
+            return nullptr;
+        }
+
+        return shader;
     }
 }

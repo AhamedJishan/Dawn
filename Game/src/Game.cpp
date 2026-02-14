@@ -35,7 +35,7 @@ namespace Dawn
 		window.Width = 1280;
 		window.Height = 720;
 		window.Title = "Dawn";
-		window.IconPath = "../Assets/icons/dawn_icon.png";
+		window.IconPath = "Assets/icons/dawn_icon.png";
 
 		LOG_INFO("Creating game");
 		return new Game(window);

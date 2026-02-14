@@ -8,6 +8,9 @@ project "Game"
 
     targetdir   "%{wks.location}/bin/%{cfg.buildcfg}/%{prj.name}"
     objdir      "%{wks.location}/bin-int/%{cfg.buildcfg}/%{prj.name}"
+    
+    -- Relative paths for Assets
+    debugdir "%{cfg.targetdir}"
 
     includedirs {
         "src/",
@@ -25,6 +28,10 @@ project "Game"
     files {
         "src/**.h",
         "src/**.cpp"
+    }
+
+    postbuildcommands {
+        "{COPYDIR} %{wks.location}/Assets %{cfg.targetdir}/Assets"
     }
 
     filter "configurations:Debug"

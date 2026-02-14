@@ -14,6 +14,7 @@ namespace Dawn
 		~Shader();
 
 		void Bind();
+		bool IsValid() const { return mId != 0; }
 
 		// Uniforms
 		void SetInt(const std::string& name, int value) const;

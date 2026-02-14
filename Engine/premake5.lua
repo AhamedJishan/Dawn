@@ -9,6 +9,9 @@ project "Engine"
     targetdir   "%{wks.location}/bin/%{cfg.buildcfg}/%{prj.name}"
     objdir      "%{wks.location}/bin-int/%{cfg.buildcfg}/%{prj.name}"
 
+    -- Relative paths for Assets
+    debugdir "%{cfg.targetdir}"
+
     includedirs {
         "src/",
         "vendor/include"

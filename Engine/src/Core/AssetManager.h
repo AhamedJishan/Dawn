@@ -5,15 +5,24 @@
 
 namespace Dawn
 {
+	// Forward declarations
+	class Texture;
+	class Shader;
+
 	class AssetManager
 	{
 	public:
 		AssetManager();
 		~AssetManager();
 
-		class Texture* GetTexture(const std::string& filePath);
+		Texture* GetTexture(const std::string& filePath);
+		Shader* GetShader(const std::string& shaderName);
 
 	private:
-		std::unordered_map<std::string, class Texture*> mTextures;
+		Shader* CreateShaderByName(const std::string& name);
+
+	private:
+		std::unordered_map<std::string, Texture*> mTextures;
+		std::unordered_map<std::string, Shader*> mShaders;
 	};
 }
