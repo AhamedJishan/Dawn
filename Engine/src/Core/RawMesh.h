@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 #include "Vertex.h"
 
 namespace Dawn
@@ -10,7 +11,13 @@ namespace Dawn
 	class RawMesh
 	{
 	public:
-		RawMesh(const std::string& name, std::vector<Vertex> vertices, std::vector<unsigned int> indices, int rawMaterialIndex);
+		RawMesh(const std::string& name, std::vector<Vertex> vertices, std::vector<unsigned int> indices, int rawMaterialIndex)
+			:mName(name)
+			,mRawMaterialIndex(rawMaterialIndex)
+			,mVertices(std::move(vertices))
+			,mIndices(std::move(indices))
+		{
+		}
 
 		const std::string& GetName() const { return mName; }
 		int GetRawMaterialIndex() const { return mRawMaterialIndex; }
