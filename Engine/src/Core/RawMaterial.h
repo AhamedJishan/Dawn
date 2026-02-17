@@ -11,9 +11,11 @@ namespace Dawn
 	{
 	public:
 		// Setters
+		void SetAlbedoTexturePath(const std::string& albedoTexturePath) { mAlbedoTexturePath = albedoTexturePath; }
 		void SetDiffuseTexturePath(const std::string& diffuseTexturePath) { mDiffuseTexturePath = diffuseTexturePath; }
 		void SetSpecularTexturePath(const std::string& specularTexturePath) { mSpecularTexturePath = specularTexturePath; }
 		void SetNormalTexturePath(const std::string& normalTexturePath) { mNormalTexturePath = normalTexturePath; }
+		void SetHeightTexturePath(const std::string& heightTexturePath) { mHeightTexturePath = heightTexturePath; }
 
 		void SetDiffuseColor(const glm::vec3& diffuseColor) { mDiffuseColor = diffuseColor; }
 		void SetSpecularColor(const glm::vec3& specularColor) { mSpecularColor = specularColor; }
@@ -21,9 +23,11 @@ namespace Dawn
 		void SetShininess(float shininess) { mShininess = shininess; }
 
 		// Getters
+		const std::string& GetAlbedoTexturePath() const { return mAlbedoTexturePath; }
 		const std::string& GetDiffuseTexturePath() const { return mDiffuseTexturePath; }
 		const std::string& GetSpecularTexturePath() const { return mSpecularTexturePath; }
 		const std::string& GetNormalTexturePath() const { return mNormalTexturePath; }
+		const std::string& GetHeightTexturePath() const { return mHeightTexturePath; }
 
 		const glm::vec3& GetDiffuseColor() const { return mDiffuseColor ; }
 		const glm::vec3& GetSpecularColor() const { return mSpecularColor ; }
@@ -31,9 +35,11 @@ namespace Dawn
 		float GetShininess() const { return mShininess; }
 
 	private:
+		std::string mAlbedoTexturePath;
 		std::string mDiffuseTexturePath;
 		std::string mSpecularTexturePath;
 		std::string mNormalTexturePath;
+		std::string mHeightTexturePath;
 
 		glm::vec3 mDiffuseColor = glm::vec3(1);
 		glm::vec3 mSpecularColor = glm::vec3(1);

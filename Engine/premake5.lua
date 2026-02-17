@@ -23,7 +23,8 @@ project "Engine"
 
     links {
         "glfw3",
-        "opengl32"
+        "opengl32",
+        "assimp"
     }
 
     files {

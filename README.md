@@ -14,7 +14,8 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ## 1. CPU Asset Layer (AssetManager)
 
-- RawModel
+- RawModel [done]
+  - Store path
   - vector<RawMesh>
   - vector<RawMaterial>
 

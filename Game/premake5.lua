@@ -31,7 +31,9 @@ project "Game"
     }
 
     postbuildcommands {
-        "{COPYDIR} %{wks.location}/Assets %{cfg.targetdir}/Assets"
+        "{COPYDIR} %{wks.location}/Assets %{cfg.targetdir}/Assets",
+        "{COPY} %{wks.location}/Engine/vendor/bin/assimp.dll %{cfg.targetdir}",
+        "{COPY} %{wks.location}/Engine/vendor/bin/assimp.pdb %{cfg.targetdir}"
     }
 
     filter "configurations:Debug"
