@@ -2,6 +2,14 @@
 A small C++ game and custom engine built with OpenGL, focused on simplicity and completion.
 
 ## TODO
+
+- Write minimal GLSL shader (MVP + basic diffuse)
+- Refine PhongMaterial to match shader contract
+- Implement RawMaterial → PhongMaterial conversion
+- Implement MeshRenderer::AttachModelToActor
+- Implement Camera component (view + projection)
+- Wire Renderer draw loop
+
 # Model + Material + Rendering TODO
 
 ## Architecture Rules

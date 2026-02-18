@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Material.h"
+#include "Rendering/Material.h"
 
 namespace Dawn
 {
