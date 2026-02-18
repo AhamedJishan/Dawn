@@ -20,6 +20,8 @@ namespace Dawn
 		RawModel(const std::string& filename);
 		~RawModel();
 
+		bool IsValid() const { return mIsValid; }
+
 		const std::string& GetDirectory() const { return mDirectory; }
 		const std::vector<RawMesh*>& GetRawMeshes() const { return mRawMeshes; }
 		const std::vector<RawMaterial*>& GetRawMaterials() const { return mRawMaterials; }
@@ -30,6 +32,7 @@ namespace Dawn
 		RawMaterial* GetRawMaterial(const aiMaterial* aiMat);
 
 	private:
+		bool mIsValid;
 		std::string mDirectory;
 
 		std::vector<RawMesh*> mRawMeshes;

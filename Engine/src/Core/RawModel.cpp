@@ -16,7 +16,10 @@ namespace Dawn
 	{
 		mDirectory = filename.substr(0, filename.find_last_of('/\\') + 1);
 
-		LoadRawModel(filename);
+		if (LoadRawModel(filename))
+			mIsValid = true;
+		else
+			mIsValid = false;
 	}
 
 	RawModel::~RawModel()

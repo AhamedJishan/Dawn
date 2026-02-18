@@ -5,10 +5,10 @@
 
 namespace Dawn
 {
-	Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, int materialIndex)
+	Mesh::Mesh(const std::string& name, const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
 	{
+		mName = name;
 		mIndexCount = static_cast<unsigned int>(indices.size());
-		mMaterialIndex = materialIndex;
 
 		SetupMesh(vertices, indices);
 	}
