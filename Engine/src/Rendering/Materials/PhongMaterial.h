@@ -7,6 +7,7 @@ namespace Dawn
 {
 	// Forward declaration
 	class Texture;
+	class RawMaterial;
 
 	class PhongMaterial : public Material 
 	{
@@ -14,11 +15,13 @@ namespace Dawn
 		PhongMaterial();
 		~PhongMaterial();
 
+		static PhongMaterial* CreateFromRaw(const RawMaterial* rawMaterial);
+
 		void Apply() override;
 
-		void SetDiffuse(Texture* texture) { mDiffuse = texture; }
-		void SetSpecular(Texture* texture) { mSpecular = texture; }
-		void SetNormal(Texture* texture) { mNormal = texture; }
+		void SetDiffuseMap(Texture* texture) { mDiffuseMap = texture; }
+		void SetSpecularMap(Texture* texture) { mSpecularMap = texture; }
+		void SetNormalMap(Texture* texture) { mNormalMap = texture; }
 
 		void SetDiffuseColor(const glm::vec3& color) { mDiffuseColor = color; }
 		void SetSpecularColor(const glm::vec3& color) { mSpecularColor = color; }
@@ -26,9 +29,9 @@ namespace Dawn
 		void SetShininess(float shininess) { mShininess = shininess; }
 
 	private:
-		Texture* mDiffuse = nullptr;
-		Texture* mSpecular= nullptr;
-		Texture* mNormal= nullptr;
+		Texture* mDiffuseMap = nullptr;
+		Texture* mSpecularMap = nullptr;
+		Texture* mNormalMap = nullptr;
 
 		glm::vec3 mDiffuseColor = glm::vec3(1.0f);
 		glm::vec3 mSpecularColor = glm::vec3(1.0f);
