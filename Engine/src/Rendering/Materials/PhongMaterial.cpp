@@ -17,13 +17,37 @@ namespace Dawn
 	
 	void PhongMaterial::Apply()
 	{
-		if (mAlbedo)
+		// Renderer would bind Shader
+
+		if (mDiffuse)
 		{
-			mAlbedo->Bind(0);
-			mShader->SetInt("u_Albedo", 0);
-			mShader->SetInt("u_HasAlbedo", 1);
+			mDiffuse->Bind(0);
+			mShader->SetInt("u_DiffuseTexture", 0);
+			mShader->SetBool("u_HasDiffuseMap", true);
 		}
 		else
-			mShader->SetInt("u_HasAlbedo", 0);
+			mShader->SetBool("u_HasDiffuseMap", false);
+
+		if (mSpecular)
+		{
+			mSpecular->Bind(1);
+			mShader->SetInt("u_SpecularTexture", 1);
+			mShader->SetBool("u_HasSpecularMap", true);
+		}
+		else
+			mShader->SetBool("u_HasSpecularMap", false);
+
+		if (mNormal)
+		{
+			mNormal->Bind(2);
+			mShader->SetInt("u_NormalTexture", 2);
+			mShader->SetBool("u_HasNormalMap", true);
+		}
+		else
+			mShader->SetBool("u_HasNormalMap", false);
+
+		mShader->SetVec3("u_DiffuseColor", mDiffuseColor);
+		mShader->SetVec3("u_SpecularColor", mSpecularColor);
+		mShader->SetFloat("u_Shininess", mShininess);
 	}
 }
