@@ -12,7 +12,7 @@ namespace Dawn
 	class MeshRenderer : public Component
 	{
 	public:
-		MeshRenderer(Actor* owner, Mesh* mesh, Material* material);
+		MeshRenderer(Actor* owner, Mesh* mesh, Material* material, unsigned int updateOrder = 100);
 		~MeshRenderer();
 
 		Mesh* GetMesh() const { return mMesh; }

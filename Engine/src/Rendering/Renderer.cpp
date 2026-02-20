@@ -1,8 +1,10 @@
 #include "Renderer.h"
 
+#include <algorithm>
 #include <glad/glad.h>
 #include "Core/Application.h"
 #include "Core/Window.h"
+#include "Core/Components/MeshRenderer.h"
 
 namespace Dawn
 {
@@ -36,5 +38,24 @@ namespace Dawn
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// TODO: Draw the scene
+	}
+
+	void Renderer::AddMeshRenderer(MeshRenderer* meshRenderer)
+	{
+		unsigned int updateOrder = meshRenderer->GetUpdateOrder();
+
+		auto it = mMeshRenderers.begin();
+		for (; it != mMeshRenderers.end(); it++)
+			if ((*it)->GetUpdateOrder() > updateOrder)
+				break;
+
+		mMeshRenderers.insert(it, meshRenderer);
+	}
+	
+	void Renderer::RemoveMeshRenderer(MeshRenderer* meshRenderer)
+	{
+		auto it = std::find(mMeshRenderers.begin(), mMeshRenderers.end(), meshRenderer);
+		if (it != mMeshRenderers.end())
+			mMeshRenderers.erase(it);
 	}
 }

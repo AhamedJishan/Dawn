@@ -2,6 +2,14 @@
 
 namespace Dawn
 {
+	// Forward declarations
+	class Window;
+	class Renderer;
+	class InputSystem;
+	class AssetManager;
+	class LayerStack;
+	class Layer;
+
 	class Application
 	{
 	public:
@@ -11,12 +19,13 @@ namespace Dawn
 		void Run();
 
 		static Application* Get() { return sInstance; }
-		class Window* GetWindow() const { return mWindow; }
-		class InputSystem* GetInputSystem() const { return mInputSystem; }
-		class AssetManager* GetAssetManager() const { return mAssetManager; }
+		Window* GetWindow() const { return mWindow; }
+		InputSystem* GetInputSystem() const { return mInputSystem; }
+		AssetManager* GetAssetManager() const { return mAssetManager; }
+		Renderer* GetRenderer() const { return mRenderer; }
 
 		// Pushes a layer and transfers ownership to the engine.
-		void PushLayer(class Layer* layer);
+		void PushLayer(Layer* layer);
 		// Pops and destroys the topmost layer
 		void PopLayer();
 
@@ -27,11 +36,11 @@ namespace Dawn
 	private:
 		static Application* sInstance;
 
-		class Window* mWindow;
-		class Renderer* mRenderer;
-		class InputSystem* mInputSystem;
-		class AssetManager* mAssetManager;
-		class LayerStack* mLayerStack;
+		Window* mWindow;
+		Renderer* mRenderer;
+		InputSystem* mInputSystem;
+		AssetManager* mAssetManager;
+		LayerStack* mLayerStack;
 
 		bool mIsRunning;
 		double mTime;
