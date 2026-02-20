@@ -1,10 +1,15 @@
 #include "MeshRenderer.h"
 
+#include <vector>
 #include "Core/Actor.h"
+#include "Core/Application.h"
+#include "Core/Assets.h"
+#include "Core/RawMaterial.h"
+#include "Core/RawModel.h"
+#include "Rendering/Renderer.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/Material.h"
-#include "Core/Application.h"
-#include "Rendering/Renderer.h"
+#include "Rendering/Materials/PhongMaterial.h"
 
 namespace Dawn
 {
@@ -22,5 +27,26 @@ namespace Dawn
 
 		delete mMaterial;
 		// Mesh will be deleted by AssetManager
+	}
+
+	void MeshRenderer::CreateFromModel(Actor* owner, const std::string& path)
+	{
+		RawModel* rawModel = Assets::GetRawModel(path);
+		if (!rawModel)
+			return;
+
+		const std::vector<Mesh*>& meshes = Assets::GetMeshes(path);
+		const std::vector<RawMaterial*>& rawMaterials = rawModel->GetRawMaterials();
+
+		for (Mesh* mesh : meshes)
+		{
+			int index = mesh->GetRawMaterialIndex();
+			if (index < 0 || index >= rawMaterials.size())
+				continue;
+
+			PhongMaterial* phongMat = PhongMaterial::CreateFromRaw(rawMaterials[index]);
+
+			new MeshRenderer(owner, mesh, phongMat);
+		}
 	}
 }

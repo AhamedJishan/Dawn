@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "Core/Component.h"
 
 namespace Dawn
@@ -14,6 +15,8 @@ namespace Dawn
 	public:
 		MeshRenderer(Actor* owner, Mesh* mesh, Material* material, unsigned int updateOrder = 100);
 		~MeshRenderer();
+
+		static void CreateFromModel(Actor* owner, const std::string& path);
 
 		Mesh* GetMesh() const { return mMesh; }
 

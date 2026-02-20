@@ -5,6 +5,8 @@
 #include "AssetManager.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Shader.h"
+#include "Rendering/Mesh.h"
+#include "Core/RawModel.h"
 
 namespace Dawn
 {
@@ -20,6 +22,16 @@ namespace Dawn
 		static Shader* GetShader(const std::string& shaderName)
 		{
 			return Application::Get()->GetAssetManager()->GetShader(shaderName);
+		}
+
+		static RawModel* GetRawModel(const std::string& path)
+		{
+			return Application::Get()->GetAssetManager()->GetRawModel(path);
+		}
+
+		static const std::vector<Mesh*>& GetMeshes(const std::string& path)
+		{
+			return Application::Get()->GetAssetManager()->GetMeshes(path);
 		}
 	};
 }

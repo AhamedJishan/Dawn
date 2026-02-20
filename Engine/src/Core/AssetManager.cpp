@@ -126,7 +126,8 @@ namespace Dawn
             const std::string& name = rawMeshes[i]->GetName();
             const std::vector<Vertex>& vertices = rawMeshes[i]->GetVertices();
             const std::vector<unsigned int>& indices = rawMeshes[i]->GetIndices();
-            Mesh* mesh = new Mesh(name, vertices, indices);
+            unsigned int rawMaterialIndex = rawMeshes[i]->GetRawMaterialIndex();
+            Mesh* mesh = new Mesh(name, vertices, indices, rawMaterialIndex);
 
             meshes.emplace_back(mesh);
         }
