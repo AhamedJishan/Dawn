@@ -5,6 +5,10 @@
 
 namespace Dawn
 {
+	// Forward Declarations;
+	class Actor;
+	class Camera;
+
 	class Scene
 	{
 	public:
@@ -13,14 +17,19 @@ namespace Dawn
 
 		void Update(float deltaTime);
 
-		void AddActor(class Actor* actor);
-		void RemoveActor(class Actor* actor);
+		void AddActor(Actor* actor);
+		void RemoveActor(Actor* actor);
+
+		void SetActiveCamera(Camera* camera) { mActiveCamera = camera; }
+		Camera* GetActiveCamera() const { return mActiveCamera; }
 
 	private:
 		std::string mFilePath;
 		bool mUpdatingActors = false;
 
-		std::vector<class Actor*> mActors;
-		std::vector<class Actor*> mPendingActors;
+		Camera* mActiveCamera = nullptr;
+
+		std::vector<Actor*> mActors;
+		std::vector<Actor*> mPendingActors;
 	};
 }
