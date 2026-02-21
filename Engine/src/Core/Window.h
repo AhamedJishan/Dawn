@@ -36,6 +36,8 @@ namespace Dawn
 
 		double GetTime();
 		void* GetNativeWindow() { return mWindow; }
+		int GetWidth() const { return mWindowConfig.Width; }
+		int GetHeight() const { return mWindowConfig.Height; }
 
 	private:
 		void SetIcon();
