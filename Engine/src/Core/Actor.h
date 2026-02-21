@@ -7,6 +7,10 @@
 
 namespace Dawn
 {
+	// Forward declaration
+	class Component;
+	class Scene;
+
 	// Base class for all scene objects.
 	// Owns transform state and a set of Components.
 	class Actor
@@ -19,7 +23,6 @@ namespace Dawn
 			Dead
 		};
 
-		// For now, takes nothing as constructor.
 		Actor(class Scene* scene);
 		virtual ~Actor();
 
@@ -27,8 +30,10 @@ namespace Dawn
 		void UpdateActor(float deltaTime);
 
 		// Component managment
-		void AddComponent(class Component* component);
-		void RemoveComponent(class Component* component);
+		void AddComponent(Component* component);
+		void RemoveComponent(Component* component);
+		template<typename T>
+		T* GetComponent() const;
 
 		glm::mat4 GetWorldTransform() const;
 		glm::vec3 GetUp()		const { return glm::normalize(glm::mat3_cast(mRotation) * glm::vec3(0, 1, 0)); }
@@ -56,8 +61,8 @@ namespace Dawn
 		glm::vec3 mScale = glm::vec3(1);
 		glm::quat mRotation = glm::quat(1, 0, 0, 0);
 
-		std::vector<class Component*> mComponents;
+		std::vector<Component*> mComponents;
 
-		class Scene* mScene = nullptr;
+		Scene* mScene = nullptr;
 	};
 }

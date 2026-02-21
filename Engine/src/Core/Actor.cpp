@@ -61,6 +61,18 @@ namespace Dawn
 			LOG_WARN("Tried to remove component that doesn't exist");
 	}
 
+	template<typename T>
+	inline T* Actor::GetComponent() const
+	{
+		for (Component* component : mComponents)
+		{
+			T* casted = dynamic_cast<T*>(component);
+			if (casted)
+				return casted;
+		}
+		return nullptr;
+	}
+
 	glm::mat4 Actor::GetWorldTransform() const
 	{
 		glm::mat4 worldTransform;
