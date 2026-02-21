@@ -20,7 +20,6 @@ namespace Dawn
 		};
 
 		// For now, takes nothing as constructor.
-		// TODO: Take scene or layer as paramter and automatically register itself to the corresponding scene.
 		Actor(class Scene* scene);
 		virtual ~Actor();
 
@@ -32,6 +31,9 @@ namespace Dawn
 		void RemoveComponent(class Component* component);
 
 		glm::mat4 GetWorldTransform() const;
+		glm::vec3 GetUp()		const { return glm::normalize(glm::mat3_cast(mRotation) * glm::vec3(0, 1, 0)); }
+		glm::vec3 GetRight()	const { return glm::normalize(glm::mat3_cast(mRotation) * glm::vec3(1, 0, 0)); }
+		glm::vec3 GetForward()	const { return glm::normalize(glm::mat3_cast(mRotation) * glm::vec3(0, 0, -1)); }
 
 		State GetState()		const { return mState; }
 		glm::vec3 GetScale()	const { return mScale; }
