@@ -3,6 +3,7 @@
 #include "Utils/Log.h"
 #include "Core/Actor.h"
 #include "Core/Scene.h"
+#include "Core/Components/MeshRenderer.h"
 
 namespace Dawn
 {
@@ -13,6 +14,8 @@ namespace Dawn
 			:Actor(scene)
 		{
 			LOG_WARN("ExampleActor created...");
+
+			MeshRenderer::CreateFromModel(this, "Assets/Models/cyborg/cyborg.obj");
 		}
 
 		~ExampleActor()

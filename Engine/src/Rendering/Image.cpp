@@ -9,6 +9,7 @@ namespace Dawn
 	{
 		mFilePath = filePath;
 
+		stbi_set_flip_vertically_on_load(true);
 		mData = stbi_load(mFilePath.c_str(), &mWidth, &mHeight, &mNumChannels, desiredChannels);
 
 		if (mData == nullptr)

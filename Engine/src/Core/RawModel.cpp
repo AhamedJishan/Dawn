@@ -14,7 +14,7 @@ namespace Dawn
 {
 	RawModel::RawModel(const std::string& filename)
 	{
-		mDirectory = filename.substr(0, filename.find_last_of('/\\') + 1);
+		mDirectory = filename.substr(0, filename.find_last_of("/\\") + 1);
 
 		if (LoadRawModel(filename))
 			mIsValid = true;
@@ -24,12 +24,12 @@ namespace Dawn
 
 	RawModel::~RawModel()
 	{
-		while (!mRawMeshes.empty())
-			delete mRawMeshes.back();
+		for (auto it : mRawMeshes)
+			delete it;
 		mRawMeshes.clear();
 
-		while (!mRawMaterials.empty())
-			delete mRawMaterials.back();
+		for (auto it : mRawMaterials)
+			delete it;
 		mRawMaterials.clear();
 	}
 	

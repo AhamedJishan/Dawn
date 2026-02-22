@@ -33,13 +33,23 @@ namespace Dawn
 		void AddComponent(Component* component);
 		void RemoveComponent(Component* component);
 		template<typename T>
-		T* GetComponent() const;
+		T* GetComponent() const
+		{
+			for (Component* component : mComponents)
+			{
+				T* casted = dynamic_cast<T*>(component);
+				if (casted)
+					return casted;
+			}
+			return nullptr;
+		}
 
 		glm::mat4 GetWorldTransform() const;
 		glm::vec3 GetUp()		const { return glm::normalize(glm::mat3_cast(mRotation) * glm::vec3(0, 1, 0)); }
 		glm::vec3 GetRight()	const { return glm::normalize(glm::mat3_cast(mRotation) * glm::vec3(1, 0, 0)); }
 		glm::vec3 GetForward()	const { return glm::normalize(glm::mat3_cast(mRotation) * glm::vec3(0, 0, -1)); }
 
+		Scene* GetScene()		const { return mScene; }
 		State GetState()		const { return mState; }
 		glm::vec3 GetScale()	const { return mScale; }
 		glm::vec3 GetPosition() const { return mPosition; }

@@ -133,8 +133,11 @@ namespace Dawn
 		}
 
 		int location = glGetUniformLocation(mId, name.c_str());
-		if (location == -1)
-			LOG_WARN("Uniform not found: %s", name.c_str());
+
+		// This is needed but not every frame
+		// so disabling for now
+		//if (location == -1)
+		//	LOG_WARN("Uniform not found: %s", name.c_str());
 
 		return location;
 	}

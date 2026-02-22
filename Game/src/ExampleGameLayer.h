@@ -4,7 +4,9 @@
 #include "Core/Scene.h"
 #include "Core/GameLayer.h"
 
+#include "Core/Components/Camera.h"
 #include "ExampleActor.h"
+#include "TestCameraActor.h"
 
 namespace Dawn
 {
@@ -20,7 +22,16 @@ namespace Dawn
 			Scene* scene = new Scene("Assets/Scenes/scene.scene");
 			LoadScene(scene);
 
-			ExampleActor* ea = new ExampleActor(scene);
+			ExampleActor* ea = new ExampleActor(GetScene());
+			TestCameraActor* tca = new TestCameraActor(GetScene());
+
+			tca->SetPosition(glm::vec3(0, 2, 3));
+			
+			Camera* cam = tca->GetComponent<Camera>();
+			if (cam)
+			{
+				GetScene()->SetActiveCamera(cam);
+			}
 		}
 
 		void OnDetach() override

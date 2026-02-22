@@ -1,10 +1,18 @@
 #include "Renderer.h"
+#include "Utils/Log.h"
 
 #include <algorithm>
 #include <glad/glad.h>
+#include <glm/mat4x4.hpp>
 #include "Core/Application.h"
 #include "Core/Window.h"
+#include "Core/Actor.h"
+#include "Core/Scene.h"
+#include "Core/Components/Camera.h"
 #include "Core/Components/MeshRenderer.h"
+#include "Shader.h"
+#include "Material.h"
+#include "Mesh.h"
 
 namespace Dawn
 {
@@ -28,6 +36,7 @@ namespace Dawn
 		Application::Get()->GetWindow()->SetFrameBufferSizeCallback([this](int width, int height) { glViewport(0, 0, width, height);});
 
 		// TODO: Set Opengl state, like depth testing, etc.
+		glEnable(GL_DEPTH_TEST);
 
 		return true;
 	}
@@ -35,9 +44,34 @@ namespace Dawn
 	void Renderer::Draw()
 	{
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// TODO: Draw the scene
+		for (MeshRenderer* meshRenderer : mMeshRenderers)
+		{
+			Camera* cam = meshRenderer->GetOwner()->GetScene()->GetActiveCamera();
+			if (!cam)
+			{
+				LOG_WARN("No Active Camera Exists!");
+				return;
+			}
+
+			glm::mat4 viewMatrix = cam->GetView();
+			glm::mat4 projectionMatrix = cam->GetProjection();
+			glm::mat4 modelMatrix = meshRenderer->GetOwner()->GetWorldTransform();
+
+			Material* mat = meshRenderer->GetMaterial();
+			Mesh* mesh = meshRenderer->GetMesh();
+			Shader* shader = mat->GetShader();
+
+			shader->Bind();
+			mat->Apply();
+			mesh->Bind();
+			
+			shader->SetMat4("u_Model", modelMatrix);
+			shader->SetMat4("u_ViewProjection", projectionMatrix * viewMatrix);
+			
+			glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, NULL);
+		}
 	}
 
 	void Renderer::AddMeshRenderer(MeshRenderer* meshRenderer)
