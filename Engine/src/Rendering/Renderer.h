@@ -10,7 +10,7 @@ namespace Dawn
 
 	struct LightingData
 	{
-		glm::vec3 ambientColor = glm::vec3(0.1f);
+		glm::vec3 ambientColor = glm::vec3(0.2f);
 		
 		struct DirectionalLight
 		{

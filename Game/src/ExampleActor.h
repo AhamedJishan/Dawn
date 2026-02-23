@@ -5,6 +5,7 @@
 #include "Core/Actor.h"
 #include "Core/Scene.h"
 #include "Core/Components/MeshRenderer.h"
+#include "Rendering/Materials/PhongMaterial.h"
 
 namespace Dawn
 {
@@ -17,6 +18,10 @@ namespace Dawn
 			LOG_WARN("ExampleActor created...");
 
 			MeshRenderer::CreateFromModel(this, "Assets/Models/cyborg/cyborg.obj");
+
+			PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
+			if (mat)
+				mat->SetSpecularColor(glm::vec3(0.8f));
 		}
 
 		~ExampleActor()
@@ -26,7 +31,7 @@ namespace Dawn
 
 		void Update(float deltaTime) override
 		{
-			Rotate(glm::radians(90.0f) * deltaTime, glm::vec3(0, 1, 0));
+			//Rotate(glm::radians(90.0f) * deltaTime, glm::vec3(0, 1, 0));
 		}
 	};
 }
