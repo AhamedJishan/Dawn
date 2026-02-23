@@ -1,11 +1,23 @@
 #pragma once
 
 #include <vector>
+#include <glm/vec3.hpp>
 
 namespace Dawn
 {
 	// Forward declaration
 	class MeshRenderer;
+
+	struct LightingData
+	{
+		glm::vec3 ambientColor = glm::vec3(0.1f);
+		
+		struct DirectionalLight
+		{
+			glm::vec3 direction = glm::vec3(-1);
+			glm::vec3 color = glm::vec3(1);
+		} directionalLight;
+	};
 
 	class Renderer
 	{
@@ -24,5 +36,6 @@ namespace Dawn
 
 	private:
 		std::vector<MeshRenderer*> mMeshRenderers;
+		LightingData mLightingData;
 	};
 }

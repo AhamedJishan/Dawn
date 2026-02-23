@@ -25,7 +25,7 @@ namespace Dawn
 			ExampleActor* ea = new ExampleActor(GetScene());
 			TestCameraActor* tca = new TestCameraActor(GetScene());
 
-			tca->SetPosition(glm::vec3(0, 2, 3));
+			tca->SetPosition(glm::vec3(0, 2, 2.5f));
 			
 			Camera* cam = tca->GetComponent<Camera>();
 			if (cam)

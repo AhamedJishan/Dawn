@@ -43,7 +43,7 @@ namespace Dawn
 	
 	void Renderer::Draw()
 	{
-		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for (MeshRenderer* meshRenderer : mMeshRenderers)
@@ -69,6 +69,11 @@ namespace Dawn
 			
 			shader->SetMat4("u_Model", modelMatrix);
 			shader->SetMat4("u_ViewProjection", projectionMatrix * viewMatrix);
+
+			shader->SetVec3("u_CameraPosition", cam->GetOwner()->GetPosition());
+			shader->SetVec3("u_AmbientColor", mLightingData.ambientColor);
+			shader->SetVec3("u_DirectionalLightColor", mLightingData.directionalLight.color);
+			shader->SetVec3("u_DirectionalLightDirection", mLightingData.directionalLight.direction);
 			
 			glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, NULL);
 		}

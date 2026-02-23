@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/vec3.hpp>
 #include "Utils/Log.h"
 #include "Core/Actor.h"
 #include "Core/Scene.h"
@@ -21,6 +22,11 @@ namespace Dawn
 		~ExampleActor()
 		{
 			LOG_WARN("ExampleActor destroyed!");
+		}
+
+		void Update(float deltaTime) override
+		{
+			Rotate(glm::radians(90.0f) * deltaTime, glm::vec3(0, 1, 0));
 		}
 	};
 }

@@ -3,8 +3,6 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ## TODO
 
-- verify update loops and matrix updates
-- complete phong shader
 - write minimal FPS movement
 
 ### Gameplay
