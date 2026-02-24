@@ -33,10 +33,13 @@ namespace Dawn
 			float yaw = mCamera->GetYaw();
 			SetRotation(glm::angleAxis(glm::radians(yaw), glm::vec3(0, 1, 0)));
 
-			if (Input::GetKey(Key::W)) mPosition += mSpeed * GetForward() * deltaTime;
-			if (Input::GetKey(Key::S)) mPosition -= mSpeed * GetForward() * deltaTime;
-			if (Input::GetKey(Key::A)) mPosition -= mSpeed * GetRight() * deltaTime;
-			if (Input::GetKey(Key::D)) mPosition += mSpeed * GetRight() * deltaTime;
+			float speed = mSpeed;
+			if (Input::GetKey(Key::LeftShift)) speed = 2 * mSpeed;
+
+			if (Input::GetKey(Key::W)) mPosition += speed * GetForward() * deltaTime;
+			if (Input::GetKey(Key::S)) mPosition -= speed * GetForward() * deltaTime;
+			if (Input::GetKey(Key::A)) mPosition -= speed * GetRight() * deltaTime;
+			if (Input::GetKey(Key::D)) mPosition += speed * GetRight() * deltaTime;
 		}
 
 	private:

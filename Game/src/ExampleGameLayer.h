@@ -10,6 +10,7 @@
 #include "Actors/FPSCameraActor.h"
 #include "Actors/PlayerActor.h"
 #include "Actors/GroundPlane.h"
+#include "Actors/Enemy.h"
 
 namespace Dawn
 {
@@ -27,14 +28,19 @@ namespace Dawn
 
 			Input::SetCursorLocked(true);
 
-			GroundPlane* ground = new GroundPlane(mScene);
-
+			// TEST ACTOR
 			ExampleActor* ea = new ExampleActor(GetScene());
-			ea->SetScale(glm::vec3(0.6f));
+			ea->SetPosition(glm::vec3(5, 0, -5));
 
+			// GROUND
+			GroundPlane* ground = new GroundPlane(mScene);
+			// ENEMY
+			Enemy* enemy = new Enemy(mScene);
+			enemy->SetPosition(glm::vec3(0, 0, -10));
+			ea->SetScale(glm::vec3(0.6f));
+			// PLAYER
 			FPSCameraActor* cameraActor = new FPSCameraActor(mScene);
 			PlayerActor* player = new PlayerActor(mScene, cameraActor);
-
 			player->SetPosition(glm::vec3(0, 0, 4));
 			
 			Camera* cam = cameraActor->GetComponent<Camera>();
