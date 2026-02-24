@@ -9,6 +9,7 @@
 #include "ExampleActor.h"
 #include "Actors/FPSCameraActor.h"
 #include "Actors/PlayerActor.h"
+#include "Actors/GroundPlane.h"
 
 namespace Dawn
 {
@@ -25,6 +26,8 @@ namespace Dawn
 			LoadScene(scene);
 
 			Input::SetCursorLocked(true);
+
+			GroundPlane* ground = new GroundPlane(mScene);
 
 			ExampleActor* ea = new ExampleActor(GetScene());
 			ea->SetScale(glm::vec3(0.6f));
@@ -51,7 +54,7 @@ namespace Dawn
 			mTime += deltaTime;
 			mFrames += 1;
 
-			if (mTime >= 1.0f)
+			if (mTime >= 2.0f)
 			{
 				LOG_INFO("FPS: %f", mFrames / mTime);
 				mFrames = 0;

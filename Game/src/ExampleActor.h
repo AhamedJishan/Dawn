@@ -21,17 +21,15 @@ namespace Dawn
 
 			PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
 			if (mat)
+			{
 				mat->SetSpecularColor(glm::vec3(0.8f));
+				mat->SetDiffuseColor(glm::vec3(1));
+			}
 		}
 
 		~ExampleActor()
 		{
 			LOG_WARN("ExampleActor destroyed!");
-		}
-
-		void Update(float deltaTime) override
-		{
-			//Rotate(glm::radians(90.0f) * deltaTime, glm::vec3(0, 1, 0));
 		}
 	};
 }

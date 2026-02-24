@@ -3,8 +3,6 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ## TODO
 
-- write minimal FPS movement
-
 ### Gameplay
 - Enemy spawn
 - Enemy (chase, damage)

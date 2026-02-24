@@ -38,8 +38,8 @@ namespace Dawn
 
 	private:
 		// In degrees
-		float yawSpeed = 0.15f;
-		float pitchSpeed = 0.15f;
+		float yawSpeed = 0.1f;
+		float pitchSpeed = 0.1f;
 
 		float mYaw = 0.0f;
 		float mPitch = 0.0f;
