@@ -34,14 +34,14 @@ namespace Dawn
 
 			// GROUND
 			GroundPlane* ground = new GroundPlane(mScene);
-			// ENEMY
-			Enemy* enemy = new Enemy(mScene);
-			enemy->SetPosition(glm::vec3(0, 0, -10));
-			ea->SetScale(glm::vec3(0.6f));
 			// PLAYER
 			FPSCameraActor* cameraActor = new FPSCameraActor(mScene);
 			PlayerActor* player = new PlayerActor(mScene, cameraActor);
 			player->SetPosition(glm::vec3(0, 0, 4));
+			// ENEMY
+			Enemy* enemy = new Enemy(mScene, player);
+			enemy->SetPosition(glm::vec3(0, 0, -10));
+			ea->SetScale(glm::vec3(0.6f));
 			
 			Camera* cam = cameraActor->GetComponent<Camera>();
 			if (cam)
