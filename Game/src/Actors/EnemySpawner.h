@@ -19,10 +19,10 @@ namespace Dawn
 			:Actor(scene)
 			,mPlayer(player)
 		{
-			mSpawnPositions.emplace_back(glm::vec3( 20.0f, 0.0f, -20.0f));
-			mSpawnPositions.emplace_back(glm::vec3(-20.0f, 0.0f, -20.0f));
-			mSpawnPositions.emplace_back(glm::vec3( 20.0f, 0.0f,  20.0f));
-			mSpawnPositions.emplace_back(glm::vec3(-20.0f, 0.0f,  20.0f));
+			mSpawnPositions.emplace_back(glm::vec3( 30.0f, 0.0f, -30.0f));
+			mSpawnPositions.emplace_back(glm::vec3(-30.0f, 0.0f, -30.0f));
+			mSpawnPositions.emplace_back(glm::vec3( 30.0f, 0.0f,  30.0f));
+			mSpawnPositions.emplace_back(glm::vec3(-30.0f, 0.0f, 30.0f));
 		}
 
 		void Update(float deltaTime) override
