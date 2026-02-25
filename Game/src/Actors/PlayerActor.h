@@ -45,7 +45,7 @@ namespace Dawn
 	private:
 		FPSCameraActor* mCamera = nullptr;
 
-		float mSpeed = 2.0f;
+		float mSpeed = 3.0f;
 		glm::vec3 mCameraOffset = glm::vec3(0, 2, 0);
 	};
 }

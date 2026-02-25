@@ -4,8 +4,9 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 ## TODO
 
 ### Gameplay
-- Enemy spawn
-- Enemy (chase, damage)
+- Enemy spawn [Done]
+- Enemy chase [Done]
+- Enemy damage/death 
 - shooting (simple AABB collision)
 
 ### Physics
@@ -16,7 +17,7 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - SoundEvents
 
 ### Actor
-- PlayerActor
+- PlayerActor [Done]
 
 ### Rendering
 - SpriteRenderer

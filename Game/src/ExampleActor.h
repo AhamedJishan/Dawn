@@ -22,7 +22,7 @@ namespace Dawn
 			PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
 			if (mat)
 			{
-				mat->SetSpecularColor(glm::vec3(0.8f));
+				mat->SetSpecularColor(glm::vec3(1.0f));
 				mat->SetDiffuseColor(glm::vec3(1));
 			}
 		}

@@ -4,7 +4,6 @@
 
 #include <glm/vec3.hpp>
 #include "Core/Components/MeshRenderer.h"
-#include "Rendering/Materials/PhongMaterial.h"
 
 namespace Dawn
 {
@@ -27,6 +26,8 @@ namespace Dawn
 			{
 				glm::vec3 moveDir = mChaseTarget->GetPosition() - GetPosition();
 				moveDir.y = 0;
+				if (glm::length(moveDir) < 1.5f)
+					return;
 				moveDir = glm::normalize(moveDir);
 
 				glm::vec3 newPos = GetPosition() + mSpeed * moveDir * deltaTime;
@@ -40,6 +41,6 @@ namespace Dawn
 	private:
 		Actor* mChaseTarget = nullptr;
 
-		float mSpeed = 2.5f;
+		float mSpeed = 4.0f;
 	};
 }

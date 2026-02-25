@@ -11,6 +11,7 @@
 #include "Actors/PlayerActor.h"
 #include "Actors/GroundPlane.h"
 #include "Actors/Enemy.h"
+#include "Actors/EnemySpawner.h"
 
 namespace Dawn
 {
@@ -31,6 +32,7 @@ namespace Dawn
 			// TEST ACTOR
 			ExampleActor* ea = new ExampleActor(GetScene());
 			ea->SetPosition(glm::vec3(5, 0, -5));
+			ea->SetScale(glm::vec3(0.6f));
 
 			// GROUND
 			GroundPlane* ground = new GroundPlane(mScene);
@@ -38,10 +40,8 @@ namespace Dawn
 			FPSCameraActor* cameraActor = new FPSCameraActor(mScene);
 			PlayerActor* player = new PlayerActor(mScene, cameraActor);
 			player->SetPosition(glm::vec3(0, 0, 4));
-			// ENEMY
-			Enemy* enemy = new Enemy(mScene, player);
-			enemy->SetPosition(glm::vec3(0, 0, -10));
-			ea->SetScale(glm::vec3(0.6f));
+			// ENEMY SPAWNER
+			EnemySpawner* enemySpawner = new EnemySpawner(mScene, player);
 			
 			Camera* cam = cameraActor->GetComponent<Camera>();
 			if (cam)
@@ -57,15 +57,6 @@ namespace Dawn
 
 		void OnGameUpdate(float deltaTime) override
 		{
-			mTime += deltaTime;
-			mFrames += 1;
-
-			if (mTime >= 2.0f)
-			{
-				LOG_INFO("FPS: %f", mFrames / mTime);
-				mFrames = 0;
-				mTime = 0;
-			}
 		}
 
 	private:
