@@ -6,6 +6,8 @@
 #include <glm/mat4x4.hpp>
 #include "Core/Application.h"
 #include "Core/Window.h"
+#include "Core/Assets.h"
+#include "Rendering/Texture.h"
 #include "Core/Actor.h"
 #include "Core/Scene.h"
 #include "Core/Components/Camera.h"
@@ -35,8 +37,8 @@ namespace Dawn
 
 		Application::Get()->GetWindow()->SetFrameBufferSizeCallback([this](int width, int height) { glViewport(0, 0, width, height);});
 
-		// TODO: Set Opengl state, like depth testing, etc.
-		glEnable(GL_DEPTH_TEST);
+		// Temporary==============================================
+		InitQuad();
 
 		return true;
 	}
@@ -45,6 +47,10 @@ namespace Dawn
 	{
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Set Opengl state, like depth testing, etc.
+		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
 
 		for (MeshRenderer* meshRenderer : mMeshRenderers)
 		{
@@ -77,6 +83,8 @@ namespace Dawn
 			
 			glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, NULL);
 		}
+
+		DrawQuad();
 	}
 
 	void Renderer::AddMeshRenderer(MeshRenderer* meshRenderer)
@@ -96,5 +104,67 @@ namespace Dawn
 		auto it = std::find(mMeshRenderers.begin(), mMeshRenderers.end(), meshRenderer);
 		if (it != mMeshRenderers.end())
 			mMeshRenderers.erase(it);
+	}
+
+	void Renderer::InitQuad()
+	{
+		float quadVertices[] =
+		{
+			// pos        // uv
+			-0.5f, -0.5f,  0.0f, 0.0f,
+			 0.5f, -0.5f,  1.0f, 0.0f,
+			 0.5f,  0.5f,  1.0f, 1.0f,
+			-0.5f,  0.5f,  0.0f, 1.0f
+		};
+		unsigned int quadIndices[] =
+		{
+			0, 1, 2,
+			2, 3, 0
+		};
+
+		glGenVertexArrays(1, &mQuadVAO);
+		glBindVertexArray(mQuadVAO);
+
+		glGenBuffers(1, &mQuadVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, mQuadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+
+		glGenBuffers(1, &mQuadEBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mQuadEBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadIndices), quadIndices, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(0));
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * (sizeof(float))));
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+
+	void Renderer::DrawQuad()
+	{
+		glDisable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		int x, y;
+		Application::Get()->GetWindow()->GetFrameBufferSize(x, y);
+		glm::mat4 orthoProjection = glm::ortho(0.0f, (float)x, 0.0f, (float)y);
+		glm::mat4 model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(x / 2, y / 2, 0.0f));
+		model = glm::scale(model, glm::vec3(128.0f, 128.0f, 1.0f));
+
+		Shader* shader = Assets::GetShader("ui_unlit");
+		Texture* texture = Assets::GetTexture("Assets/Textures/Crosshair.png");
+
+		shader->Bind();
+		texture->Bind(0);
+		shader->SetInt("u_texture", 0);
+		shader->SetMat4("u_Model", model);
+		shader->SetMat4("u_ViewProjection", orthoProjection);
+
+		glBindVertexArray(mQuadVAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 	}
 }

@@ -83,9 +83,8 @@ namespace Dawn
 		mInputSystem->Update();
 		mLayerStack->Update(deltaTime);
 
-		// Input system test
 		if (Input::GetKeyDown(Key::Space))
-			LOG_INFO("Application Running: %f", 1 / deltaTime);
+			LOG_INFO("FPS: %f", (1 / deltaTime));
 	}
 
 	void Application::GenerateOutput()
