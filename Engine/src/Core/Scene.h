@@ -9,6 +9,17 @@ namespace Dawn
 	class Actor;
 	class Camera;
 	class SphereCollider;
+	namespace Physics
+	{
+		struct Ray;
+		struct Sphere;
+	}
+
+	struct RaycastHit
+	{
+		Actor* actor;
+		glm::vec3 position;
+	};
 
 	class Scene
 	{
@@ -26,6 +37,9 @@ namespace Dawn
 
 		void SetActiveCamera(Camera* camera) { mActiveCamera = camera; }
 		Camera* GetActiveCamera() const { return mActiveCamera; }
+
+		// Physics Utilities
+		bool RayCast(const Physics::Ray& ray, float maxDistance, RaycastHit& outHitInfo);
 
 	private:
 		std::string mFilePath;

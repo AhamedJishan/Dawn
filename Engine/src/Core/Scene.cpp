@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include "Actor.h"
+#include "Physics/Physics.h"
+#include "Components/SphereCollider.h"
 
 namespace Dawn
 {
@@ -79,5 +81,28 @@ namespace Dawn
 		auto it = std::find(mColliders.begin(), mColliders.end(), collider);
 		if (it != mColliders.end())
 			mColliders.erase(it);
+	}
+
+	bool Scene::RayCast(const Physics::Ray& ray, float maxDistance, RaycastHit& outHitInfo)
+	{
+		float closestT = maxDistance;
+		bool hit = false;
+		outHitInfo.actor = nullptr;
+
+		for (SphereCollider* sphereCollider : mColliders)
+		{
+			Physics::Sphere sphere = sphereCollider->GetWorldSphere();
+
+			float t = 0.0f;
+			if (Physics::Intersects(ray, sphere, t) && t < closestT)
+			{
+				closestT =  t;
+				hit = true;
+				outHitInfo.actor = sphereCollider->GetOwner();
+				outHitInfo.position = ray.origin + ray.direction * t;
+			}
+		}
+
+		return hit;
 	}
 }
