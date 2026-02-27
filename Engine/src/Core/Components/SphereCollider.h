@@ -13,6 +13,7 @@ namespace Dawn
 	{
 	public:
 		SphereCollider(class Actor* owner, unsigned int updateOrder = 100);
+		~SphereCollider();
 
 		Sphere GetWorldSphere() const;
 

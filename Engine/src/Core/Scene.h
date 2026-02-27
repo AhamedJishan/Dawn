@@ -8,6 +8,7 @@ namespace Dawn
 	// Forward Declarations;
 	class Actor;
 	class Camera;
+	class SphereCollider;
 
 	class Scene
 	{
@@ -20,6 +21,9 @@ namespace Dawn
 		void AddActor(Actor* actor);
 		void RemoveActor(Actor* actor);
 
+		void AddSphereCollider(SphereCollider* collider);
+		void RemoveSphereCollider(SphereCollider* collider);
+
 		void SetActiveCamera(Camera* camera) { mActiveCamera = camera; }
 		Camera* GetActiveCamera() const { return mActiveCamera; }
 
@@ -31,5 +35,7 @@ namespace Dawn
 
 		std::vector<Actor*> mActors;
 		std::vector<Actor*> mPendingActors;
+
+		std::vector<SphereCollider*> mColliders;
 	};
 }

@@ -67,4 +67,17 @@ namespace Dawn
 			mPendingActors.erase(it);
 
 	}
+
+	void Scene::AddSphereCollider(SphereCollider* collider)
+	{
+		mColliders.emplace_back(collider);
+	}
+	// Called by SphereCollider::~SphereCollider()
+	// Removes the SphereCollider from the list.
+	void Scene::RemoveSphereCollider(SphereCollider* collider)
+	{
+		auto it = std::find(mColliders.begin(), mColliders.end(), collider);
+		if (it != mColliders.end())
+			mColliders.erase(it);
+	}
 }
