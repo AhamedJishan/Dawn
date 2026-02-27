@@ -7,7 +7,10 @@
 namespace Dawn
 {
 	// Forward declarations
-	struct Sphere;
+	namespace Physics
+	{
+		struct Sphere;
+	}
 
 	class SphereCollider : public Component
 	{
@@ -15,7 +18,7 @@ namespace Dawn
 		SphereCollider(class Actor* owner, unsigned int updateOrder = 100);
 		~SphereCollider();
 
-		Sphere GetWorldSphere() const;
+		Physics::Sphere GetWorldSphere() const;
 
 		float GetRadius() const { return mRadius; }
 		glm::vec3 GetOffset() const { return mOffset; }

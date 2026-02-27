@@ -17,9 +17,9 @@ namespace Dawn
 		mOwner->GetScene()->RemoveSphereCollider(this);
 	}
 
-	Sphere SphereCollider::GetWorldSphere() const
+	Physics::Sphere SphereCollider::GetWorldSphere() const
 	{
-		Sphere sphere;
+		Physics::Sphere sphere;
 		sphere.center = mOwner->GetPosition() + mOffset;
 		sphere.radius = mRadius;
 

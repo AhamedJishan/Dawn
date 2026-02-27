@@ -4,6 +4,7 @@
 
 #include <glm/vec3.hpp>
 #include "Core/Components/MeshRenderer.h"
+#include "Core/Components/SphereCollider.h"
 
 namespace Dawn
 {
@@ -18,6 +19,8 @@ namespace Dawn
 			,mChaseTarget(chaseTarget)
 		{
 			MeshRenderer::CreateFromModel(this, "Assets/Models/enemy/enemy.obj");
+			mCollider = new SphereCollider(this);
+
 		}
 
 		void Update(float deltaTime) override
@@ -40,6 +43,7 @@ namespace Dawn
 
 	private:
 		Actor* mChaseTarget = nullptr;
+		SphereCollider* mCollider = nullptr;
 
 		float mSpeed = 4.0f;
 	};
