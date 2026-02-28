@@ -32,6 +32,7 @@ namespace Dawn
 
 		void AddActor(Actor* actor);
 		void RemoveActor(Actor* actor);
+		bool ContainsActor(Actor* actor);
 
 		void AddSphereCollider(SphereCollider* collider);
 		void RemoveSphereCollider(SphereCollider* collider);

@@ -7,17 +7,10 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - Enemy spawn [Done]
 - Enemy chase [Done]
 - Enemy damage/death 
-- shooting (simple AABB collision)
-
-### Physics
-- AABB
 
 ### AudioSystem
 - Bank
 - SoundEvents
-
-### Actor
-- PlayerActor [Done]
 
 ### Rendering
 - SpriteRenderer

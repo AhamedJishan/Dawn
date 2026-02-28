@@ -27,6 +27,15 @@ namespace Dawn
 
 		void Update(float deltaTime) override
 		{
+			mEnemies.erase(
+				std::remove_if(mEnemies.begin(), mEnemies.end(), 
+					[this](Enemy* e)
+					{
+						return !mScene->ContainsActor(e);
+					})
+				,mEnemies.end()
+			);
+
 			mTimeSinceLastSpawn += deltaTime;
 			if (static_cast<unsigned int>(mEnemies.size()) < mMaxEnemyCount && mTimeSinceLastSpawn >= mSpawnInterval)
 			{

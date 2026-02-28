@@ -15,6 +15,7 @@ namespace Dawn
 			:Actor(scene)
 		{
 			mCollider = new SphereCollider(this);
+			mCollider->SetRadius(0.2f);
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
 		}
 

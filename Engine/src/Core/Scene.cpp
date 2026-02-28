@@ -70,6 +70,19 @@ namespace Dawn
 
 	}
 
+	bool Scene::ContainsActor(Actor* actor)
+	{
+		auto it = std::find(mActors.begin(), mActors.end(), actor);
+		if (it != mActors.end())
+			return true;
+
+		it = std::find(mPendingActors.begin(), mPendingActors.end(), actor);
+		if (it != mPendingActors.end())
+			return true;
+
+		return false;
+	}
+
 	void Scene::AddSphereCollider(SphereCollider* collider)
 	{
 		mColliders.emplace_back(collider);
