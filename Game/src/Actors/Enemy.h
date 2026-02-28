@@ -20,7 +20,13 @@ namespace Dawn
 		{
 			MeshRenderer::CreateFromModel(this, "Assets/Models/enemy/enemy.obj");
 			mCollider = new SphereCollider(this);
+			LOG_INFO("Enemy spawned");
 
+		}
+
+		~Enemy()
+		{
+			LOG_INFO("Enemy died");
 		}
 
 		void Update(float deltaTime) override

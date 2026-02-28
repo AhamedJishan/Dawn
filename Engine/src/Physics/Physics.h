@@ -20,6 +20,7 @@ namespace Dawn
 		};
 
 
+		bool Intersects(const Sphere& a, const Sphere& b);
 		bool Intersects(const Ray& ray, const Sphere& sphere, float& outT);
 	}
 }

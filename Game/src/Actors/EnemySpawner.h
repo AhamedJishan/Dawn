@@ -40,8 +40,6 @@ namespace Dawn
 					mLastSpawnIndex = 0;
 				enemy->SetPosition(mSpawnPositions[mLastSpawnIndex]);
 				mLastSpawnIndex++;
-
-				LOG_INFO("Enemy spawned");
 			}
 		}
 

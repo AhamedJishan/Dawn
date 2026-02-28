@@ -3,6 +3,8 @@
 #include "Core/Actor.h"
 
 #include "Core/Components/MeshRenderer.h"
+#include "Core/Components/SphereCollider.h"
+#include "Enemy.h"
 
 namespace Dawn
 {
@@ -12,6 +14,7 @@ namespace Dawn
 		Projectile(class Scene* scene)
 			:Actor(scene)
 		{
+			mCollider = new SphereCollider(this);
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
 		}
 
@@ -22,10 +25,20 @@ namespace Dawn
 				SetState(Actor::State::Dead);
 
 			SetPosition(GetPosition() + GetForward() * mSpeed * deltaTime);
+
+			// Check for collisions
+			Enemy* enemy = dynamic_cast<Enemy*>(mCollider->CheckCollisions());
+			if (enemy)
+			{
+				SetState(Actor::State::Dead);
+				enemy->SetState(Actor::State::Dead);
+			}
 		}
 
 	private:
 		float mLifeTime = 3.0f;
 		float mSpeed = 50.0f;
+
+		SphereCollider* mCollider = nullptr;
 	};
 }

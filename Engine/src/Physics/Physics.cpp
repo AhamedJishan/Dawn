@@ -5,6 +5,13 @@
 
 namespace Dawn::Physics
 {
+    bool Intersects(const Sphere& a, const Sphere& b)
+    {
+        float radiusSum = a.radius + b.radius;
+        float dist = glm::length(a.center - b.center);
+        return dist <= radiusSum;
+    }
+
     // Ray–Sphere Intersection
     // 
     // O = ray Origin

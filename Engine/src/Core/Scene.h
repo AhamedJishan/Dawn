@@ -40,6 +40,7 @@ namespace Dawn
 		Camera* GetActiveCamera() const { return mActiveCamera; }
 
 		// Physics Utilities
+		const std::vector<SphereCollider*>& GetColliderList() const { return mColliders; }
 		bool RayCast(const Physics::Ray& ray, float maxDistance, RaycastHit& outHitInfo);
 
 	private:

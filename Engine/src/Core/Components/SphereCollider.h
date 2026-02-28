@@ -7,6 +7,7 @@
 namespace Dawn
 {
 	// Forward declarations
+	class Actor;
 	namespace Physics
 	{
 		struct Sphere;
@@ -17,6 +18,8 @@ namespace Dawn
 	public:
 		SphereCollider(class Actor* owner, unsigned int updateOrder = 100);
 		~SphereCollider();
+
+		Actor* CheckCollisions();
 
 		Physics::Sphere GetWorldSphere() const;
 
