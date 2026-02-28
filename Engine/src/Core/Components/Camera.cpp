@@ -30,4 +30,22 @@ namespace Dawn
 
 		return glm::perspective(glm::radians(mFOV), aspect, mNear, mFar);
 	}
+
+	glm::vec3 Camera::UnProject(float screenX, float screenY, float depth)
+	{
+		float screenWidth = static_cast<float>(Application::Get()->GetWindow()->GetWidth());
+		float screenHeight = static_cast<float>(Application::Get()->GetWindow()->GetHeight());
+
+		float ndcX = (screenX / screenWidth) * 2.0f - 1.0f;
+		float ndcY = 1.0f - (screenY / screenHeight) * 2.0f;
+		float ndcZ = depth * 2.0f - 1.0f;
+		glm::vec4 clipPos(ndcX, ndcY, ndcZ, 1.0f);
+
+		glm::mat4 invViewProjection = glm::inverse(GetProjection() * GetView());
+
+		glm::vec4 worldPos = invViewProjection * clipPos;
+		worldPos /= worldPos.w;
+
+		return glm::vec3(worldPos);
+	}
 }

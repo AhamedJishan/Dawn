@@ -15,6 +15,8 @@ namespace Dawn
 
 		glm::mat4 GetView() const;
 		glm::mat4 GetProjection() const;
+
+		glm::vec3 UnProject(float screenX, float screenY, float depth);
 		
 		// FOV in degrees
 		void SetFOV(float value) { mFOV = value; }
@@ -23,8 +25,8 @@ namespace Dawn
 
 		// FOV in degrees
 		float GetFOV() const { return mFOV; }
-		float GetNearPlane() const { return mNear; }
-		float GetFarPlane() const { return mFar; }
+		float GetNear() const { return mNear; }
+		float GetFar() const { return mFar; }
 
 	protected:
 		// in degrees
