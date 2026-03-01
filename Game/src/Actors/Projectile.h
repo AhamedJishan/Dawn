@@ -37,8 +37,8 @@ namespace Dawn
 		}
 
 	private:
-		float mLifeTime = 3.0f;
-		float mSpeed = 50.0f;
+		float mLifeTime = 1.0f;
+		float mSpeed = 100.0f;
 
 		SphereCollider* mCollider = nullptr;
 	};

@@ -1,6 +1,7 @@
 #include "Gun.h"
 #include "Utils/Log.h"
 
+#include <glm/gtc/constants.hpp>
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Scene.h"
@@ -25,6 +26,19 @@ namespace Dawn
 		{
 			Fire();
 			mTimeSinceLastFire = 0.0f;
+
+			mRecoilTimer = mRecoilDuration;
+		}
+
+		// No need to store base position.
+		// PlayerActor resets the gun transform every frame.
+		// Recoil applies a temporary offset on top of that.
+		if (mRecoilTimer > 0.0f)
+		{
+			float t = 1 - mRecoilTimer / mRecoilDuration;
+			float recoilOffset = mRecoilAmount * glm::sin(t * glm::pi<float>());
+			SetPosition(GetPosition() - GetForward() * recoilOffset);
+			mRecoilTimer -= deltaTime;
 		}
 	}
 

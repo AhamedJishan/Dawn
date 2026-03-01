@@ -17,7 +17,11 @@ namespace Dawn
 		void Fire();
 
 	private:
-		const float mFireCooldown = 0.25f;
+		const float mFireCooldown = 0.1f;
 		float mTimeSinceLastFire = 0.0f;
+
+		const float mRecoilDuration = 0.2f;
+		float mRecoilTimer = 0.0f;
+		float mRecoilAmount = 0.03f;
 	};
 }

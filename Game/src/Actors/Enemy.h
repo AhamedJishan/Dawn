@@ -59,6 +59,6 @@ namespace Dawn
 		SphereCollider* mCollider = nullptr;
 
 		float mSpeed = 4.0f;
-		float mHealth = 3.0f;
+		int mHealth = 1;
 	};
 }
