@@ -153,10 +153,10 @@ namespace Dawn
 		glm::mat4 orthoProjection = glm::ortho(0.0f, (float)x, 0.0f, (float)y);
 		glm::mat4 model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(x / 2, y / 2, 0.0f));
-		model = glm::scale(model, glm::vec3(128.0f, 128.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 1.0f));
 
 		Shader* shader = Assets::GetShader("ui_unlit");
-		Texture* texture = Assets::GetTexture("Assets/Textures/Crosshair.png");
+		Texture* texture = Assets::GetTexture("Assets/Textures/dot.png");
 
 		shader->Bind();
 		texture->Bind(0);

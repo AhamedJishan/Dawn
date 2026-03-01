@@ -32,7 +32,7 @@ namespace Dawn
 			if (enemy)
 			{
 				SetState(Actor::State::Dead);
-				enemy->SetState(Actor::State::Dead);
+				enemy->TakeDamage();
 			}
 		}
 

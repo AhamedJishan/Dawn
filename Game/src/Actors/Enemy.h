@@ -47,10 +47,18 @@ namespace Dawn
 			}
 		}
 
+		void TakeDamage()
+		{
+			mHealth--;
+			if (mHealth <= 0.0f)
+				SetState(Actor::State::Dead);
+		}
+
 	private:
 		Actor* mChaseTarget = nullptr;
 		SphereCollider* mCollider = nullptr;
 
 		float mSpeed = 4.0f;
+		float mHealth = 3.0f;
 	};
 }
