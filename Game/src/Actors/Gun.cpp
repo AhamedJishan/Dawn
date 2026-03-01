@@ -20,11 +20,15 @@ namespace Dawn
 
 	void Gun::Update(float deltaTime)
 	{
-		if (Input::GetMouseButtonDown(MouseButton::Left))
-			Shoot();
+		mTimeSinceLastFire += deltaTime;
+		if (mTimeSinceLastFire >= mFireCooldown && Input::GetMouseButtonDown(MouseButton::Left))
+		{
+			Fire();
+			mTimeSinceLastFire = 0.0f;
+		}
 	}
 
-	void Gun::Shoot()
+	void Gun::Fire()
 	{
 		Camera* camera = mScene->GetActiveCamera();
 		if (!camera)

@@ -14,8 +14,10 @@ namespace Dawn
 
 		void Update(float deltaTime) override;
 
-		void Shoot();
+		void Fire();
 
 	private:
+		const float mFireCooldown = 0.25f;
+		float mTimeSinceLastFire = 0.0f;
 	};
 }
