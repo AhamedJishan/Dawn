@@ -45,6 +45,14 @@ namespace Dawn
 
 				SetRotation(glm::quatLookAt(moveDir, GetUp()));
 			}
+
+			if (mHitImpactTimer > 0.0f)
+			{
+				mHitImpactTimer -= deltaTime;
+				float t = 1 - mHitImpactTimer / mHitImpactDuration;
+				float scaleOffset = mScalePunchAmount * glm::sin(t * glm::pi<float>());
+				SetScale(glm::vec3(1.0f + scaleOffset));
+			}
 		}
 
 		void TakeDamage()
@@ -52,6 +60,8 @@ namespace Dawn
 			mHealth--;
 			if (mHealth <= 0.0f)
 				SetState(Actor::State::Dead);
+
+			mHitImpactTimer = mHitImpactDuration;
 		}
 
 	private:
@@ -59,6 +69,10 @@ namespace Dawn
 		SphereCollider* mCollider = nullptr;
 
 		float mSpeed = 4.0f;
-		int mHealth = 1;
+		int mHealth = 3;
+
+		const float mScalePunchAmount = 0.2f;
+		const float mHitImpactDuration = 0.1f;
+		float mHitImpactTimer = 0.0f;
 	};
 }
