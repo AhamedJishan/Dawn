@@ -37,11 +37,21 @@ namespace Dawn
 		{
 			for (Component* component : mComponents)
 			{
-				T* casted = dynamic_cast<T*>(component);
-				if (casted)
+				if (T* casted = dynamic_cast<T*>(component))
 					return casted;
 			}
 			return nullptr;
+		}
+		template<typename T>
+		std::vector<T*> GetComponents() const
+		{
+			std::vector<T*> resultList;
+			for (Component* component : mComponents)
+			{
+				if (T* casted = dynamic_cast<T*>(component))
+					resultList.emplace_back(casted);
+			}
+			return resultList;
 		}
 
 		glm::mat4 GetWorldTransform() const;
