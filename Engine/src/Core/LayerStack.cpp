@@ -40,4 +40,10 @@ namespace Dawn
 		for (Layer* layer : mLayers)
 			layer->OnUpdate(deltaTime);
 	}
+
+	void LayerStack::ImGuiRender()
+	{
+		for (Layer* layer : mLayers)
+			layer->OnImGuiRender();
+	}
 }

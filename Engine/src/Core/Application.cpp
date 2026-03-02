@@ -95,7 +95,7 @@ namespace Dawn
 		mRenderer->Draw();
 
 		mImGuiSystem->BeginFrame();
-		// TODO: call mLayerStack->OnImGuiRender()
+		mLayerStack->ImGuiRender();
 		mImGuiSystem->EndFrame();
 
 		mWindow->SwapBuffers();

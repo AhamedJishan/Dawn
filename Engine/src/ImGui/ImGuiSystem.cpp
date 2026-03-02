@@ -3,7 +3,6 @@
 #include <Vendor/imgui/imgui.h>
 #include <Vendor/imgui/imgui_impl_glfw.h>
 #include <Vendor/imgui/imgui_impl_opengl3.h>
-// glfw header just for glfwGetPrimaryMonitor()
 #include <GLFW/glfw3.h>
 #include <Core/Application.h>
 #include <Core/Window.h>
@@ -24,11 +23,10 @@ namespace Dawn
 
 		ImGui::StyleColorsDark();
 
-		/* I'll check what difference it makes, then remove if unneeded
 		float main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor());
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.ScaleAllSizes(main_scale);
-		style.FontScaleDpi = main_scale;*/
+		style.FontScaleDpi = main_scale;
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplGlfw_InitForOpenGL(window, true);

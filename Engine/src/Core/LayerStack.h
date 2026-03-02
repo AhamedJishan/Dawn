@@ -14,6 +14,7 @@ namespace Dawn
 		void PopLayer();
 
 		void Update(float deltaTime);
+		void ImGuiRender();
 
 	private:
 		std::vector<class Layer*> mLayers;
