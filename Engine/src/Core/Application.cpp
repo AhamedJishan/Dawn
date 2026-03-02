@@ -4,6 +4,7 @@
 #include <glm/vec2.hpp>
 #include "Window.h"
 #include "Rendering/Renderer.h"
+#include "ImGui/ImGuiSystem.h"
 #include "Input/InputSystem.h"
 #include "Input/Input.h"
 #include "AssetManager.h"
@@ -42,6 +43,7 @@ namespace Dawn
 		}
 
 		mInputSystem = new InputSystem();
+		mImGuiSystem = new ImGuiSystem();
 		mAssetManager = new AssetManager();
 		mLayerStack = new LayerStack();
 	}
@@ -51,6 +53,7 @@ namespace Dawn
 		if (mLayerStack)	delete mLayerStack;
 		if (mAssetManager)	delete mAssetManager;
 		if (mInputSystem)	delete mInputSystem;
+		if (mImGuiSystem)	delete mImGuiSystem;
 		if (mRenderer)		delete mRenderer;
 		if (mWindow)		delete mWindow;
 
@@ -90,6 +93,10 @@ namespace Dawn
 	void Application::GenerateOutput()
 	{
 		mRenderer->Draw();
+
+		mImGuiSystem->BeginFrame();
+		// TODO: call mLayerStack->OnImGuiRender()
+		mImGuiSystem->EndFrame();
 
 		mWindow->SwapBuffers();
 	}

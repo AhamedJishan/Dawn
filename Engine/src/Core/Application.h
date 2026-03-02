@@ -6,6 +6,7 @@ namespace Dawn
 	class Window;
 	class Renderer;
 	class InputSystem;
+	class ImGuiSystem;
 	class AssetManager;
 	class LayerStack;
 	class Layer;
@@ -39,6 +40,7 @@ namespace Dawn
 		Window* mWindow;
 		Renderer* mRenderer;
 		InputSystem* mInputSystem;
+		ImGuiSystem* mImGuiSystem;
 		AssetManager* mAssetManager;
 		LayerStack* mLayerStack;
 
