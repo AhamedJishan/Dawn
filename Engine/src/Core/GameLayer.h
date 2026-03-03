@@ -7,10 +7,18 @@ namespace Dawn
 	class GameLayer : public Layer
 	{
 	public:
+		enum class State
+		{
+			Gameplay,
+			Paused
+			// TBDL: Quit
+		};
+
 		GameLayer();
 		virtual ~GameLayer();
 
 		// To be implemented by derived class
+		// Runs even when the State is Paused
 		virtual void OnGameUpdate(float deltaTime) {}
 
 		void OnUpdate(float deltaTime) override;
@@ -23,5 +31,7 @@ namespace Dawn
 
 	protected:
 		class Scene* mScene = nullptr;
+
+		State mState;
 	};
 }

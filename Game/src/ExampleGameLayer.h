@@ -10,7 +10,6 @@
 #include "Actors/FPSCameraActor.h"
 #include "Actors/PlayerActor.h"
 #include "Actors/GroundPlane.h"
-#include "Actors/Enemy.h"
 #include "Actors/EnemySpawner.h"
 
 namespace Dawn
@@ -57,6 +56,22 @@ namespace Dawn
 
 		void OnGameUpdate(float deltaTime) override
 		{
+			if (Input::GetKeyDown(Key::Escape))
+			{
+				if (mState == State::Gameplay)
+				{
+					// Pause the game
+					mState = State::Paused;
+					Input::SetCursorLocked(false);
+
+				}
+				else if (mState == State::Paused)
+				{
+					// Resume the game
+					mState = State::Gameplay;
+					Input::SetCursorLocked(true);
+				}
+			}
 		}
 
 	private:

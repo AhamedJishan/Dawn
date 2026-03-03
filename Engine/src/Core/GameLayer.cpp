@@ -5,6 +5,7 @@
 namespace Dawn
 {
 	GameLayer::GameLayer()
+		:mState(State::Gameplay)
 	{
 	}
 	GameLayer::~GameLayer()
@@ -14,7 +15,7 @@ namespace Dawn
 
 	void GameLayer::OnUpdate(float deltaTime)
 	{
-		if (mScene)
+		if (mScene && mState == State::Gameplay)
 			mScene->Update(deltaTime);
 
 		OnGameUpdate(deltaTime);
