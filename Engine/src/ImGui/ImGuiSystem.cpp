@@ -1,9 +1,9 @@
 #include "ImGuiSystem.h"
 
+#include <GLFW/glfw3.h>
 #include <Vendor/imgui/imgui.h>
 #include <Vendor/imgui/imgui_impl_glfw.h>
 #include <Vendor/imgui/imgui_impl_opengl3.h>
-#include <GLFW/glfw3.h>
 #include <Core/Application.h>
 #include <Core/Window.h>
 
@@ -45,8 +45,6 @@ namespace Dawn
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		// Temporary just to check
-		ImGui::ShowDemoWindow();
 	}
 	
 	void ImGuiSystem::EndFrame()

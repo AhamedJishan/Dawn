@@ -4,6 +4,8 @@
 #include "Core/Scene.h"
 #include "Core/GameLayer.h"
 
+#include <Vendor/imgui/imgui.h>
+
 #include "Input/Input.h"
 #include "Core/Components/Camera.h"
 #include "ExampleActor.h"
@@ -72,6 +74,12 @@ namespace Dawn
 					Input::SetCursorLocked(true);
 				}
 			}
+		}
+
+		void OnImGuiRender() override
+		{
+			if (mState == State::Paused)
+				ImGui::ShowDemoWindow();
 		}
 
 	private:

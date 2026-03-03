@@ -14,9 +14,11 @@ project "Game"
 
     includedirs {
         "src/",
-        "../Engine/include",
         "../Engine/src",
-        "vendor/include"
+
+        "../Engine/vendor/include",
+
+        "../Engine/src/Vendor/"
     }
 
     --libdirs { }
