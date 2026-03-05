@@ -7,8 +7,7 @@
 
 namespace Dawn
 {
-	Scene::Scene(const std::string& filePath)
-		:mFilePath(filePath)
+	Scene::Scene()
 	{
 		// TODO: Load the scene from the filepath. To be done when/if Serialization is implemented
 	}
@@ -25,6 +24,9 @@ namespace Dawn
 	
 	void Scene::Update(float deltaTime)
 	{
+		if (mIsPaused)
+			return;
+
 		// Update Actors
 		mUpdatingActors = true;
 		for (Actor* actor : mActors)

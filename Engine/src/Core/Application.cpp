@@ -7,6 +7,7 @@
 #include "ImGui/ImGuiSystem.h"
 #include "Input/InputSystem.h"
 #include "AssetManager.h"
+#include "Scene.h"
 
 namespace Dawn
 {
@@ -70,7 +71,6 @@ namespace Dawn
 			Update();
 			GenerateOutput();
 		}
-
 	}
 
 	void Application::Update()
@@ -87,6 +87,8 @@ namespace Dawn
 		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
 
 		mInputSystem->Update();
+
+		if (mScene) mScene->Update(deltaTime);
 
 		// --- GAME UPDATE ---
 		if(mGame) mGame->Update(deltaTime);

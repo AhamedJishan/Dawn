@@ -10,6 +10,7 @@ namespace Dawn
 	class Actor;
 	class Camera;
 	class SphereCollider;
+	class Application;
 	namespace Physics
 	{
 		struct Ray;
@@ -24,18 +25,29 @@ namespace Dawn
 
 	class Scene
 	{
-	public:
-		Scene(const std::string& filePath);
-		~Scene();
-
+	private:
+		friend class Application;
 		void Update(float deltaTime);
 
+		friend class Actor;
 		void AddActor(Actor* actor);
 		void RemoveActor(Actor* actor);
-		bool ContainsActor(Actor* actor);
 
+		friend class SphereCollider;
 		void AddSphereCollider(SphereCollider* collider);
 		void RemoveSphereCollider(SphereCollider* collider);
+
+	public:
+		Scene();
+		virtual ~Scene();
+
+		// Scenes must implement this to populate the Scene
+		virtual void Init() = 0;
+
+		bool ContainsActor(Actor* actor);
+
+		void SetPaused(bool value) { mIsPaused = value; }
+		bool IsPaused() const { return mIsPaused; }
 
 		void SetActiveCamera(Camera* camera) { mActiveCamera = camera; }
 		Camera* GetActiveCamera() const { return mActiveCamera; }
@@ -45,8 +57,8 @@ namespace Dawn
 		bool RayCast(const Physics::Ray& ray, float maxDistance, RaycastHit& outHitInfo);
 
 	private:
-		std::string mFilePath;
 		bool mUpdatingActors = false;
+		bool mIsPaused = false;
 
 		Camera* mActiveCamera = nullptr;
 
