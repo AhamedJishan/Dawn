@@ -1,15 +1,12 @@
 #include "Application.h"
 #include "Utils/Log.h"
 
-#include <glm/vec2.hpp>
+#include "Game.h"
 #include "Window.h"
 #include "Rendering/Renderer.h"
 #include "ImGui/ImGuiSystem.h"
 #include "Input/InputSystem.h"
-#include "Input/Input.h"
 #include "AssetManager.h"
-#include "LayerStack.h"
-#include "Layer.h"
 
 namespace Dawn
 {
@@ -45,12 +42,10 @@ namespace Dawn
 		mInputSystem = new InputSystem();
 		mImGuiSystem = new ImGuiSystem();
 		mAssetManager = new AssetManager();
-		mLayerStack = new LayerStack();
 	}
 
 	Application::~Application()
 	{
-		if (mLayerStack)	delete mLayerStack;
 		if (mAssetManager)	delete mAssetManager;
 		if (mInputSystem)	delete mInputSystem;
 		if (mImGuiSystem)	delete mImGuiSystem;
@@ -60,8 +55,16 @@ namespace Dawn
 		sInstance = nullptr;
 	}
 
+	void Application::LoadGame(Game* game)
+	{
+		mGame = game;
+	}
+
 	void Application::Run()
 	{
+		// --- GAME START ---
+		if (mGame) mGame->Start();
+
 		while (mIsRunning)
 		{
 			Update();
@@ -84,10 +87,9 @@ namespace Dawn
 		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
 
 		mInputSystem->Update();
-		mLayerStack->Update(deltaTime);
 
-		if (Input::GetKeyDown(Key::Space))
-			LOG_INFO("FPS: %f", (1 / deltaTime));
+		// --- GAME UPDATE ---
+		if(mGame) mGame->Update(deltaTime);
 	}
 
 	void Application::GenerateOutput()
@@ -95,20 +97,10 @@ namespace Dawn
 		mRenderer->Draw();
 
 		mImGuiSystem->BeginFrame();
-		mLayerStack->ImGuiRender();
+		// --- GAME IMGUIRENDER ---
+		if (mGame) mGame->ImGuiRender();
 		mImGuiSystem->EndFrame();
 
 		mWindow->SwapBuffers();
-	}
-
-
-	// Layer Functionality
-	void Application::PushLayer(Layer* layer)
-	{
-		mLayerStack->PushLayer(layer);
-	}
-	void Application::PopLayer()
-	{
-		mLayerStack->PopLayer();
 	}
 }
