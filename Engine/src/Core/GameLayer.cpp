@@ -8,6 +8,7 @@ namespace Dawn
 		:mState(State::Gameplay)
 	{
 	}
+
 	GameLayer::~GameLayer()
 	{
 		delete mScene;
