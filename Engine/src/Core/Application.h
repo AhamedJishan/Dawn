@@ -19,22 +19,22 @@ namespace Dawn
 		Application(struct WindowConfig windowConfig);
 		virtual ~Application();
 
-		void Run();
-
 		void LoadGame(Game* game);
+
+		void Run();
+		void Quit() { mIsRunning = false; }
 
 		template<typename T>
 		void LoadScene()
 		{
 			static_assert(std::is_base_of<Scene, T>::value, "T must inherit from Scene!");
 
-			if (mScene)
-				delete mScene;
+			if (mPendingScene)
+				delete mPendingScene;
 
 			T* newScene = new T();
-			newScene->Init();
 
-			mScene = newScene;
+			mPendingScene = newScene;
 		}
 
 
@@ -55,6 +55,7 @@ namespace Dawn
 
 		Game* mGame = nullptr;
 		Scene* mScene = nullptr;
+		Scene* mPendingScene = nullptr;
 
 		Window* mWindow = nullptr;
 		Renderer* mRenderer = nullptr;

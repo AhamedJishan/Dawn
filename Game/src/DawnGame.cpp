@@ -29,6 +29,11 @@ namespace Dawn
 	
 	void DawnGame::Update(float deltaTime)
 	{
+		if (Input::GetKeyDown(Key::Space))
+		{
+			Application::Get()->LoadScene<GameScene>();
+		}
+
 		if (Input::GetKeyDown(Key::Escape))
 		{
 			if (mState == GameState::Gameplay)
@@ -131,9 +136,7 @@ namespace Dawn
 		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 		if (ImGui::Button("Exit", ImVec2(buttonWidth, 50)))
 		{
-			// Temporary
-			// TODO: proper closure
-			exit(0);
+			Application::Get()->Quit();
 		}
 
 		ImGui::PopFont();

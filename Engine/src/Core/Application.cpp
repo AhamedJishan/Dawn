@@ -75,6 +75,15 @@ namespace Dawn
 
 	void Application::Update()
 	{
+		if (mPendingScene)
+		{
+			if (mScene) delete mScene;
+
+			mScene = mPendingScene;
+			mPendingScene = nullptr;
+			mScene->Init();
+		}
+
 		mWindow->PollEvents();
 
 		if (mWindow->ShouldClose())
