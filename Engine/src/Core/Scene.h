@@ -61,6 +61,7 @@ namespace Dawn
 
 	private:
 		bool mUpdatingActors = false;
+		// if true, actors won't get updated
 		bool mIsPaused = false;
 
 		Camera* mActiveCamera = nullptr;

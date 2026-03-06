@@ -5,13 +5,6 @@
 
 namespace Dawn
 {
-	enum class GameState
-	{
-		MainMenu,
-		Gameplay,
-		Paused
-	};
-
 	class DawnGame : public Game
 	{
 	public:
@@ -19,9 +12,5 @@ namespace Dawn
 		~DawnGame();
 
 		void Start() override;
-
-	private:
-		float mTime = 0;
-		int mFrames = 0;
 	};
 }

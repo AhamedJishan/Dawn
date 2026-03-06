@@ -50,12 +50,19 @@ namespace Dawn
 
 	void GameScene::Update(float deltaTime)
 	{
+		if (Input::GetKeyDown(Key::Escape))
+		{
+			SetPaused(!IsPaused());
+			Input::SetCursorLocked(!IsPaused());
+		}
 	}
 	
 	void GameScene::ImGuiRender()
 	{
 		DrawKillCounter();
-		//DrawPauseWindow();
+
+		if (IsPaused())
+			DrawPauseWindow();
 	}
 
 	void GameScene::DrawPauseWindow()
