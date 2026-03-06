@@ -63,7 +63,6 @@ namespace Dawn
 
 	void Application::Run()
 	{
-		// --- GAME START ---
 		if (mGame) mGame->Start();
 
 		while (mIsRunning)
@@ -97,10 +96,11 @@ namespace Dawn
 
 		mInputSystem->Update();
 
-		if (mScene) mScene->Update(deltaTime);
-
-		// --- GAME UPDATE ---
-		if(mGame) mGame->Update(deltaTime);
+		if (mScene) 
+		{
+			mScene->Update(deltaTime);
+			mScene->UpdateActors(deltaTime);
+		}
 	}
 
 	void Application::GenerateOutput()
@@ -108,8 +108,7 @@ namespace Dawn
 		mRenderer->Draw();
 
 		mImGuiSystem->BeginFrame();
-		// --- GAME IMGUIRENDER ---
-		if (mGame) mGame->ImGuiRender();
+		if (mScene) mScene->ImGuiRender();
 		mImGuiSystem->EndFrame();
 
 		mWindow->SwapBuffers();

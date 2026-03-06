@@ -7,6 +7,7 @@ namespace Dawn
 {
 	enum class GameState
 	{
+		MainMenu,
 		Gameplay,
 		Paused
 	};
@@ -18,20 +19,9 @@ namespace Dawn
 		~DawnGame();
 
 		void Start() override;
-		void Update(float deltaTime) override;
-		void ImGuiRender() override;
-
-	private:
-		void DrawPauseWindow();
-		void DrawKillCounter();
 
 	private:
 		float mTime = 0;
 		int mFrames = 0;
-
-		GameState mState;
-
-		ImFont* mRobotoRegular = nullptr;
-		ImFont* mRobotoBold = nullptr;
 	};
 }

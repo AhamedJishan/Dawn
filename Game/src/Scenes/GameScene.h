@@ -1,5 +1,6 @@
 #pragma once
 
+#include <imgui/imgui.h>
 #include "Core/Scene.h"
 
 namespace Dawn
@@ -14,10 +15,17 @@ namespace Dawn
 		~GameScene();
 
 		void Init() override;
+		void Update(float deltaTime) override;
+		void ImGuiRender() override;
 
-		EnemySpawner* GetEnemySpawner() const { return mEnemySpawner; }
+	private:
+		void DrawPauseWindow();
+		void DrawKillCounter();
 
 	private:
 		EnemySpawner* mEnemySpawner = nullptr;
+
+		ImFont* mRobotoRegular = nullptr;
+		ImFont* mRobotoBold = nullptr;
 	};
 }

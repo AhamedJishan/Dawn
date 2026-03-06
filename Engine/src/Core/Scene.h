@@ -27,7 +27,7 @@ namespace Dawn
 	{
 	private:
 		friend class Application;
-		void Update(float deltaTime);
+		void UpdateActors(float deltaTime);
 
 		friend class Actor;
 		void AddActor(Actor* actor);
@@ -41,8 +41,11 @@ namespace Dawn
 		Scene();
 		virtual ~Scene();
 
-		// Scenes must implement this to populate the Scene
-		virtual void Init() = 0;
+		// Scenes can implement this to populate the Scene with Actors
+		virtual void Init() {}
+		virtual void Update(float deltaTime) {}
+		virtual void ImGuiRender() {}
+
 
 		bool ContainsActor(Actor* actor);
 

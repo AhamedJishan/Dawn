@@ -22,7 +22,7 @@ namespace Dawn
 			delete mPendingActors.back();
 	}
 	
-	void Scene::Update(float deltaTime)
+	void Scene::UpdateActors(float deltaTime)
 	{
 		if (mIsPaused)
 			return;
