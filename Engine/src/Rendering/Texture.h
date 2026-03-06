@@ -11,6 +11,9 @@ namespace Dawn
 		void Bind(int slot = 0);
 
 		bool IsValid() const { return mId != 0; }
+		unsigned int GetId() const { return mId; }
+		int GetWidth() const { return mWidth; }
+		int GetHeight() const { return mHeight; }
 
 	private:
 		bool Load(const class Image* image);

@@ -162,7 +162,7 @@ namespace Dawn
 			ImGuiWindowFlags_AlwaysAutoResize);
 
 		ImGui::PushFont(mRobotoRegular, 18.0f);
-		ImGui::Text("Kill Count: %d", mEnemySpawner->GetEnemiesKilled());
+		ImGui::Text("Score: %d", mEnemySpawner->GetEnemiesKilled());
 		ImGui::PopFont();
 
 		ImGui::End();
