@@ -4,7 +4,7 @@
 
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/SphereCollider.h"
-#include "Enemy.h"
+#include "EnemyKamikaze.h"
 
 namespace Dawn
 {
@@ -29,7 +29,7 @@ namespace Dawn
 			SetPosition(GetPosition() + GetForward() * mSpeed * deltaTime);
 
 			// Check for collisions
-			Enemy* enemy = dynamic_cast<Enemy*>(mCollider->CheckCollisions());
+			EnemyKamikaze* enemy = dynamic_cast<EnemyKamikaze*>(mCollider->CheckCollisions());
 			if (enemy)
 			{
 				SetState(Actor::State::Dead);

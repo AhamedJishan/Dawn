@@ -1,6 +1,7 @@
 #include "EnemySpawner.h"
 
 #include "Core/Scene.h"
+#include "Actors/EnemyKamikaze.h"
 
 namespace Dawn
 {
@@ -18,7 +19,7 @@ namespace Dawn
 	{
 		// Remove invalid actor + increase mEnemiesKilled
 		auto newEnd = std::remove_if(mEnemies.begin(), mEnemies.end(),
-			[this](Enemy* e)
+			[this](EnemyKamikaze* e)
 			{
 				return !mScene->ContainsActor(e);
 			});
@@ -31,7 +32,7 @@ namespace Dawn
 		{
 			mTimeSinceLastSpawn = 0.0f;
 			// Spawn Enemy
-			Enemy* enemy = new Enemy(mScene, mPlayer);
+			EnemyKamikaze* enemy = new EnemyKamikaze(mScene, mPlayer);
 			mEnemies.emplace_back(enemy);
 
 			// Set enemy location

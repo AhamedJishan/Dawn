@@ -3,13 +3,13 @@
 
 #include <vector>
 #include <glm/vec3.hpp>
-#include "Actors/Enemy.h"
 #include "Actors/PlayerActor.h"
 
 namespace Dawn
 {
 	// Forward declarations
 	class Scene;
+	class EnemyKamikaze;
 
 	class EnemySpawner : public Actor
 	{
@@ -30,7 +30,7 @@ namespace Dawn
 		unsigned int mLastSpawnIndex = 0;
 
 		PlayerActor* mPlayer = nullptr;
-		std::vector<Enemy*> mEnemies;
+		std::vector<EnemyKamikaze*> mEnemies;
 		std::vector<glm::vec3> mSpawnPositions;
 	};
 }
