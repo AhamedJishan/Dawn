@@ -11,8 +11,9 @@ namespace Dawn
 	class Projectile : public Actor
 	{
 	public:
-		Projectile(class Scene* scene)
+		Projectile(class Scene* scene, float damage = 35.0f)
 			:Actor(scene)
+			,mDamage(damage)
 		{
 			mCollider = new SphereCollider(this);
 			mCollider->SetRadius(0.2f);
@@ -32,13 +33,14 @@ namespace Dawn
 			if (enemy)
 			{
 				SetState(Actor::State::Dead);
-				enemy->TakeDamage();
+				enemy->TakeDamage(mDamage);
 			}
 		}
 
 	private:
 		float mLifeTime = 1.0f;
 		float mSpeed = 100.0f;
+		float mDamage = 35.0f;
 
 		SphereCollider* mCollider = nullptr;
 	};

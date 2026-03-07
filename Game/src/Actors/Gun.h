@@ -17,6 +17,7 @@ namespace Dawn
 		void Fire();
 
 	private:
+		float mDamage = 35.0f;
 		const float mFireCooldown = 0.1f;
 		float mTimeSinceLastFire = 0.0f;
 

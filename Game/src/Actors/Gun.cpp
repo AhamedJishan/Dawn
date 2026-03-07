@@ -69,7 +69,7 @@ namespace Dawn
 		glm::vec3 projectileDirection = glm::normalize(targetLocation - GetPosition());
 		glm::quat projectileRotation = glm::quatLookAt(projectileDirection, glm::vec3(0, 1, 0));
 
-		Projectile* projectile = new Projectile(mScene);
+		Projectile* projectile = new Projectile(mScene, mDamage);
 		projectile->SetPosition(GetPosition());
 		projectile->SetRotation(projectileRotation);
 	}

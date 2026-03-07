@@ -8,6 +8,7 @@
 #include "Core/Components/SphereCollider.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/Materials/PhongMaterial.h"
+#include "Components/Damageable.h"
 
 namespace Dawn
 {
@@ -35,6 +36,8 @@ namespace Dawn
 						mBodyMaterial = mat;
 				}
 			}
+
+			mDamageable = new Damageable(this, 100.0f);
 		}
 
 		~Enemy()
@@ -76,14 +79,14 @@ namespace Dawn
 			}
 		}
 
-		void TakeDamage()
+		void TakeDamage(float dmg)
 		{
-			mHealth--;
-			if (mHealth <= 0.0f)
+			mDamageable->TakeDamage(dmg);
+			if (mDamageable->IsDead())
 				SetState(Actor::State::Dead);
 
 			mHitImpactTimer = mHitImpactDuration;
-			
+
 			if (mBodyMaterial)
 				mBodyMaterial->SetDiffuseColor(mBodyHitColor);
 			mIsInImpactState = true;
@@ -94,11 +97,12 @@ namespace Dawn
 		SphereCollider* mCollider = nullptr;
 		PhongMaterial* mBodyMaterial = nullptr;
 
+		Damageable* mDamageable = nullptr;
+
 		const glm::vec3 mBodyBaseColor = glm::vec3(0.2f);
-		const glm::vec3 mBodyHitColor = glm::vec3(0.8f, 0.2f, 0.2f);
+		const glm::vec3 mBodyHitColor = glm::vec3(0.9f, 0.3f, 0.3f);
 
 		float mSpeed = 4.0f;
-		int mHealth = 3;
 
 		bool mIsInImpactState = false;
 		const float mScalePunchAmount = 0.15f;
