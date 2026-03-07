@@ -2,6 +2,7 @@
 
 #include "Core/Application.h"
 #include "Scenes/MainMenuScene.h"
+#include "Scenes/GameScene.h"
 
 namespace Dawn
 {
@@ -15,6 +16,8 @@ namespace Dawn
 	
 	void DawnGame::Start()
 	{
-		Application::Get()->LoadScene<MainMenuScene>();
+		//For the final build
+		//Application::Get()->LoadScene<MainMenuScene>();
+		Application::Get()->LoadScene<GameScene>();
 	}
 }
