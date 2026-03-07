@@ -25,7 +25,8 @@ namespace Dawn
 	private:
 		EnemySpawner* mEnemySpawner = nullptr;
 
-		ImFont* mRobotoRegular = nullptr;
-		ImFont* mRobotoBold = nullptr;
+		ImFont* mFontBold = nullptr;
+		ImFont* mFontRegular = nullptr;
+		ImFont* mFontLight = nullptr;
 	};
 }

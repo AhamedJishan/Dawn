@@ -8,6 +8,7 @@
 #include "Core/Components/Camera.h"
 #include "Core/Application.h"
 #include "Input/Input.h"
+#include "MainMenuScene.h"
 
 namespace Dawn
 {
@@ -24,8 +25,9 @@ namespace Dawn
 		Input::SetCursorLocked(true);
 
 		ImGuiIO& io = ImGui::GetIO();
-		mRobotoRegular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Roboto-Regular.ttf");
-		mRobotoBold = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Roboto-ExtraBold.ttf");
+		mFontBold = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-SemiBold.ttf");
+		mFontRegular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-Regular.ttf");
+		mFontLight = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-Regular.ttf");
 
 		// TEST ACTOR
 		ExampleActor* ea = new ExampleActor(this);
@@ -89,9 +91,9 @@ namespace Dawn
 		style.FrameBorderSize = 0;
 
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.15f, 0.15f, 0.15f, 0.6f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.85f, 0.40f, 0.05f, 0.9f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.70f, 0.30f, 0.05f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0.3f));
 
 		// --- Pause Menu Window ---
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
@@ -105,9 +107,9 @@ namespace Dawn
 		float windowWidth = ImGui::GetWindowSize().x;
 
 		// --- Title ---
-		ImGui::PushFont(mRobotoBold, 50.0f);
+		ImGui::PushFont(mFontRegular, 45.0f);
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.15f, 1.0f));
-		const char* title = "Paused";
+		const char* title = "PAUSED";
 		float textWidth = ImGui::CalcTextSize(title).x;
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 
@@ -118,12 +120,12 @@ namespace Dawn
 		ImGui::Dummy(ImVec2(0, 20));
 
 		// --- Buttons ---
+		ImGui::PushFont(mFontLight, 25.0f);
+		float buttonHeight = ImGui::CalcTextSize("DUMMY").y + 4;
 		float buttonWidth = 200.0f;
-
 		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-		ImGui::PushFont(mRobotoRegular, 25.0f);
 
-		if (ImGui::Button("Resume", ImVec2(buttonWidth, 50)))
+		if (ImGui::Button("RESUME", ImVec2(buttonWidth, buttonHeight)))
 		{
 			// Resume the game
 			Application::Get()->GetScene()->SetPaused(false);
@@ -133,9 +135,9 @@ namespace Dawn
 		ImGui::Dummy(ImVec2(0, 10)); // spacing
 
 		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-		if (ImGui::Button("Exit", ImVec2(buttonWidth, 50)))
+		if (ImGui::Button("EXIT", ImVec2(buttonWidth, buttonHeight)))
 		{
-			Application::Get()->Quit();
+			Application::Get()->LoadScene<MainMenuScene>();
 		}
 
 		ImGui::PopFont();
@@ -161,7 +163,7 @@ namespace Dawn
 			ImGuiWindowFlags_NoResize |
 			ImGuiWindowFlags_AlwaysAutoResize);
 
-		ImGui::PushFont(mRobotoRegular, 18.0f);
+		ImGui::PushFont(mFontRegular, 20.0f);
 		ImGui::Text("Score: %d", mEnemySpawner->GetEnemiesKilled());
 		ImGui::PopFont();
 
