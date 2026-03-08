@@ -1,5 +1,6 @@
 #include "GameScene.h"
 
+#include <glm/vec3.hpp>
 #include "ExampleActor.h"
 #include "Actors/GroundPlane.h"
 #include "Actors/EnemySpawner.h"
@@ -57,6 +58,9 @@ namespace Dawn
 			SetPaused(!IsPaused());
 			Input::SetCursorLocked(!IsPaused());
 		}
+
+		if (mIsGameOver)
+			mTimeSinceGameOver += deltaTime;
 	}
 	
 	void GameScene::ImGuiRender()
@@ -66,14 +70,14 @@ namespace Dawn
 
 		if (IsPaused() && !mIsGameOver)
 			DrawPauseWindow();
-		else if (mIsGameOver);
-			// TODO: show game over screen
+		else if (mIsGameOver)
+			DrawGameOver();
 	}
 
 	void GameScene::GameOver()
 	{
 		SetPaused(true);
-		Input::SetCursorLocked(!false);
+		Input::SetCursorLocked(false);
 		mIsGameOver = true;
 	}
 
@@ -102,8 +106,8 @@ namespace Dawn
 
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0.8f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0.3f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.15f, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.15f, 0.3f));
 
 		// --- Pause Menu Window ---
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
@@ -117,7 +121,7 @@ namespace Dawn
 		float windowWidth = ImGui::GetWindowSize().x;
 
 		// --- Title ---
-		ImGui::PushFont(mFontRegular, 45.0f);
+		ImGui::PushFont(mFontBold, 50.0f);
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.15f, 1.0f));
 		const char* title = "PAUSED";
 		float textWidth = ImGui::CalcTextSize(title).x;
@@ -145,7 +149,7 @@ namespace Dawn
 		ImGui::Dummy(ImVec2(0, 10)); // spacing
 
 		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-		if (ImGui::Button("EXIT", ImVec2(buttonWidth, buttonHeight)))
+		if (ImGui::Button("MAIN MENU", ImVec2(buttonWidth, buttonHeight)))
 		{
 			Application::Get()->LoadScene<MainMenuScene>();
 		}
@@ -188,10 +192,10 @@ namespace Dawn
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(10, 10));
-		ImGui::SetNextWindowBgAlpha(0.2f);
 
 		ImGui::Begin("HealthBarWindow", NULL,
 			ImGuiWindowFlags_NoDecoration |
+			ImGuiWindowFlags_NoBackground |
 			ImGuiWindowFlags_NoMove |
 			ImGuiWindowFlags_NoResize);
 
@@ -218,5 +222,72 @@ namespace Dawn
 
 		ImGui::End();
 		ImGui::PopStyleVar(2);
+	}
+
+	void GameScene::DrawGameOver()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+
+		// --- BackGround Window ---
+		ImGui::SetNextWindowPos(ImVec2(0, 0));
+		ImGui::SetNextWindowSize(io.DisplaySize);
+		
+		float alpha = mTimeSinceGameOver / mGameOverTransitionDuration;
+		alpha = glm::clamp(alpha, 0.0f, 1.0f);
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, alpha));
+
+		ImGui::Begin("Game Over Window", NULL,
+			ImGuiWindowFlags_NoDecoration |
+			ImGuiWindowFlags_NoBringToFrontOnFocus |
+			ImGuiWindowFlags_NoMove);
+
+		ImGui::PopStyleColor();
+
+		// --- GAME OVER TEXT ---
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+
+		ImGui::PushFont(mFontBold, 50.0f);
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.15f, 1.0f));
+		const char* gameOverText = "GAME OVER";
+		ImVec2 textSize = ImGui::CalcTextSize(gameOverText);
+		ImGui::SetCursorPos(ImVec2(center.x - textSize.x/2.0f, center.y - 100));
+
+		ImGui::Text(gameOverText);
+		
+		ImGui::PopStyleColor();
+		ImGui::PopFont();
+
+		// --- BUTTONS ---
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.15f, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.15f, 0.3f));
+
+		float windowWidth = ImGui::GetWindowSize().x;
+
+		ImGui::PushFont(mFontLight, 25.0f);
+		float buttonHeight = ImGui::CalcTextSize("DUMMY").y + 4;
+		float buttonWidth = 200.0f;
+		ImGui::SetCursorPosY(center.y + 100);
+		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
+
+		// --- RESTART GAME ---
+		if (ImGui::Button("RESTART", ImVec2(buttonWidth, buttonHeight)))
+		{
+			Application::Get()->LoadScene<GameScene>();
+			Input::SetCursorLocked(true);
+		}
+
+		ImGui::Dummy(ImVec2(0, 10)); // spacing
+		// --- EXIT TO MAIN MENU ---
+		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
+		if (ImGui::Button("MAIN MENU", ImVec2(buttonWidth, buttonHeight)))
+		{
+			Application::Get()->LoadScene<MainMenuScene>();
+		}
+
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::End();
 	}
 }

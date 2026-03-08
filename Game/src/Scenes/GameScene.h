@@ -26,6 +26,7 @@ namespace Dawn
 		void DrawPauseWindow();
 		void DrawKillCounter();
 		void DrawHealthBar();
+		void DrawGameOver();
 
 	private:
 		EnemySpawner* mEnemySpawner = nullptr;
@@ -37,5 +38,8 @@ namespace Dawn
 		float mMaxPlayerHealth = 0.0f;
 		float mPlayerHealth = 0.0f;
 		bool mIsGameOver = false;
+
+		float mTimeSinceGameOver = 0.0f;
+		const float mGameOverTransitionDuration = 2.0f;
 	};
 }
