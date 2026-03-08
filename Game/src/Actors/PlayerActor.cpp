@@ -2,13 +2,13 @@
 #include "Utils/Log.h"
 
 #include "Gun.h"
-#include "Core/Scene.h"
+#include "Scenes/GameScene.h"
 #include "FPSCameraActor.h"
 #include "Components/Damageable.h"
 
 namespace Dawn
 {
-	PlayerActor::PlayerActor(Scene* scene, FPSCameraActor* fpsCameraActor)
+	PlayerActor::PlayerActor(GameScene* scene, FPSCameraActor* fpsCameraActor)
 		:Actor(scene)
 	{
 		if (!fpsCameraActor)
@@ -17,14 +17,21 @@ namespace Dawn
 			return;
 		}
 
+		mGameScene = scene;
 		mCamera = fpsCameraActor;
 
 		mGun = new Gun(mScene);
 		mDamageable = new Damageable(this, 100.0f);
+
+		mGameScene->SetPlayerHealth(mDamageable->GetHealth());
+		mGameScene->SetMaxPlayerHealth(mDamageable->GetMaxHealth());
 	}
 
 	void PlayerActor::Update(float deltaTime)
 	{
+		if (mDamageable->IsDead())
+			mGameScene->GameOver();
+
 		// sync camera pos
 		mCamera->SetPosition(GetPosition() + mCameraOffset);
 
@@ -52,10 +59,12 @@ namespace Dawn
 	void PlayerActor::TakeDamage(float dmg)
 	{
 		mDamageable->TakeDamage(dmg);
+		mGameScene->SetPlayerHealth(mDamageable->GetHealth());
+
 		if (mDamageable->IsDead())
 		{
-			// TODO: transition to gameover
-			LOG_WARN("GAME OVER!!");
+			LOG_WARN("PLAYER DIED!");
+			mGameScene->GameOver();
 		}
 	}
 }

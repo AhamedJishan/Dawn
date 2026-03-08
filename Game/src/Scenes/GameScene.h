@@ -18,9 +18,14 @@ namespace Dawn
 		void Update(float deltaTime) override;
 		void ImGuiRender() override;
 
+		void SetPlayerHealth(float health) { mPlayerHealth = health; }
+		void SetMaxPlayerHealth(float health) { mMaxPlayerHealth = health; }
+		void GameOver();
+
 	private:
 		void DrawPauseWindow();
 		void DrawKillCounter();
+		void DrawHealthBar();
 
 	private:
 		EnemySpawner* mEnemySpawner = nullptr;
@@ -28,5 +33,9 @@ namespace Dawn
 		ImFont* mFontBold = nullptr;
 		ImFont* mFontRegular = nullptr;
 		ImFont* mFontLight = nullptr;
+
+		float mMaxPlayerHealth = 0.0f;
+		float mPlayerHealth = 0.0f;
+		bool mIsGameOver = false;
 	};
 }

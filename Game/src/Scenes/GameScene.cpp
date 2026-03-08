@@ -52,7 +52,7 @@ namespace Dawn
 
 	void GameScene::Update(float deltaTime)
 	{
-		if (Input::GetKeyDown(Key::Escape))
+		if (Input::GetKeyDown(Key::Escape) && !mIsGameOver)
 		{
 			SetPaused(!IsPaused());
 			Input::SetCursorLocked(!IsPaused());
@@ -62,9 +62,19 @@ namespace Dawn
 	void GameScene::ImGuiRender()
 	{
 		DrawKillCounter();
+		DrawHealthBar();
 
-		if (IsPaused())
+		if (IsPaused() && !mIsGameOver)
 			DrawPauseWindow();
+		else if (mIsGameOver);
+			// TODO: show game over screen
+	}
+
+	void GameScene::GameOver()
+	{
+		SetPaused(true);
+		Input::SetCursorLocked(!false);
+		mIsGameOver = true;
 	}
 
 	void GameScene::DrawPauseWindow()
@@ -166,6 +176,45 @@ namespace Dawn
 		ImGui::PushFont(mFontRegular, 20.0f);
 		ImGui::Text("Score: %d", mEnemySpawner->GetEnemiesKilled());
 		ImGui::PopFont();
+
+		ImGui::End();
+		ImGui::PopStyleVar(2);
+	}
+
+	void GameScene::DrawHealthBar()
+	{
+		ImGui::SetNextWindowPos(ImVec2(10, 10));
+		ImGui::SetNextWindowSize(ImVec2(200, 20));
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(10, 10));
+		ImGui::SetNextWindowBgAlpha(0.2f);
+
+		ImGui::Begin("HealthBarWindow", NULL,
+			ImGuiWindowFlags_NoDecoration |
+			ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoResize);
+
+		ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+		ImVec2 pos = ImGui::GetCursorScreenPos();
+		ImVec2 size = ImGui::GetContentRegionAvail();
+
+		// Background
+		drawList->AddRectFilled(
+			pos,
+			ImVec2(pos.x + size.x, pos.y + size.y),
+			IM_COL32(40, 40, 40, 255)
+		);
+
+		// Health
+		float fraction = mPlayerHealth / mMaxPlayerHealth;
+		drawList->AddRectFilled(
+			pos,
+			ImVec2(pos.x + fraction * size.x, pos.y + size.y),
+			IM_COL32(40, 200, 40, 255)
+		);
+		ImGui::Dummy(size);
 
 		ImGui::End();
 		ImGui::PopStyleVar(2);

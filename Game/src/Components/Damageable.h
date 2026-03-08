@@ -12,23 +12,27 @@ namespace Dawn
 	public:
 		Damageable(Actor* owner, float maxHealth = 100.0f)
 			:Component(owner)
-			, mHealth(maxHealth)
+			,mMaxHealth(maxHealth)
+			,mHealth(maxHealth)
 		{
 		}
 
 		void TakeDamage(float dmg)
 		{
 			mHealth -= dmg;
+			mHealth = glm::clamp(mHealth, 0.0f, mMaxHealth);
 
-			if (mHealth <= 0.0f)
+			if (mHealth == 0.0f)
 				mIsDead = true;
 		}
 
-		float GetHealth() const { return mHealth; }
 		bool IsDead() const { return mIsDead; }
+		float GetHealth() const { return mHealth; }
+		float GetMaxHealth() const { return mMaxHealth; }
 
 	private:
-		float mHealth = 100.0f;
+		const float mMaxHealth;
+		float mHealth;
 		bool mIsDead = false;
 	};
 }
