@@ -23,6 +23,20 @@ namespace Dawn
 		glm::vec3 position;
 	};
 
+	struct EnvironmentSettings
+	{
+		float fogDensity = 0.0f;
+		glm::vec3 fogColor = glm::vec3(1);
+
+		glm::vec3 ambientColor = glm::vec3(0.2f);
+
+		struct DirectionalLight
+		{
+			glm::vec3 direction = glm::vec3(-1);
+			glm::vec3 color = glm::vec3(1);
+		} directionalLight;
+	};
+
 	class Scene
 	{
 	private:
@@ -52,6 +66,10 @@ namespace Dawn
 		void SetPaused(bool value) { mIsPaused = value; }
 		bool IsPaused() const { return mIsPaused; }
 
+		void SetEnvironmentSettings(const EnvironmentSettings& settings) { mEnvironmentSettings = settings; }
+		EnvironmentSettings& GetEnvironmentSettings() { return mEnvironmentSettings; }
+		const EnvironmentSettings& GetEnvironmentSettings() const { return mEnvironmentSettings; }
+
 		void SetActiveCamera(Camera* camera) { mActiveCamera = camera; }
 		Camera* GetActiveCamera() const { return mActiveCamera; }
 
@@ -70,5 +88,7 @@ namespace Dawn
 		std::vector<Actor*> mPendingActors;
 
 		std::vector<SphereCollider*> mColliders;
+
+		EnvironmentSettings mEnvironmentSettings;
 	};
 }

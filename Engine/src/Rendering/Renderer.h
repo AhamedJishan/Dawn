@@ -9,17 +9,6 @@ namespace Dawn
 	class MeshRenderer;
 	class Shader;
 
-	struct LightingData
-	{
-		glm::vec3 ambientColor = glm::vec3(0.2f);
-		
-		struct DirectionalLight
-		{
-			glm::vec3 direction = glm::vec3(-1);
-			glm::vec3 color = glm::vec3(1);
-		} directionalLight;
-	};
-
 	class Renderer
 	{
 	public:
@@ -37,6 +26,5 @@ namespace Dawn
 
 	private:
 		std::vector<MeshRenderer*> mMeshRenderers;
-		LightingData mLightingData;
 	};
 }

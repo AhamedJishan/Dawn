@@ -46,17 +46,20 @@ namespace Dawn
 		glEnable(GL_DEPTH_TEST);
 		glDisable(GL_BLEND);
 
+		Camera* cam = Application::Get()->GetScene()->GetActiveCamera();
+		if (!cam)
+		{
+			LOG_WARN("No Active Camera Exists!");
+			return;
+		}
+
+		glm::mat4 viewMatrix = cam->GetView();
+		glm::mat4 projectionMatrix = cam->GetProjection();
+
+		const EnvironmentSettings& environmentSettings = Application::Get()->GetScene()->GetEnvironmentSettings();
+
 		for (MeshRenderer* meshRenderer : mMeshRenderers)
 		{
-			Camera* cam = meshRenderer->GetOwner()->GetScene()->GetActiveCamera();
-			if (!cam)
-			{
-				LOG_WARN("No Active Camera Exists!");
-				return;
-			}
-
-			glm::mat4 viewMatrix = cam->GetView();
-			glm::mat4 projectionMatrix = cam->GetProjection();
 			glm::mat4 modelMatrix = meshRenderer->GetOwner()->GetWorldTransform();
 
 			Material* mat = meshRenderer->GetMaterial();
@@ -70,12 +73,12 @@ namespace Dawn
 			shader->SetMat4("u_Model", modelMatrix);
 			shader->SetMat4("u_ViewProjection", projectionMatrix * viewMatrix);
 
-			shader->SetFloat("u_FogDensity", 0.05f);
-			shader->SetVec3("u_FogColor", glm::vec3(0.025f));
+			shader->SetFloat("u_FogDensity", environmentSettings.fogDensity);
+			shader->SetVec3("u_FogColor", environmentSettings.fogColor);
 			shader->SetVec3("u_CameraPosition", cam->GetOwner()->GetPosition());
-			shader->SetVec3("u_AmbientColor", mLightingData.ambientColor);
-			shader->SetVec3("u_DirectionalLightColor", mLightingData.directionalLight.color);
-			shader->SetVec3("u_DirectionalLightDirection", mLightingData.directionalLight.direction);
+			shader->SetVec3("u_AmbientColor", environmentSettings.ambientColor);
+			shader->SetVec3("u_DirectionalLightColor", environmentSettings.directionalLight.color);
+			shader->SetVec3("u_DirectionalLightDirection", environmentSettings.directionalLight.direction);
 			
 			glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, NULL);
 		}
