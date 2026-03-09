@@ -6,8 +6,6 @@
 #include <glm/mat4x4.hpp>
 #include "Core/Application.h"
 #include "Core/Window.h"
-#include "Core/Assets.h"
-#include "Rendering/Texture.h"
 #include "Core/Actor.h"
 #include "Core/Scene.h"
 #include "Core/Components/Camera.h"
@@ -72,6 +70,8 @@ namespace Dawn
 			shader->SetMat4("u_Model", modelMatrix);
 			shader->SetMat4("u_ViewProjection", projectionMatrix * viewMatrix);
 
+			shader->SetFloat("u_FogDensity", 0.05f);
+			shader->SetVec3("u_FogColor", glm::vec3(0.025f));
 			shader->SetVec3("u_CameraPosition", cam->GetOwner()->GetPosition());
 			shader->SetVec3("u_AmbientColor", mLightingData.ambientColor);
 			shader->SetVec3("u_DirectionalLightColor", mLightingData.directionalLight.color);

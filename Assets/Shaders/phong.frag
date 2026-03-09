@@ -14,6 +14,8 @@ uniform vec3 u_SpecularColor;
 uniform float u_Shininess;
 
 // to be set by Renderer
+uniform float u_FogDensity;
+uniform vec3 u_FogColor;
 uniform vec3 u_CameraPosition;
 uniform vec3 u_AmbientColor;
 uniform vec3 u_DirectionalLightColor;
@@ -47,19 +49,25 @@ void main()
     vec3 viewDir = normalize(u_CameraPosition - frag_in.FragPos);
     vec3 halfDir = normalize(lightDir + viewDir);
 
-    // Ambient
+    // --- AMBIENT ---
     phong = u_AmbientColor * baseColor.rgb;
 
-    // Diffuse
+    // --- DIFFUSE ---
     float diffuseFactor = max(dot(lightDir, normal), 0);
     phong += diffuseFactor * u_DirectionalLightColor * baseColor.rgb;
 
-    // Specular
+    // --- SPECULAR ---
     if (diffuseFactor > 0)
     {
         float specularFactor = pow(max(dot(normal, halfDir), 0), u_Shininess);
         phong += specularFactor * u_DirectionalLightColor * specularColor;
     }
 
-    OutColor = vec4(phong, baseColor.a);
+    // --- FOG (Exponential squared) ---
+    float dist = length(frag_in.FragPos - u_CameraPosition);
+    float fogIntensity = 1 - exp(-pow(dist * u_FogDensity, 2.0));
+
+    vec3 finalColor = mix(phong, u_FogColor, fogIntensity);
+    
+    OutColor = vec4(finalColor, baseColor.a);
 }
