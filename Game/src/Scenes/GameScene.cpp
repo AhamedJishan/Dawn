@@ -192,22 +192,10 @@ namespace Dawn
 
 	void GameScene::DrawHealthBar()
 	{
-		ImGui::SetNextWindowPos(ImVec2(10, 10));
-		ImGui::SetNextWindowSize(ImVec2(200, 20));
+		ImDrawList* drawList = ImGui::GetForegroundDrawList();
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(10, 10));
-
-		ImGui::Begin("HealthBarWindow", NULL,
-			ImGuiWindowFlags_NoDecoration |
-			ImGuiWindowFlags_NoBackground |
-			ImGuiWindowFlags_NoMove |
-			ImGuiWindowFlags_NoResize);
-
-		ImDrawList* drawList = ImGui::GetWindowDrawList();
-
-		ImVec2 pos = ImGui::GetCursorScreenPos();
-		ImVec2 size = ImGui::GetContentRegionAvail();
+		ImVec2 pos(10, 10);
+		ImVec2 size(200, 20);
 
 		// Background
 		drawList->AddRectFilled(
@@ -223,10 +211,6 @@ namespace Dawn
 			ImVec2(pos.x + fraction * size.x, pos.y + size.y),
 			IM_COL32(40, 200, 40, 255)
 		);
-		ImGui::Dummy(size);
-
-		ImGui::End();
-		ImGui::PopStyleVar(2);
 	}
 
 	void GameScene::DrawCrossHair()
