@@ -65,8 +65,13 @@ namespace Dawn
 	
 	void GameScene::ImGuiRender()
 	{
+		if (!mIsGameOver && !IsPaused())
+		{
+			DrawCrossHair();
+			DrawHealthBar();
+		}
+
 		DrawKillCounter();
-		DrawHealthBar();
 
 		if (IsPaused() && !mIsGameOver)
 			DrawPauseWindow();
@@ -222,6 +227,13 @@ namespace Dawn
 
 		ImGui::End();
 		ImGui::PopStyleVar(2);
+	}
+
+	void GameScene::DrawCrossHair()
+	{
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImDrawList* drawList = ImGui::GetForegroundDrawList();
+		drawList->AddCircleFilled(center, 3.0f, IM_COL32(255, 255, 255, 255), 8);
 	}
 
 	void GameScene::DrawGameOver()

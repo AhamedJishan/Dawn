@@ -38,13 +38,5 @@ namespace Dawn
 	private:
 		std::vector<MeshRenderer*> mMeshRenderers;
 		LightingData mLightingData;
-
-		//=====================================================
-		// Temporary until UI system is not made
-		//=====================================================
-		void InitQuad();
-		void DrawQuad();
-
-		unsigned int mQuadVAO = 0, mQuadVBO = 0, mQuadEBO = 0;
 	};
 }

@@ -26,6 +26,7 @@ namespace Dawn
 		void DrawPauseWindow();
 		void DrawKillCounter();
 		void DrawHealthBar();
+		void DrawCrossHair();
 		void DrawGameOver();
 
 	private:
