@@ -48,10 +48,7 @@ namespace Dawn
 
 		Camera* cam = Application::Get()->GetScene()->GetActiveCamera();
 		if (!cam)
-		{
-			LOG_WARN("No Active Camera Exists!");
 			return;
-		}
 
 		glm::mat4 viewMatrix = cam->GetView();
 		glm::mat4 projectionMatrix = cam->GetProjection();
