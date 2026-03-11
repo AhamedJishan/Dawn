@@ -2,6 +2,8 @@
 
 #include <string>
 #include <unordered_map>
+#include <fmod/fmod_studio.hpp>
+#include <glm/mat4x4.hpp>
 
 
 // Forward declarations
@@ -19,6 +21,11 @@ namespace FMOD
 
 namespace Dawn
 {
+	FMOD_VECTOR VecToFmodVec(float x, float y, float z);
+
+	// Forward declarations
+	class SoundEvent;
+
 	class AudioSystem
 	{
 	public:
@@ -31,12 +38,16 @@ namespace Dawn
 
 		void Update();
 
-		// TODO: SetListener();
+		SoundEvent PlayEvent(const std::string& name);
+
+		void SetListener(const glm::mat4& viewMatrix);
 
 		void SetBusVolume(const std::string& name, float value);
 		void SetBusPaused(const std::string& name, bool value);
 		float GetBusVolume(const std::string& name);
 		bool GetBusPaused(const std::string& name);
+
+		FMOD::Studio::EventInstance* GetEventInstance(unsigned int id);
 
 	private:
 		bool Init();

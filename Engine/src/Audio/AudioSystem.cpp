@@ -2,13 +2,24 @@
 #include "Utils/Log.h"
 
 #include <vector>
-#include <fmod/core/fmod.hpp>
-#include <fmod/studio/fmod_studio.hpp>
-#include <fmod/core/fmod_errors.h>
+#include <fmod/fmod_studio.hpp>
+#include <fmod/fmod_errors.h>
+#include "SoundEvent.h"
 
 namespace Dawn
 {
 	unsigned int AudioSystem::sNextId = 0;
+
+	FMOD_VECTOR VecToFmodVec(float x, float y, float z)
+	{
+		FMOD_VECTOR retVec;
+
+		retVec.x = x;
+		retVec.y = y;
+		retVec.z = z;
+
+		return retVec;
+	}
 
 	AudioSystem::AudioSystem()
 	{
@@ -214,6 +225,46 @@ namespace Dawn
 		if (mSystem) mSystem->update();
 	}
 
+	SoundEvent AudioSystem::PlayEvent(const std::string& name)
+	{
+		unsigned int eventId = 0;
+
+		auto iter = mEvents.find(name);
+		if (iter != mEvents.end())
+		{
+			FMOD::Studio::EventInstance* event = nullptr;
+			iter->second->createInstance(&event);
+
+			if (event)
+			{
+				event->start();
+
+				eventId = ++sNextId;
+				mEventInstances.emplace(eventId, event);
+			}
+
+			return SoundEvent(this, eventId);
+		}
+
+		LOG_WARN("Event '%s' is not a part of any loaded audio banks", name.c_str());
+		return SoundEvent();
+	}
+
+	void AudioSystem::SetListener(const glm::mat4& viewMatrix)
+	{
+		glm::mat4 invViewMat = glm::inverse(viewMatrix);
+
+		FMOD_3D_ATTRIBUTES listener;
+
+		listener.position = VecToFmodVec(invViewMat[3][0], invViewMat[3][1], invViewMat[3][2]);
+		listener.forward = VecToFmodVec(invViewMat[2][0], invViewMat[2][1], invViewMat[2][2]);
+		listener.up = VecToFmodVec(invViewMat[1][0], invViewMat[1][1], invViewMat[1][2]);
+
+		listener.velocity = { 0, 0, 0 };
+
+		mSystem->setListenerAttributes(0, &listener);
+	}
+
 	void AudioSystem::SetBusVolume(const std::string& name, float value)
 	{
 		auto it = mBuses.find(name);
@@ -268,5 +319,14 @@ namespace Dawn
 		it->second->getPaused(&paused);
 
 		return paused;
+	}
+
+	FMOD::Studio::EventInstance* AudioSystem::GetEventInstance(unsigned int id)
+	{
+		auto it = mEventInstances.find(id);
+		if (it != mEventInstances.end())
+			return it->second;
+
+		return nullptr;
 	}
 }
