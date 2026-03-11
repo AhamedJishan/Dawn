@@ -24,7 +24,9 @@ project "Engine"
     links {
         "glfw3",
         "opengl32",
-        "assimp"
+        "assimp",
+        "fmod_vc",
+        "fmodstudio_vc"
     }
 
     files {

@@ -33,9 +33,14 @@ project "Game"
     }
 
     postbuildcommands {
+        -- Assets
         "{COPYDIR} %{wks.location}/Assets %{cfg.targetdir}/Assets",
+        -- Assimp
         "{COPY} %{wks.location}/Engine/vendor/bin/assimp.dll %{cfg.targetdir}",
-        "{COPY} %{wks.location}/Engine/vendor/bin/assimp.pdb %{cfg.targetdir}"
+        "{COPY} %{wks.location}/Engine/vendor/bin/assimp.pdb %{cfg.targetdir}",
+        -- FMOD
+        "{COPY} %{wks.location}/Engine/vendor/bin/fmod.dll %{cfg.targetdir}",
+        "{COPY} %{wks.location}/Engine/vendor/bin/fmodstudio.dll %{cfg.targetdir}"
     }
 
     filter "configurations:Debug"
