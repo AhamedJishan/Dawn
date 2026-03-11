@@ -3,12 +3,18 @@
 #include "Core/Actor.h"
 #include <Core/Application.h>
 #include <Core/Window.h>
+#include <Audio/AudioSystem.h>
 
 namespace Dawn
 {
 	Camera::Camera(Actor* owner, unsigned int updateOrder)
 		:Component(owner, updateOrder)
 	{
+	}
+
+	void Camera::Update(float deltaTime)
+	{
+		Application::Get()->GetAudioSystem()->SetListener(GetView());
 	}
 
 	glm::mat4 Camera::GetView() const

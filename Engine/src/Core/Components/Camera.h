@@ -13,6 +13,8 @@ namespace Dawn
 	public:
 		Camera(Actor* owner, unsigned int updateOrder = 100);
 
+		void Update(float deltaTime) override;
+
 		glm::mat4 GetView() const;
 		glm::mat4 GetProjection() const;
 

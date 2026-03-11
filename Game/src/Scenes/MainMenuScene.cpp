@@ -4,6 +4,11 @@
 #include "Core/Assets.h"
 #include "GameScene.h"
 
+
+#include "Core/Application.h"
+#include "Audio/AudioSystem.h"
+#include "Audio/SoundEvent.h"
+
 namespace Dawn
 {
 	void MainMenuScene::Init()
@@ -19,6 +24,10 @@ namespace Dawn
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.FrameRounding = 6.0f;
+
+		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/MainMenu.bank");
+		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/UI.bank");
+		Application::Get()->GetAudioSystem()->PlayEvent("event:/mainmenu_bgm");
 	}
 
 	void MainMenuScene::Update(float deltaTime)

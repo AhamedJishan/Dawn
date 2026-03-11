@@ -11,6 +11,7 @@ namespace Dawn
 	class Renderer;
 	class InputSystem;
 	class ImGuiSystem;
+	class AudioSystem;
 	class AssetManager;
 
 	class Application
@@ -44,6 +45,7 @@ namespace Dawn
 		Window* GetWindow() const { return mWindow; }
 		Renderer* GetRenderer() const { return mRenderer; }
 		InputSystem* GetInputSystem() const { return mInputSystem; }
+		AudioSystem* GetAudioSystem() const { return mAudioSystem; }
 		AssetManager* GetAssetManager() const { return mAssetManager; }
 
 	private:
@@ -61,6 +63,7 @@ namespace Dawn
 		Renderer* mRenderer = nullptr;
 		InputSystem* mInputSystem = nullptr;
 		ImGuiSystem* mImGuiSystem = nullptr;
+		AudioSystem* mAudioSystem = nullptr;
 		AssetManager* mAssetManager = nullptr;
 
 		bool mIsRunning = false;

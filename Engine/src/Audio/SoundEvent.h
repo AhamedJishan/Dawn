@@ -6,7 +6,7 @@
 namespace Dawn
 {
 	// forward declarations
-	class AuioSystem;
+	class AudioSystem;
 
 	class SoundEvent
 	{

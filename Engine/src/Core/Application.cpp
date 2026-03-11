@@ -6,6 +6,7 @@
 #include "Rendering/Renderer.h"
 #include "ImGui/ImGuiSystem.h"
 #include "Input/InputSystem.h"
+#include "Audio/AudioSystem.h"
 #include "AssetManager.h"
 #include "Scene.h"
 
@@ -40,6 +41,7 @@ namespace Dawn
 			return;
 		}
 
+		mAudioSystem = new AudioSystem();
 		mInputSystem = new InputSystem();
 		mImGuiSystem = new ImGuiSystem();
 		mAssetManager = new AssetManager();
@@ -50,6 +52,7 @@ namespace Dawn
 		if (mAssetManager)	delete mAssetManager;
 		if (mInputSystem)	delete mInputSystem;
 		if (mImGuiSystem)	delete mImGuiSystem;
+		if (mAudioSystem)	delete mAudioSystem;
 		if (mRenderer)		delete mRenderer;
 		if (mWindow)		delete mWindow;
 
@@ -95,6 +98,7 @@ namespace Dawn
 		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
 
 		mInputSystem->Update();
+		mAudioSystem->Update();
 
 		if (mScene) 
 		{
