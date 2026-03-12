@@ -5,6 +5,7 @@
 #include "Rendering/Materials/PhongMaterial.h"
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/SphereCollider.h"
+#include "Core/Components/Audio.h"
 #include "Components/Damageable.h"
 #include "PlayerActor.h"
 
@@ -30,6 +31,10 @@ namespace Dawn
 		}
 
 		mDamageable = new Damageable(this, 100.0f);
+
+		mAudioComponent = new Audio(this);
+		mEnemyPresence = mAudioComponent->PlayEvent("event:/enemy_presence");
+		mEnemyPresence.SetVolume(10.0f);
 	}
 
 	EnemyKamikaze::~EnemyKamikaze()
@@ -40,11 +45,19 @@ namespace Dawn
 	void EnemyKamikaze::Update(float deltaTime)
 	{
 		if (mActionState == ActionState::Chasing)
+		{
 			Chase(deltaTime);
+		}
 		else if (mActionState == ActionState::Exploding)
+		{
 			Exploding(deltaTime);
+			mEnemyPresence.Stop();
+		}
 		else
+		{
+			mAudioComponent->PlayEvent("event:/enemy_explode");
 			Explode(deltaTime);
+		}
 
 
 		// --- FEEDBACK STUFF ---

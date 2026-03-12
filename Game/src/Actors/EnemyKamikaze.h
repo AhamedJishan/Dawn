@@ -3,6 +3,7 @@
 #include "Core/Actor.h"
 
 #include <glm/vec3.hpp>
+#include "Audio/SoundEvent.h"
 
 namespace Dawn
 {
@@ -12,6 +13,7 @@ namespace Dawn
 	class PhongMaterial;
 	class SphereCollider;
 	class PlayerActor;
+	class Audio;
 
 	class EnemyKamikaze : public Actor
 	{
@@ -39,6 +41,8 @@ namespace Dawn
 		PlayerActor* mPlayer = nullptr;
 		SphereCollider* mCollider = nullptr;
 		PhongMaterial* mBodyMaterial = nullptr;
+		Audio* mAudioComponent = nullptr;
+		SoundEvent mEnemyPresence;
 
 		float mExplosionTimer = 1.5f;
 		const float mExplosionRadius = 4.0f;

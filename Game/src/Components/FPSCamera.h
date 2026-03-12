@@ -21,6 +21,8 @@ namespace Dawn
 
 		void Update(float deltaTime) override
 		{
+			Camera::Update(deltaTime);
+
 			glm::vec2 cursorDeltaPos = Input::GetCursorDeltaPos();
 
 			mYaw += -cursorDeltaPos.x * yawSpeed;

@@ -1,4 +1,4 @@
-#include "AudioComponent.h"
+#include "Audio.h"
 
 #include "Audio/SoundEvent.h"
 #include "Core/Actor.h"
@@ -7,17 +7,17 @@
 
 namespace Dawn
 {
-	AudioComponent::AudioComponent(Actor* owner, int updateOrder)
+	Audio::Audio(Actor* owner, int updateOrder)
 		:Component(owner, updateOrder)
 	{
 	}
 
-	AudioComponent::~AudioComponent()
+	Audio::~Audio()
 	{
 		StopAllEvents();
 	}
 	
-	void AudioComponent::Update(float deltaTime)
+	void Audio::Update(float deltaTime)
 	{
 		auto iter = mEvents2D.begin();
 		while (iter != mEvents2D.end())
@@ -41,7 +41,7 @@ namespace Dawn
 		}
 	}
 	
-	SoundEvent AudioComponent::PlayEvent(const std::string& name)
+	SoundEvent Audio::PlayEvent(const std::string& name)
 	{
 		SoundEvent event = Application::Get()->GetAudioSystem()->PlayEvent(name);
 		if (event.Is3D())
@@ -55,7 +55,7 @@ namespace Dawn
 		return event;
 	}
 	
-	void AudioComponent::StopAllEvents()
+	void Audio::StopAllEvents()
 	{
 		for (SoundEvent event : mEvents2D)
 			event.Stop();
