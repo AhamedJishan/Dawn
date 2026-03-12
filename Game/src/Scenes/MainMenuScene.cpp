@@ -14,6 +14,8 @@ namespace Dawn
 	{
 		if (mBgmSE.IsValid())
 			mBgmSE.Stop();
+
+		Application::Get()->GetAudioSystem()->UnloadBank("Assets/Audio/MainMenu.bank");
 	}
 
 	void MainMenuScene::Init()

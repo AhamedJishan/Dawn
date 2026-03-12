@@ -8,6 +8,7 @@
 #include "Actors/FPSCameraActor.h"
 #include "Core/Components/Camera.h"
 #include "Core/Application.h"
+#include "Audio/AudioSystem.h"
 #include "Input/Input.h"
 #include "MainMenuScene.h"
 
@@ -24,6 +25,10 @@ namespace Dawn
 
 	GameScene::~GameScene()
 	{
+		if (mBgmSE.IsValid())
+			mBgmSE.Stop();
+
+		Application::Get()->GetAudioSystem()->UnloadBank("Assets/Audio/Game.bank");
 	}
 	
 	void GameScene::Init()
@@ -54,6 +59,10 @@ namespace Dawn
 		{
 			SetActiveCamera(cam);
 		}
+
+		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/Game.bank");
+		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/UI.bank");
+		mBgmSE = Application::Get()->GetAudioSystem()->PlayEvent("event:/game_bgm");
 	}
 
 	void GameScene::Update(float deltaTime)

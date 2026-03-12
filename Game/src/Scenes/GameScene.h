@@ -2,6 +2,7 @@
 
 #include <imgui/imgui.h>
 #include "Core/Scene.h"
+#include "Audio/SoundEvent.h"
 
 namespace Dawn
 {
@@ -42,5 +43,7 @@ namespace Dawn
 
 		float mTimeSinceGameOver = 0.0f;
 		const float mGameOverTransitionDuration = 2.0f;
+
+		SoundEvent mBgmSE;
 	};
 }
