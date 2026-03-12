@@ -7,10 +7,15 @@
 
 #include "Core/Application.h"
 #include "Audio/AudioSystem.h"
-#include "Audio/SoundEvent.h"
 
 namespace Dawn
 {
+	MainMenuScene::~MainMenuScene()
+	{
+		if (mBGM.IsValid())
+			mBGM.Stop();
+	}
+
 	void MainMenuScene::Init()
 	{
 		Input::SetCursorLocked(false);
@@ -27,7 +32,7 @@ namespace Dawn
 
 		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/MainMenu.bank");
 		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/UI.bank");
-		Application::Get()->GetAudioSystem()->PlayEvent("event:/mainmenu_bgm");
+		mBGM = Application::Get()->GetAudioSystem()->PlayEvent("event:/mainmenu_bgm");
 	}
 
 	void MainMenuScene::Update(float deltaTime)

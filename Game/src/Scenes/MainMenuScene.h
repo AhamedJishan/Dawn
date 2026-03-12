@@ -2,6 +2,7 @@
 
 #include <imgui/imgui.h>
 #include "Core/Scene.h"
+#include "Audio/SoundEvent.h"
 
 namespace Dawn
 {
@@ -12,7 +13,7 @@ namespace Dawn
 	{
 	public:
 		MainMenuScene() {}
-		~MainMenuScene() {}
+		~MainMenuScene();
 
 		void Init() override;
 		void Update(float deltaTime) override;
@@ -27,5 +28,7 @@ namespace Dawn
 		ImFont* mFontBold = nullptr;
 		ImFont* mFontRegular = nullptr;
 		ImFont* mFontLight = nullptr;
+
+		SoundEvent mBGM;
 	};
 }
