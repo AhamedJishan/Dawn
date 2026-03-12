@@ -12,8 +12,8 @@ namespace Dawn
 {
 	MainMenuScene::~MainMenuScene()
 	{
-		if (mBGM.IsValid())
-			mBGM.Stop();
+		if (mBgmSE.IsValid())
+			mBgmSE.Stop();
 	}
 
 	void MainMenuScene::Init()
@@ -32,7 +32,7 @@ namespace Dawn
 
 		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/MainMenu.bank");
 		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/UI.bank");
-		mBGM = Application::Get()->GetAudioSystem()->PlayEvent("event:/mainmenu_bgm");
+		mBgmSE = Application::Get()->GetAudioSystem()->PlayEvent("event:/mainmenu_bgm");
 	}
 
 	void MainMenuScene::Update(float deltaTime)
@@ -115,14 +115,31 @@ namespace Dawn
 		ImGui::SetCursorPosY(windowSize.y - 5 * buttonSize.y);
 		if (ImGui::Button("START", buttonSize))
 		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
 			Application::Get()->LoadScene<GameScene>();
 		}
+		if (!mStartButtonHovered && ImGui::IsItemHovered())
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
+			mStartButtonHovered = true;
+		}
+		else if (!ImGui::IsItemHovered())
+			mStartButtonHovered = false;
 
 		ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2.0f);
 		if (ImGui::Button("QUIT", buttonSize))
 		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
 			Application::Get()->Quit();
 		}
+		if (!mQuitButtonHovered && ImGui::IsItemHovered())
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
+			mQuitButtonHovered = true;
+		}
+		else if (!ImGui::IsItemHovered())
+			mQuitButtonHovered = false;
+
 		ImGui::PopStyleColor(3);
 		ImGui::PopFont();
 

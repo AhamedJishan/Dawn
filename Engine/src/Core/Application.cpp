@@ -77,14 +77,8 @@ namespace Dawn
 
 	void Application::Update()
 	{
-		if (mPendingScene)
-		{
-			if (mScene) delete mScene;
-
-			mScene = mPendingScene;
-			mPendingScene = nullptr;
-			mScene->Init();
-		}
+		mInputSystem->Update();
+		mAudioSystem->Update();
 
 		mWindow->PollEvents();
 
@@ -97,8 +91,14 @@ namespace Dawn
 		// Prevent large deltaTime jumps
 		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
 
-		mInputSystem->Update();
-		mAudioSystem->Update();
+		if (mPendingScene)
+		{
+			if (mScene) delete mScene;
+
+			mScene = mPendingScene;
+			mPendingScene = nullptr;
+			mScene->Init();
+		}
 
 		if (mScene) 
 		{

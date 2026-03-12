@@ -29,6 +29,9 @@ namespace Dawn
 		ImFont* mFontRegular = nullptr;
 		ImFont* mFontLight = nullptr;
 
-		SoundEvent mBGM;
+		SoundEvent mBgmSE;
+		
+		bool mStartButtonHovered = false;
+		bool mQuitButtonHovered = false;
 	};
 }
