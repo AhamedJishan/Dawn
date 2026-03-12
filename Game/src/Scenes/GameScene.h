@@ -45,5 +45,9 @@ namespace Dawn
 		const float mGameOverTransitionDuration = 2.0f;
 
 		SoundEvent mBgmSE;
+
+		bool mResumeButtonHovered = false;
+		bool mRestartButtonHovered = false;
+		bool mMainMenuButtonHovered = false;
 	};
 }

@@ -161,17 +161,33 @@ namespace Dawn
 		if (ImGui::Button("RESUME", ImVec2(buttonWidth, buttonHeight)))
 		{
 			// Resume the game
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
 			Application::Get()->GetScene()->SetPaused(false);
 			Input::SetCursorLocked(true);
 		}
+		if (!mResumeButtonHovered && ImGui::IsItemHovered())
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
+			mResumeButtonHovered = true;
+		}
+		else if (!ImGui::IsItemHovered())
+			mResumeButtonHovered = false;
 
 		ImGui::Dummy(ImVec2(0, 10)); // spacing
 
 		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 		if (ImGui::Button("MAIN MENU", ImVec2(buttonWidth, buttonHeight)))
 		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
 			Application::Get()->LoadScene<MainMenuScene>();
 		}
+		if (!mMainMenuButtonHovered && ImGui::IsItemHovered())
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
+			mMainMenuButtonHovered = true;
+		}
+		else if (!ImGui::IsItemHovered())
+			mMainMenuButtonHovered = false;
 
 		ImGui::PopFont();
 
@@ -283,17 +299,33 @@ namespace Dawn
 		// --- RESTART GAME ---
 		if (ImGui::Button("RESTART", ImVec2(buttonWidth, buttonHeight)))
 		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
 			Application::Get()->LoadScene<GameScene>();
 			Input::SetCursorLocked(true);
 		}
+		if (!mRestartButtonHovered && ImGui::IsItemHovered())
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
+			mRestartButtonHovered = true;
+		}
+		else if (!ImGui::IsItemHovered())
+			mRestartButtonHovered = false;
 
 		ImGui::Dummy(ImVec2(0, 10)); // spacing
 		// --- EXIT TO MAIN MENU ---
 		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 		if (ImGui::Button("MAIN MENU", ImVec2(buttonWidth, buttonHeight)))
 		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
 			Application::Get()->LoadScene<MainMenuScene>();
 		}
+		if (!mMainMenuButtonHovered && ImGui::IsItemHovered())
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
+			mMainMenuButtonHovered = true;
+		}
+		else if (!ImGui::IsItemHovered())
+			mMainMenuButtonHovered = false;
 
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
