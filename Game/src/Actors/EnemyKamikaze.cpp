@@ -6,6 +6,8 @@
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/SphereCollider.h"
 #include "Core/Components/Audio.h"
+#include "Core/Application.h"
+#include "Audio/AudioSystem.h"
 #include "Components/Damageable.h"
 #include "PlayerActor.h"
 
@@ -55,7 +57,7 @@ namespace Dawn
 		}
 		else
 		{
-			mAudioComponent->PlayEvent("event:/enemy_explode");
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/enemy_explode", GetPosition());
 			Explode(deltaTime);
 		}
 

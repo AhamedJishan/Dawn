@@ -10,6 +10,17 @@ namespace Dawn
 {
 	unsigned int AudioSystem::sNextId = 0;
 
+	FMOD_VECTOR VecToFmodVec(glm::vec3 vec)
+	{
+		FMOD_VECTOR retVec;
+
+		retVec.x = vec.x;
+		retVec.y = vec.y;
+		retVec.z = vec.z;
+
+		return retVec;
+	}
+
 	FMOD_VECTOR VecToFmodVec(float x, float y, float z)
 	{
 		FMOD_VECTOR retVec;
@@ -225,7 +236,7 @@ namespace Dawn
 		if (mSystem) mSystem->update();
 	}
 
-	SoundEvent AudioSystem::PlayEvent(const std::string& name)
+	SoundEvent AudioSystem::PlayEvent(const std::string& name, const glm::vec3 position)
 	{
 		unsigned int eventId = 0;
 
@@ -237,6 +248,16 @@ namespace Dawn
 
 			if (event)
 			{
+				bool is3D = false;
+				iter->second->is3D(&is3D);
+
+				if (is3D)
+				{
+					FMOD_3D_ATTRIBUTES attr;
+					attr.position = VecToFmodVec(position);
+					event->set3DAttributes(&attr);
+				}
+
 				event->start();
 
 				eventId = ++sNextId;

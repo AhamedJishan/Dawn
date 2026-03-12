@@ -77,9 +77,6 @@ namespace Dawn
 
 	void Application::Update()
 	{
-		mInputSystem->Update();
-		mAudioSystem->Update();
-
 		mWindow->PollEvents();
 
 		if (mWindow->ShouldClose())
@@ -90,6 +87,9 @@ namespace Dawn
 		mTime = currentTime;
 		// Prevent large deltaTime jumps
 		deltaTime = deltaTime > 0.05 ? 0.05 : deltaTime;
+
+		mInputSystem->Update();
+		mAudioSystem->Update();
 
 		if (mPendingScene)
 		{
@@ -105,6 +105,8 @@ namespace Dawn
 			mScene->Update(deltaTime);
 			mScene->UpdateActors(deltaTime);
 		}
+
+		mAudioSystem->Update();
 	}
 
 	void Application::GenerateOutput()

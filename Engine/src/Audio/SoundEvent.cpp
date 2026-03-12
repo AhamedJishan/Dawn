@@ -22,6 +22,21 @@ namespace Dawn
 		return (mSystem && mSystem->GetEventInstance(mId) != nullptr);
 	}
 
+	bool SoundEvent::IsOneshot() const
+	{
+		bool isOneshot = false;
+		FMOD::Studio::EventInstance* event = mSystem ? mSystem->GetEventInstance(mId) : nullptr;
+
+		if (event)
+		{
+			FMOD::Studio::EventDescription* ed = nullptr;
+			event->getDescription(&ed);
+			if (ed)
+				ed->isOneshot(&isOneshot);
+		}
+		return isOneshot;
+	}
+
 	bool SoundEvent::Is3D() const
 	{
 		bool is3D = false;

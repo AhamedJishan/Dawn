@@ -21,6 +21,7 @@ namespace FMOD
 
 namespace Dawn
 {
+	FMOD_VECTOR VecToFmodVec(glm::vec3 vec);
 	FMOD_VECTOR VecToFmodVec(float x, float y, float z);
 
 	// Forward declarations
@@ -38,7 +39,7 @@ namespace Dawn
 
 		void Update();
 
-		SoundEvent PlayEvent(const std::string& name);
+		SoundEvent PlayEvent(const std::string& name, const glm::vec3 position = glm::vec3(0));
 
 		void SetListener(const glm::mat4& viewMatrix);
 

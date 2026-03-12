@@ -15,6 +15,7 @@ namespace Dawn
 
 		bool IsValid() const;
 
+		bool IsOneshot() const;
 		bool Is3D() const;
 		void Set3DAttributes(const glm::mat4& worldTranform) const;
 
@@ -30,6 +31,8 @@ namespace Dawn
 		float GetPitch() const;
 		float GetVolume() const;
 		float GetParameter(const std::string& name) const;
+
+		const unsigned int GetId() const { return mId; }
 
 	private:
 		friend class AudioSystem;
