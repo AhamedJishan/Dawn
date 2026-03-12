@@ -57,7 +57,6 @@ namespace Dawn
 		}
 		else
 		{
-			Application::Get()->GetAudioSystem()->PlayEvent("event:/enemy_explode", GetPosition());
 			Explode(deltaTime);
 		}
 
@@ -108,14 +107,20 @@ namespace Dawn
 			SetRotation(glm::quatLookAt(moveDir, GetUp()));
 		}
 		else
+		{
+			mAudioComponent->PlayEvent("event:/enemy_fuse");
 			mActionState = ActionState::Exploding;
+		}
 	}
 
 	void EnemyKamikaze::Exploding(float deltaTime)
 	{
 		mExplosionTimer -= deltaTime;
 		if (mExplosionTimer <= 0.0f)
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/enemy_explode", GetPosition());
 			mActionState = ActionState::Explode;
+		}
 		else if (mExplosionTimer <= mExplosionScaleDuration)
 		{
 			// linearly interpolate to scale
