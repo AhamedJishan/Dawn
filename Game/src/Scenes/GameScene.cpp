@@ -6,6 +6,7 @@
 #include "Actors/EnemySpawner.h"
 #include "Actors/PlayerActor.h"
 #include "Actors/FPSCameraActor.h"
+#include "Actors/Gun.h"
 #include "Core/Components/Camera.h"
 #include "Core/Application.h"
 #include "Audio/AudioSystem.h"
@@ -51,6 +52,7 @@ namespace Dawn
 		FPSCameraActor* cameraActor = new FPSCameraActor(this);
 		PlayerActor* player = new PlayerActor(this, cameraActor);
 		player->SetPosition(glm::vec3(0, 0, 4));
+		Gun* gun = new Gun(this, player);
 		// ENEMY SPAWNER
 		mEnemySpawner = new EnemySpawner(this, player);
 

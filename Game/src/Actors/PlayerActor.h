@@ -18,18 +18,17 @@ namespace Dawn
 		void Update(float deltaTime) override;
 
 		void TakeDamage(float dmg);
+		const glm::vec3& GetGunPosition();
 
 	private:
 		GameScene* mGameScene = nullptr;
+		Damageable* mDamageable = nullptr;
 
 		float mSpeed = 3.0f;
 
 		FPSCameraActor* mCamera = nullptr;
 		glm::vec3 mCameraOffset = glm::vec3(0, 2, 0);
 
-		Gun* mGun = nullptr;
-		glm::vec3 mGunOffset = glm::vec3(0.15f, -.075f, 0.225f);
-
-		Damageable* mDamageable = nullptr;
+		glm::vec3 mGunOffset = glm::vec3(0.175f, -.1f, 0.175f);
 	};
 }

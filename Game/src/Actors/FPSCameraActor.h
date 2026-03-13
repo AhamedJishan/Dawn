@@ -16,6 +16,7 @@ namespace Dawn
 			:Actor(scene)
 		{
 			mCamera = new FPSCamera(this);
+			mCamera->SetFOV(80.0f);
 		}
 
 		float GetYaw() const { return mCamera->GetYaw(); }

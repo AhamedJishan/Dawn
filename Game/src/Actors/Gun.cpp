@@ -2,6 +2,7 @@
 #include "Utils/Log.h"
 
 #include <glm/gtc/constants.hpp>
+#include <glm/vec3.hpp>
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Scene.h"
@@ -10,38 +11,39 @@
 #include "Core/Components/Audio.h"
 #include "Input/Input.h"
 #include "Physics/Physics.h"
+#include "PlayerActor.h"
 #include "Projectile.h"
 
 namespace Dawn
 {
-	Gun::Gun(Scene* scene)
+	Gun::Gun(Scene* scene, PlayerActor* player)
 		:Actor(scene)
 	{
 		MeshRenderer::CreateFromModel(this, "Assets/Models/gun/gun.obj");
 		mAudioComponent = new Audio(this);
+		mPlayer = player;
 	}
 
 	void Gun::Update(float deltaTime)
 	{
+		SyncTransform();
+
 		mTimeSinceLastFire += deltaTime;
 		if (mTimeSinceLastFire >= mFireCooldown && Input::GetMouseButtonDown(MouseButton::Left))
 		{
 			Fire();
 			mTimeSinceLastFire = 0.0f;
 
-			mRecoilTimer = mRecoilDuration;
+			mRecoilOffset -= GetForward() * mRecoilKickAmount;
+			mRecoilPitch += mRecoilPitchKick;
 		}
 
-		// No need to store base position.
-		// PlayerActor resets the gun transform every frame.
-		// Recoil applies a temporary offset on top of that.
-		if (mRecoilTimer > 0.0f)
-		{
-			float t = 1 - mRecoilTimer / mRecoilDuration;
-			float recoilOffset = mRecoilAmount * glm::sin(t * glm::pi<float>());
-			SetPosition(GetPosition() - GetForward() * recoilOffset);
-			mRecoilTimer -= deltaTime;
-		}
+		mRecoilOffset = glm::mix(mRecoilOffset, glm::vec3(0.0f), deltaTime * mRecoilRecoverySpeed);
+		mRecoilPitch = glm::mix(mRecoilPitch, 0.0f, deltaTime * mRecoilRecoverySpeed);
+
+		// Apply recoil
+		SetPosition(GetPosition() + mRecoilOffset);
+		Rotate(mRecoilPitch, glm::vec3(1, 0, 0));
 	}
 
 	void Gun::Fire()
@@ -76,6 +78,12 @@ namespace Dawn
 		Projectile* projectile = new Projectile(mScene, mDamage);
 		projectile->SetPosition(GetPosition());
 		projectile->SetRotation(projectileRotation);
+	}
+
+	void Gun::SyncTransform()
+	{
+		SetPosition(mPlayer->GetGunPosition());
+		SetRotation(mScene->GetActiveCamera()->GetOwner()->GetRotation());
 	}
 
 }

@@ -19,8 +19,6 @@ namespace Dawn
 
 		mGameScene = scene;
 		mCamera = fpsCameraActor;
-
-		mGun = new Gun(mScene);
 		mDamageable = new Damageable(this, 100.0f);
 
 		mGameScene->SetPlayerHealth(mDamageable->GetHealth());
@@ -45,15 +43,6 @@ namespace Dawn
 		if (Input::GetKey(Key::S)) mPosition -= speed * GetForward() * deltaTime;
 		if (Input::GetKey(Key::A)) mPosition -= speed * GetRight() * deltaTime;
 		if (Input::GetKey(Key::D)) mPosition += speed * GetRight() * deltaTime;
-
-		// sync Gun pos
-		glm::vec3 gunPos = mCamera->GetPosition();
-		gunPos += mCamera->GetUp() * mGunOffset.y;
-		gunPos += mCamera->GetRight() * mGunOffset.x;
-		gunPos += mCamera->GetForward() * mGunOffset.z;
-		mGun->SetPosition(gunPos);
-		// sync gun rotation
-		mGun->SetRotation(mCamera->GetRotation());
 	}
 
 	void PlayerActor::TakeDamage(float dmg)
@@ -66,5 +55,15 @@ namespace Dawn
 			LOG_WARN("PLAYER DIED!");
 			mGameScene->GameOver();
 		}
+	}
+	const glm::vec3& PlayerActor::GetGunPosition()
+	{
+		glm::vec3 gunPos = mCamera->GetPosition();
+
+		gunPos += mCamera->GetUp() * mGunOffset.y;
+		gunPos += mCamera->GetRight() * mGunOffset.x;
+		gunPos += mCamera->GetForward() * mGunOffset.z;
+
+		return gunPos;
 	}
 }
