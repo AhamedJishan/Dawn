@@ -18,7 +18,7 @@ namespace Dawn
 		void Update(float deltaTime) override;
 
 		void TakeDamage(float dmg);
-		const glm::vec3& GetGunPosition();
+		glm::vec3 GetGunPosition();
 
 	private:
 		GameScene* mGameScene = nullptr;

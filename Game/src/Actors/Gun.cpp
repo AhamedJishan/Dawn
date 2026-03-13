@@ -26,8 +26,20 @@ namespace Dawn
 
 	void Gun::Update(float deltaTime)
 	{
-		SyncTransform();
+		glm::quat baseRotation = mScene->GetActiveCamera()->GetOwner()->GetRotation();
+		glm::vec3 basePosition = mPlayer->GetGunPosition();
 
+		SetRotation(baseRotation);
+
+		// --- SWAY ---
+		glm::vec2 swayMoveOffset = GetSwayMovementOffset();
+		glm::vec3 targetSway = GetRight() * swayMoveOffset.x - GetUp() * swayMoveOffset.y;
+		mSwayMoveOffset = glm::mix(mSwayMoveOffset, targetSway, deltaTime * mSwaySmooth);
+
+		glm::vec2 swayRotationOffset = GetSwayRotationOffset();
+		mSwayRotationOffset = glm::mix(mSwayRotationOffset, swayRotationOffset, deltaTime * mSwaySmooth);
+
+		// --- FIRE ---
 		mTimeSinceLastFire += deltaTime;
 		if (mTimeSinceLastFire >= mFireCooldown && Input::GetMouseButtonDown(MouseButton::Left))
 		{
@@ -38,11 +50,19 @@ namespace Dawn
 			mRecoilPitch += mRecoilPitchKick;
 		}
 
+		// --- RECOIL ---
 		mRecoilOffset = glm::mix(mRecoilOffset, glm::vec3(0.0f), deltaTime * mRecoilRecoverySpeed);
 		mRecoilPitch = glm::mix(mRecoilPitch, 0.0f, deltaTime * mRecoilRecoverySpeed);
 
-		// Apply recoil
-		SetPosition(GetPosition() + mRecoilOffset);
+		// --- FINAL TRANSFORM ---
+		glm::vec3 finalPosition = basePosition + mSwayMoveOffset + mRecoilOffset;
+
+		SetPosition(finalPosition);
+
+		Rotate(mSwayRotationOffset.y, glm::vec3(1, 0, 0));
+		Rotate(mSwayRotationOffset.x, glm::vec3(0, 1, 0));
+
+		// recoil kick
 		Rotate(mRecoilPitch, glm::vec3(1, 0, 0));
 	}
 
@@ -80,10 +100,22 @@ namespace Dawn
 		projectile->SetRotation(projectileRotation);
 	}
 
-	void Gun::SyncTransform()
+	glm::vec2 Gun::GetSwayMovementOffset()
 	{
-		SetPosition(mPlayer->GetGunPosition());
-		SetRotation(mScene->GetActiveCamera()->GetOwner()->GetRotation());
+		glm::vec2 invertLook = Input::GetCursorDeltaPos() * (-mSwayMoveStep);
+		invertLook.x = glm::clamp(invertLook.x, -mMaxSwayMoveStep, mMaxSwayMoveStep);
+		invertLook.y = glm::clamp(invertLook.y, -mMaxSwayMoveStep, mMaxSwayMoveStep);
+
+		return invertLook;
+	}
+
+	glm::vec2 Gun::GetSwayRotationOffset()
+	{
+		glm::vec2 invertLook = Input::GetCursorDeltaPos() * mSwayRotationStep;
+		invertLook.x = glm::clamp(invertLook.x, -mMaxSwayRotationStep, mMaxSwayRotationStep);
+		invertLook.y = glm::clamp(invertLook.y, -mMaxSwayRotationStep, mMaxSwayRotationStep);
+
+		return invertLook;
 	}
 
 }

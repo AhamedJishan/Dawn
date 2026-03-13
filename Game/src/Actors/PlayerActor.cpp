@@ -56,7 +56,7 @@ namespace Dawn
 			mGameScene->GameOver();
 		}
 	}
-	const glm::vec3& PlayerActor::GetGunPosition()
+	glm::vec3 PlayerActor::GetGunPosition()
 	{
 		glm::vec3 gunPos = mCamera->GetPosition();
 
