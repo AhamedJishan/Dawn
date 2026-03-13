@@ -6,6 +6,7 @@ namespace Dawn
 {
 	// Forward declarations
 	class Scene;
+	class Audio;
 
 	class Gun : public Actor
 	{
@@ -24,5 +25,7 @@ namespace Dawn
 		const float mRecoilDuration = 0.2f;
 		float mRecoilTimer = 0.0f;
 		float mRecoilAmount = 0.03f;
+
+		Audio* mAudioComponent = nullptr;
 	};
 }

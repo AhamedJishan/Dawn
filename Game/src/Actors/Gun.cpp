@@ -7,6 +7,7 @@
 #include "Core/Scene.h"
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/Camera.h"
+#include "Core/Components/Audio.h"
 #include "Input/Input.h"
 #include "Physics/Physics.h"
 #include "Projectile.h"
@@ -17,6 +18,7 @@ namespace Dawn
 		:Actor(scene)
 	{
 		MeshRenderer::CreateFromModel(this, "Assets/Models/gun/gun.obj");
+		mAudioComponent = new Audio(this);
 	}
 
 	void Gun::Update(float deltaTime)
@@ -44,6 +46,8 @@ namespace Dawn
 
 	void Gun::Fire()
 	{
+		mAudioComponent->PlayEvent("event:/gunshot");
+
 		Camera* camera = mScene->GetActiveCamera();
 		if (!camera)
 			return;
