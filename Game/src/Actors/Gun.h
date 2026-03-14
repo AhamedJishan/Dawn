@@ -24,8 +24,13 @@ namespace Dawn
 		void UpdateSwayOffsets(float deltaTime);
 		glm::vec2 GetSwayMovementOffset();
 		glm::vec2 GetSwayRotationOffset();
+
 		void RecoilKickBack();
 		void RecoilRecovery(float deltaTime);
+
+		void UpdateBobOffset(float deltaTime);
+
+		glm::vec3 GetMoveInput();
 
 	private:
 		PlayerActor* mPlayer = nullptr;
@@ -43,13 +48,21 @@ namespace Dawn
 		const float mRecoilRecoverySpeed = 5.0f;
 
 		// Sway
-		const float mSwaySmooth = 12.0f;
-		const float mSwayMoveStep = 0.01f;
-		const float mMaxSwayMoveStep = 0.06f;
+		const float mSwaySmooth = 8.0f;
+		const float mSwayMoveStep = 0.02f;
+		const float mMaxSwayMoveStep = 0.12f;
 		const float mSwayRotationStep = 0.2f;
 		const float mMaxSwayRotationStep = 0.3f;
 
-		glm::vec3 mSwayMoveOffset = glm::vec3(0.0f);
-		glm::vec2 mSwayRotationOffset = glm::vec2(0.0f);
+		glm::vec3 mSwayMoveOffset = glm::vec3(0);
+		glm::vec2 mSwayRotationOffset = glm::vec2(0);
+
+		// Bob
+		const float mBobSpeed = 10.0f;
+		const float mBobAmount = 0.02f;
+		const float mBobLerpSpeed = 9.0f;
+		float mBobTime = 0.0f;
+		float mCurrentBobAmount = 0.0f;
+		glm::vec3 mBobMoveOffset = glm::vec3(0);
 	};
 }

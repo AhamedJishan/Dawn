@@ -29,6 +29,6 @@ namespace Dawn
 		FPSCameraActor* mCamera = nullptr;
 		glm::vec3 mCameraOffset = glm::vec3(0, 2, 0);
 
-		glm::vec3 mGunOffset = glm::vec3(0.175f, -.1f, 0.175f);
+		glm::vec3 mGunOffset = glm::vec3(0.17f, -.1f, 0.18f);
 	};
 }

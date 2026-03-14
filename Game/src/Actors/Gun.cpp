@@ -32,6 +32,8 @@ namespace Dawn
 		SetRotation(baseRotation);
 
 		UpdateSwayOffsets(deltaTime);
+		UpdateBobOffset(deltaTime);
+		RecoilRecovery(deltaTime);
 
 		mTimeSinceLastFire += deltaTime;
 		if (mTimeSinceLastFire >= mFireCooldown && Input::GetMouseButtonDown(MouseButton::Left))
@@ -42,10 +44,8 @@ namespace Dawn
 			RecoilKickBack();
 		}
 
-		RecoilRecovery(deltaTime);
-
 		// --- FINAL TRANSFORM ---
-		glm::vec3 finalPosition = basePosition + mSwayMoveOffset + mRecoilOffset;
+		glm::vec3 finalPosition = basePosition + mSwayMoveOffset + mBobMoveOffset + mRecoilOffset;
 		SetPosition(finalPosition);
 
 		Rotate(mSwayRotationOffset.y, glm::vec3(1, 0, 0));
@@ -126,5 +126,42 @@ namespace Dawn
 	{
 		mRecoilOffset = glm::mix(mRecoilOffset, glm::vec3(0.0f), deltaTime * mRecoilRecoverySpeed);
 		mRecoilPitch = glm::mix(mRecoilPitch, 0.0f, deltaTime * mRecoilRecoverySpeed);
+	}
+
+	void Gun::UpdateBobOffset(float deltaTime)
+	{
+		glm::vec3 moveInput = GetMoveInput();
+		bool isMoving = (glm::length(moveInput) > 0.01f);
+		bool isSprinting = isMoving && Input::GetKey(Key::LeftShift);
+
+		// --- Lerp the amplitude ---
+		float speedFactor = isMoving ? (isSprinting ? 1.0f : 0.75f) : 0.25f;
+		float targetAmount = mBobAmount * speedFactor;
+
+		float lerpFactor = 1 - glm::exp(-mBobLerpSpeed * deltaTime);
+		mCurrentBobAmount += (targetAmount - mCurrentBobAmount) * lerpFactor;
+
+		// --- Advance BobTime ---
+		mBobTime += mBobSpeed * speedFactor * deltaTime;
+
+		// --- Compute offsets ---
+		float verticalOffset	= glm::sin(mBobTime)		* mCurrentBobAmount;
+		float horizontalOffset	= glm::sin(mBobTime * 0.5f)	* mCurrentBobAmount * 0.5f;
+
+		mBobMoveOffset = glm::vec3(0);
+		mBobMoveOffset += GetUp() * verticalOffset;
+		mBobMoveOffset += GetRight() * horizontalOffset;
+	}
+
+	glm::vec3 Gun::GetMoveInput()
+	{
+		glm::vec3 moveInput = glm::vec3(0);
+
+		if (Input::GetKey(Key::W)) moveInput.y += 1.0f;
+		if (Input::GetKey(Key::S)) moveInput.y -= 1.0f;
+		if (Input::GetKey(Key::A)) moveInput.x -= 1.0f;
+		if (Input::GetKey(Key::D)) moveInput.x += 1.0f;
+
+		return (glm::length(moveInput) > 0.01f) ? moveInput : glm::vec3(0);
 	}
 }
