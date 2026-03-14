@@ -1,7 +1,6 @@
 #include "Gun.h"
 #include "Utils/Log.h"
 
-#include <glm/gtc/constants.hpp>
 #include <glm/vec3.hpp>
 #include "Core/Application.h"
 #include "Core/Window.h"
@@ -29,40 +28,28 @@ namespace Dawn
 		glm::quat baseRotation = mScene->GetActiveCamera()->GetOwner()->GetRotation();
 		glm::vec3 basePosition = mPlayer->GetGunPosition();
 
+		// Need this since rest of the code requires correct orientation
 		SetRotation(baseRotation);
 
-		// --- SWAY ---
-		glm::vec2 swayMoveOffset = GetSwayMovementOffset();
-		glm::vec3 targetSway = GetRight() * swayMoveOffset.x - GetUp() * swayMoveOffset.y;
-		mSwayMoveOffset = glm::mix(mSwayMoveOffset, targetSway, deltaTime * mSwaySmooth);
+		UpdateSwayOffsets(deltaTime);
 
-		glm::vec2 swayRotationOffset = GetSwayRotationOffset();
-		mSwayRotationOffset = glm::mix(mSwayRotationOffset, swayRotationOffset, deltaTime * mSwaySmooth);
-
-		// --- FIRE ---
 		mTimeSinceLastFire += deltaTime;
 		if (mTimeSinceLastFire >= mFireCooldown && Input::GetMouseButtonDown(MouseButton::Left))
 		{
 			Fire();
 			mTimeSinceLastFire = 0.0f;
 
-			mRecoilOffset -= GetForward() * mRecoilKickAmount;
-			mRecoilPitch += mRecoilPitchKick;
+			RecoilKickBack();
 		}
 
-		// --- RECOIL ---
-		mRecoilOffset = glm::mix(mRecoilOffset, glm::vec3(0.0f), deltaTime * mRecoilRecoverySpeed);
-		mRecoilPitch = glm::mix(mRecoilPitch, 0.0f, deltaTime * mRecoilRecoverySpeed);
+		RecoilRecovery(deltaTime);
 
 		// --- FINAL TRANSFORM ---
 		glm::vec3 finalPosition = basePosition + mSwayMoveOffset + mRecoilOffset;
-
 		SetPosition(finalPosition);
 
 		Rotate(mSwayRotationOffset.y, glm::vec3(1, 0, 0));
 		Rotate(mSwayRotationOffset.x, glm::vec3(0, 1, 0));
-
-		// recoil kick
 		Rotate(mRecoilPitch, glm::vec3(1, 0, 0));
 	}
 
@@ -118,4 +105,26 @@ namespace Dawn
 		return invertLook;
 	}
 
+	void Gun::UpdateSwayOffsets(float deltaTime)
+	{
+		// Sway Movement
+		glm::vec2 swayMoveOffset = GetSwayMovementOffset();
+		glm::vec3 targetSway = GetRight() * swayMoveOffset.x - GetUp() * swayMoveOffset.y;
+		mSwayMoveOffset = glm::mix(mSwayMoveOffset, targetSway, deltaTime * mSwaySmooth);
+		// Sway Rotation
+		glm::vec2 swayRotationOffset = GetSwayRotationOffset();
+		mSwayRotationOffset = glm::mix(mSwayRotationOffset, swayRotationOffset, deltaTime * mSwaySmooth);
+	}
+
+	void Gun::RecoilKickBack()
+	{
+		mRecoilOffset -= GetForward() * mRecoilKickAmount;
+		mRecoilPitch += mRecoilPitchAmount;
+	}
+
+	void Gun::RecoilRecovery(float deltaTime)
+	{
+		mRecoilOffset = glm::mix(mRecoilOffset, glm::vec3(0.0f), deltaTime * mRecoilRecoverySpeed);
+		mRecoilPitch = glm::mix(mRecoilPitch, 0.0f, deltaTime * mRecoilRecoverySpeed);
+	}
 }

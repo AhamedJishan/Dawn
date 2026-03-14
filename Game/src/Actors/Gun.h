@@ -20,8 +20,12 @@ namespace Dawn
 		void Fire();
 
 	private:
+		// Updates 'mSwayMoveOffset' and 'mSwayRotationOffset'
+		void UpdateSwayOffsets(float deltaTime);
 		glm::vec2 GetSwayMovementOffset();
 		glm::vec2 GetSwayRotationOffset();
+		void RecoilKickBack();
+		void RecoilRecovery(float deltaTime);
 
 	private:
 		PlayerActor* mPlayer = nullptr;
@@ -35,15 +39,15 @@ namespace Dawn
 		glm::vec3 mRecoilOffset = glm::vec3(0.0f);
 		float mRecoilPitch = 0.0f;
 		const float mRecoilKickAmount = 0.1f;
-		const float mRecoilPitchKick = 0.2f;
+		const float mRecoilPitchAmount = 0.2f;
 		const float mRecoilRecoverySpeed = 5.0f;
 
 		// Sway
-		const float mSwaySmooth = 7.0f;
+		const float mSwaySmooth = 12.0f;
 		const float mSwayMoveStep = 0.01f;
 		const float mMaxSwayMoveStep = 0.06f;
-		const float mSwayRotationStep = 0.40f;
-		const float mMaxSwayRotationStep = 0.55f;
+		const float mSwayRotationStep = 0.2f;
+		const float mMaxSwayRotationStep = 0.3f;
 
 		glm::vec3 mSwayMoveOffset = glm::vec3(0.0f);
 		glm::vec2 mSwayRotationOffset = glm::vec2(0.0f);
