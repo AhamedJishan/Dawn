@@ -4,7 +4,7 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 ## TODO
 
 ### Phase 1: Core Game Feel & Systems
-- Gunplay Polish: Swap sine-wave recoil for a snappy spring/damped system.
+- [Done] Gunplay Polish: Swap sine-wave recoil for a snappy spring/damped system.
 - Shooting Visuals: Add muzzle flash (simple quad) and camera kick/recoil.
 - Player Movement Polish: Tweak acceleration/deceleration and wall collisions to make navigation feel incredibly smooth.
 - Wave Spawning System: Create wave/round logic and distribute spawn points to handle horde pacing.
@@ -26,6 +26,7 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - shooting
 - enemy chase
 - wave system
+- Dash into enemy to attack
 
 ### Rendering
 - SpriteRenderer

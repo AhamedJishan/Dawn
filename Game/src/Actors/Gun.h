@@ -39,6 +39,7 @@ namespace Dawn
 		float mDamage = 35.0f;
 		const float mFireCooldown = 0.1f;
 		float mTimeSinceLastFire = 0.0f;
+		glm::vec3 mProjectileSpawnOffset = glm::vec3(0.0f, 0.05f, 0.15f);
 
 		// Recoil
 		glm::vec3 mRecoilOffset = glm::vec3(0.0f);
@@ -53,7 +54,6 @@ namespace Dawn
 		const float mMaxSwayMoveStep = 0.12f;
 		const float mSwayRotationStep = 0.2f;
 		const float mMaxSwayRotationStep = 0.3f;
-
 		glm::vec3 mSwayMoveOffset = glm::vec3(0);
 		glm::vec2 mSwayRotationOffset = glm::vec2(0);
 

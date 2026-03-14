@@ -18,6 +18,7 @@ namespace Dawn
 			mCollider = new SphereCollider(this);
 			mCollider->SetRadius(0.2f);
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
+			SetScale(glm::vec3(0.2f));
 		}
 
 		void Update(float deltaTime) override
@@ -39,7 +40,7 @@ namespace Dawn
 
 	private:
 		float mLifeTime = 1.0f;
-		float mSpeed = 100.0f;
+		float mSpeed = 40.0f;
 		float mDamage = 35.0f;
 
 		SphereCollider* mCollider = nullptr;

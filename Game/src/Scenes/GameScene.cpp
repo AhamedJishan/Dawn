@@ -249,7 +249,7 @@ namespace Dawn
 	{
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImDrawList* drawList = ImGui::GetForegroundDrawList();
-		drawList->AddCircleFilled(center, 3.0f, IM_COL32(255, 255, 255, 255), 8);
+		drawList->AddCircleFilled(center, 2.0f, IM_COL32(255, 255, 255, 255), 8);
 	}
 
 	void GameScene::DrawGameOver()
