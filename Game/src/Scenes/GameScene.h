@@ -31,7 +31,7 @@ namespace Dawn
 		void DrawGameOver();
 
 	private:
-		EnemySpawner* mEnemySpawner = nullptr;
+		//EnemySpawner* mEnemySpawner = nullptr;
 
 		ImFont* mFontBold = nullptr;
 		ImFont* mFontRegular = nullptr;

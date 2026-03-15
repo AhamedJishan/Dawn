@@ -5,9 +5,9 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ### Phase 1: Core Game Feel & Systems
 - [Done] Gunplay Polish: Swap sine-wave recoil for a snappy spring/damped system.
-- Shooting Visuals: Add muzzle flash (simple quad) and camera kick/recoil.
+- [Postponed] Shooting Visuals: Add muzzle flash (simple quad) and camera kick/recoil.
 - Player Movement Polish: Tweak acceleration/deceleration and wall collisions to make navigation feel incredibly smooth.
-- Wave Spawning System: Create wave/round logic and distribute spawn points to handle horde pacing.
+- [WIP] Wave Spawning System: Create wave/round logic and distribute spawn points to handle horde pacing.
 - Enemy Separation Logic: Implement simple steering/repulsion behavior to prevent overlapping meshes.
 
 ### Phase 2: The "Vibe" & Graphics

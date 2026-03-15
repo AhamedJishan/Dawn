@@ -4,6 +4,7 @@
 #include "ExampleActor.h"
 #include "Actors/GroundPlane.h"
 #include "Actors/EnemySpawner.h"
+#include "Actors/WaveManager.h"
 #include "Actors/PlayerActor.h"
 #include "Actors/FPSCameraActor.h"
 #include "Actors/Gun.h"
@@ -54,7 +55,9 @@ namespace Dawn
 		player->SetPosition(glm::vec3(0, 0, 4));
 		Gun* gun = new Gun(this, player);
 		// ENEMY SPAWNER
-		mEnemySpawner = new EnemySpawner(this, player);
+		//mEnemySpawner = new EnemySpawner(this, player);
+
+		WaveManager* waveManager = new WaveManager(this, player);
 
 		Camera* cam = cameraActor->GetComponent<Camera>();
 		if (cam)
@@ -215,7 +218,8 @@ namespace Dawn
 			ImGuiWindowFlags_AlwaysAutoResize);
 
 		ImGui::PushFont(mFontRegular, 20.0f);
-		ImGui::Text("Score: %d", mEnemySpawner->GetEnemiesKilled());
+		// TODO: 
+		ImGui::Text("Score: %d", 0);
 		ImGui::PopFont();
 
 		ImGui::End();
