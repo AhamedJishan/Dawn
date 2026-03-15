@@ -33,7 +33,7 @@ namespace Dawn
 	protected:
 		// in degrees
 		float mFOV = 60.0f;
-		float mNear = 0.1f;
+		float mNear = 0.01f;
 		float mFar = 100.0f;
 	};
 }

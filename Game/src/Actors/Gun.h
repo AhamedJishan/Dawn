@@ -58,8 +58,8 @@ namespace Dawn
 		glm::vec2 mSwayRotationOffset = glm::vec2(0);
 
 		// Bob
-		const float mBobSpeed = 10.0f;
-		const float mBobAmount = 0.02f;
+		const float mBobSpeed = 13.0f;
+		const float mBobAmount = 0.01f;
 		const float mBobLerpSpeed = 9.0f;
 		float mBobTime = 0.0f;
 		float mCurrentBobAmount = 0.0f;

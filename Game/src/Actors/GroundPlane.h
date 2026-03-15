@@ -17,11 +17,11 @@ namespace Dawn
 		GroundPlane(Scene* scene)
 			:Actor(scene)
 		{
-			MeshRenderer::CreateFromModel(this, "Assets/Models/greybox/greybox.obj");
+			MeshRenderer::CreateFromModel(this, "Assets/Models/arena/arena.obj");
 
-			PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
-			if (mat)
-				mat->SetDiffuseColor(glm::vec3(0.5f));
+			//PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
+			//if (mat);
+			//	mat->SetDiffuseColor(glm::vec3(0.5f));
 		}
 	};
 }
