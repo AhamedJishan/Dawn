@@ -59,6 +59,11 @@ namespace Dawn
 
 		void Update(float deltaTime) override;
 
+		WaveState GetWaveState() const { return mWaveState; }
+		unsigned int GetWaveEnemiesRemaining() const { return mWaveEnemiesRemaining; }
+		unsigned int GetCurrentWaveIndex() const { return mCurrentWaveIndex; }
+		float GetWaveCountdown() const { return mTimeBetweenWaves - mWaveTimer; }
+
 	private:
 		void QueueSpawn(unsigned int enemyCount, unsigned int spawnLocationIndex);
 		unsigned int GetTotalEnemyCountForWave(unsigned int waveIndex);
@@ -72,8 +77,8 @@ namespace Dawn
 		std::array<glm::vec3, NUM_SPAWN_LOCATIONS> mSpawnLocations = 
 		{
 			glm::vec3(0.0f, 0.0f,  ARENA_RADIUS),
+			glm::vec3(ARENA_RADIUS, 0.0f, 0.0f),
 			glm::vec3(0.0f, 0.0f, -ARENA_RADIUS),
-			glm::vec3( ARENA_RADIUS, 0.0f, 0.0f),
 			glm::vec3(-ARENA_RADIUS, 0.0f, 0.0f)
 		};
 

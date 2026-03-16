@@ -3,7 +3,6 @@
 #include <glm/vec3.hpp>
 #include "ExampleActor.h"
 #include "Actors/GroundPlane.h"
-#include "Actors/EnemySpawner.h"
 #include "Actors/WaveManager.h"
 #include "Actors/PlayerActor.h"
 #include "Actors/FPSCameraActor.h"
@@ -54,10 +53,9 @@ namespace Dawn
 		PlayerActor* player = new PlayerActor(this, cameraActor);
 		player->SetPosition(glm::vec3(0, 0, 4));
 		Gun* gun = new Gun(this, player);
-		// ENEMY SPAWNER
-		//mEnemySpawner = new EnemySpawner(this, player);
 
-		WaveManager* waveManager = new WaveManager(this, player);
+		// --- WAVE MANAGER ---
+		mWaveManager = new WaveManager(this, player);
 
 		Camera* cam = cameraActor->GetComponent<Camera>();
 		if (cam)
@@ -86,16 +84,17 @@ namespace Dawn
 	{
 		if (!mIsGameOver && !IsPaused())
 		{
+			DrawWaveUI();
 			DrawCrossHair();
 			DrawHealthBar();
 		}
 
-		DrawKillCounter();
-
 		if (IsPaused() && !mIsGameOver)
 			DrawPauseWindow();
-		else if (mIsGameOver)
+		else if (mIsGameOver && mWaveManager->GetWaveState() != WaveState::End)
 			DrawGameOver();
+		else if (mIsGameOver && mWaveManager->GetWaveState() == WaveState::End)
+			DrawVictoryUI();
 	}
 
 	void GameScene::GameOver()
@@ -201,30 +200,6 @@ namespace Dawn
 		ImGui::End();	// Pause Menu
 		ImGui::End();	// Overlay
 	}
-	
-	void GameScene::DrawKillCounter()
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		float windowCenterX = ImGui::GetMainViewport()->GetCenter().x;
-
-		ImGui::SetNextWindowBgAlpha(0.4f);
-		ImGui::SetNextWindowPos(ImVec2(windowCenterX, 0.0f), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.0f);
-
-		ImGui::Begin("KillCounter", NULL,
-			ImGuiWindowFlags_NoDecoration |
-			ImGuiWindowFlags_NoResize |
-			ImGuiWindowFlags_AlwaysAutoResize);
-
-		ImGui::PushFont(mFontRegular, 20.0f);
-		// TODO: 
-		ImGui::Text("Score: %d", 0);
-		ImGui::PopFont();
-
-		ImGui::End();
-		ImGui::PopStyleVar(2);
-	}
 
 	void GameScene::DrawHealthBar()
 	{
@@ -317,6 +292,89 @@ namespace Dawn
 		else if (!ImGui::IsItemHovered())
 			mRestartButtonHovered = false;
 
+		ImGui::Dummy(ImVec2(0, 10)); 
+		// --- EXIT TO MAIN MENU ---
+		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
+		if (ImGui::Button("MAIN MENU", ImVec2(buttonWidth, buttonHeight)))
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
+			Application::Get()->LoadScene<MainMenuScene>();
+		}
+		if (!mMainMenuButtonHovered && ImGui::IsItemHovered())
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
+			mMainMenuButtonHovered = true;
+		}
+		else if (!ImGui::IsItemHovered())
+			mMainMenuButtonHovered = false;
+
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::End();
+	}
+
+	void GameScene::DrawVictoryUI()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+
+		// --- BackGround Window ---
+		ImGui::SetNextWindowPos(ImVec2(0, 0));
+		ImGui::SetNextWindowSize(io.DisplaySize);
+
+		float alpha = mTimeSinceGameOver / mGameOverTransitionDuration;
+		alpha = glm::clamp(alpha, 0.0f, 1.0f);
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, alpha));
+
+		ImGui::Begin("Game Over Window", NULL,
+			ImGuiWindowFlags_NoDecoration |
+			ImGuiWindowFlags_NoBringToFrontOnFocus |
+			ImGuiWindowFlags_NoMove);
+
+		ImGui::PopStyleColor();
+
+		// --- VICTORY TEXT ---
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+
+		ImGui::PushFont(mFontBold, 50.0f);
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.15f, 1.0f));
+		const char* gameOverText = "YOU WON!";
+		ImVec2 textSize = ImGui::CalcTextSize(gameOverText);
+		ImGui::SetCursorPos(ImVec2(center.x - textSize.x / 2.0f, center.y - 100));
+
+		ImGui::Text(gameOverText);
+
+		ImGui::PopStyleColor();
+		ImGui::PopFont();
+
+		// --- BUTTONS ---
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.15f, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.15f, 0.3f));
+
+		float windowWidth = ImGui::GetWindowSize().x;
+
+		ImGui::PushFont(mFontLight, 25.0f);
+		float buttonHeight = ImGui::CalcTextSize("DUMMY").y + 4;
+		float buttonWidth = 200.0f;
+		ImGui::SetCursorPosY(center.y + 100);
+		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
+
+		// --- RESTART GAME ---
+		if (ImGui::Button("RESTART", ImVec2(buttonWidth, buttonHeight)))
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
+			Application::Get()->LoadScene<GameScene>();
+			Input::SetCursorLocked(true);
+		}
+		if (!mRestartButtonHovered && ImGui::IsItemHovered())
+		{
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
+			mRestartButtonHovered = true;
+		}
+		else if (!ImGui::IsItemHovered())
+			mRestartButtonHovered = false;
+
 		ImGui::Dummy(ImVec2(0, 10)); // spacing
 		// --- EXIT TO MAIN MENU ---
 		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
@@ -337,5 +395,56 @@ namespace Dawn
 		ImGui::PopStyleColor(3);
 
 		ImGui::End();
+	}
+
+	void GameScene::DrawWaveUI()
+	{
+		WaveState waveState = mWaveManager->GetWaveState();
+		unsigned int currentWaveNumber = mWaveManager->GetCurrentWaveIndex() + 1;
+
+		ImGuiIO& io = ImGui::GetIO();
+		float windowCenterX = ImGui::GetMainViewport()->GetCenter().x;
+
+		ImGui::SetNextWindowBgAlpha(0.4f);
+		ImGui::SetNextWindowPos(ImVec2(windowCenterX, 0.0f), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.0f);
+
+		ImGui::Begin("Wave UI", NULL,
+			ImGuiWindowFlags_NoDecoration |
+			ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_AlwaysAutoResize);
+
+		switch (waveState)
+		{
+		case Dawn::WaveState::Begin:
+			break;
+		case Dawn::WaveState::WaveStarting:
+		{
+			ImGui::PushFont(mFontRegular, 20.0f);
+			int waveTimer = (int)std::ceil(mWaveManager->GetWaveCountdown());
+			ImGui::Text("WAVE %d STARTS IN: %d", currentWaveNumber, waveTimer);
+			ImGui::PopFont();
+			break;
+		}
+		case Dawn::WaveState::WaveActive:
+		{
+			ImGui::PushFont(mFontRegular, 20.0f);
+			unsigned int enemiesRemaining = mWaveManager->GetWaveEnemiesRemaining();
+			ImGui::Text("WAVE %d | ENEMIES REMAINING: %d", currentWaveNumber, enemiesRemaining);
+			ImGui::PopFont();
+			break;
+		}
+		case Dawn::WaveState::WaveClear:
+			break;
+		case Dawn::WaveState::End:
+			GameOver();
+			break;
+		default:
+			break;
+		}
+
+		ImGui::End();
+		ImGui::PopStyleVar(2);
 	}
 }

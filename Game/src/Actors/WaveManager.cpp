@@ -27,7 +27,7 @@ namespace Dawn
 		Wave wave2;
 		wave2.phases.push_back(Phase(0.0f, 5, 1));
 		wave2.phases.push_back(Phase(5.0f, 5, 3));
-		wave2.phases.push_back(Phase(0.0f, 5, 1));
+		wave2.phases.push_back(Phase(0.0f, 5, 2));
 
 		mWaves.push_back(wave1);
 		mWaves.push_back(wave2);

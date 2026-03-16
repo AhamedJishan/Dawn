@@ -7,7 +7,7 @@
 namespace Dawn
 {
 	// Forward declarations
-	class EnemySpawner;
+	class WaveManager;
 
 	class GameScene : public Scene
 	{
@@ -29,9 +29,11 @@ namespace Dawn
 		void DrawHealthBar();
 		void DrawCrossHair();
 		void DrawGameOver();
+		void DrawVictoryUI();
+		void DrawWaveUI();
 
 	private:
-		//EnemySpawner* mEnemySpawner = nullptr;
+		WaveManager* mWaveManager = nullptr;
 
 		ImFont* mFontBold = nullptr;
 		ImFont* mFontRegular = nullptr;
