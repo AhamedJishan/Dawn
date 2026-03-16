@@ -9,13 +9,15 @@
 #include "Core/Application.h"
 #include "Audio/AudioSystem.h"
 #include "Components/Damageable.h"
+#include "WaveManager.h"
 #include "PlayerActor.h"
 
 namespace Dawn
 {
-	EnemyKamikaze::EnemyKamikaze(Scene* scene, PlayerActor* player)
+	EnemyKamikaze::EnemyKamikaze(Scene* scene, PlayerActor* player, WaveManager* waveManager)
 		:Actor(scene)
 		,mPlayer(player)
+		,mWaveManager(waveManager)
 	{
 		MeshRenderer::CreateFromModel(this, "Assets/Models/enemy/enemy.obj");
 		mCollider = new SphereCollider(this);
@@ -37,6 +39,8 @@ namespace Dawn
 		mAudioComponent = new Audio(this);
 		mEnemyPresence = mAudioComponent->PlayEvent("event:/enemy_presence");
 		mEnemyPresence.SetVolume(10.0f);
+
+		mMoveDirection = glm::normalize(mPlayer->GetPosition() - GetPosition());
 	}
 
 	EnemyKamikaze::~EnemyKamikaze()
@@ -95,21 +99,25 @@ namespace Dawn
 		if (!mPlayer)
 			return;
 
-		glm::vec3 moveDir = mPlayer->GetPosition() - GetPosition();
+		float distanceToPlayer = glm::length(mPlayer->GetPosition() - GetPosition());
+
+		glm::vec3 targetMoveDirection = GetFinalMoveDirection();
+		glm::vec3 moveDir = glm::mix(mMoveDirection, targetMoveDirection, mMoveDirectionSmoothing * deltaTime);
+		mMoveDirection = moveDir;
 		moveDir.y = 0;
 
-		if (glm::length(moveDir) > 1.5f)
+		if (distanceToPlayer < mExplosionTriggerRadius)
+		{
+			mAudioComponent->PlayEvent("event:/enemy_fuse");
+			mActionState = ActionState::Exploding;
+		}
+		else
 		{
 			moveDir = glm::normalize(moveDir);
 			glm::vec3 newPos = GetPosition() + mSpeed * moveDir * deltaTime;
 
 			SetPosition(newPos);
 			SetRotation(glm::quatLookAt(moveDir, GetUp()));
-		}
-		else
-		{
-			mAudioComponent->PlayEvent("event:/enemy_fuse");
-			mActionState = ActionState::Exploding;
 		}
 	}
 
@@ -140,7 +148,7 @@ namespace Dawn
 
 	void EnemyKamikaze::Explode(float deltaTime)
 	{
-		mState = State::Dead;
+		SetState(Actor::State::Dead);
 
 		if (!mPlayer)
 			return;
@@ -150,5 +158,32 @@ namespace Dawn
 			return;
 
 		mPlayer->TakeDamage(mExplosionDamage);
+	}
+
+	glm::vec3 EnemyKamikaze::GetFinalMoveDirection()
+	{
+		EnemyKamikaze* closestEnemy = nullptr;
+		float closestDistanceToEnemy = std::numeric_limits<float>::max();
+		for (EnemyKamikaze* enemy : mWaveManager->GetEnemies())
+		{
+			float distanceToEnemy = glm::length(enemy->GetPosition() - GetPosition());
+			if (distanceToEnemy < closestDistanceToEnemy && enemy != this)
+			{
+				closestDistanceToEnemy = distanceToEnemy;
+				closestEnemy = enemy;
+			}
+		}
+
+		glm::vec3 directionToPlayer = glm::normalize(mPlayer->GetPosition() - GetPosition());
+		if (closestEnemy == nullptr || closestDistanceToEnemy > mSteeringRange)
+			return glm::normalize(directionToPlayer);
+
+		glm::vec3 directionAwayFromClosestEnemy = glm::normalize(GetPosition() - closestEnemy->GetPosition());
+		if (closestDistanceToEnemy <= mSteeringCutOffRange)
+			return glm::normalize(directionAwayFromClosestEnemy);
+
+		float distanceFactor = glm::clamp((closestDistanceToEnemy / mSteeringRange), 0.0f, 1.0f);
+		glm::vec3 direction = distanceFactor * directionToPlayer + (1 - distanceFactor) * directionAwayFromClosestEnemy;
+		return glm::normalize(direction);
 	}
 }

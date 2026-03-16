@@ -89,7 +89,7 @@ namespace Dawn
 					{
 						mSpawnQueue[spawnLocationIndex] -= 1;
 						mTimeSinceLastSpawn[spawnLocationIndex] = 0.0f;
-						EnemyKamikaze* enemy = new EnemyKamikaze(mScene, mPlayer);
+						EnemyKamikaze* enemy = new EnemyKamikaze(mScene, mPlayer, this);
 						enemy->SetPosition(mSpawnLocations[spawnLocationIndex]);
 						mEnemies.push_back(enemy);
 					}

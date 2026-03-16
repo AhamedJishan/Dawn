@@ -16,9 +16,9 @@ namespace Dawn
 			,mDamage(damage)
 		{
 			mCollider = new SphereCollider(this);
-			mCollider->SetRadius(0.2f);
+			mCollider->SetRadius(0.3f);
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
-			SetScale(glm::vec3(0.2f));
+			SetScale(glm::vec3(0.3f));
 		}
 
 		void Update(float deltaTime) override

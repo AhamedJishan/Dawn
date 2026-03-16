@@ -59,6 +59,7 @@ namespace Dawn
 
 		void Update(float deltaTime) override;
 
+		const std::vector<EnemyKamikaze*>& GetEnemies() const { return mEnemies; }
 		WaveState GetWaveState() const { return mWaveState; }
 		unsigned int GetWaveEnemiesRemaining() const { return mWaveEnemiesRemaining; }
 		unsigned int GetCurrentWaveIndex() const { return mCurrentWaveIndex; }

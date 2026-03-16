@@ -12,6 +12,7 @@ namespace Dawn
 	class Damageable;
 	class PhongMaterial;
 	class SphereCollider;
+	class WaveManager;
 	class PlayerActor;
 	class Audio;
 
@@ -25,7 +26,7 @@ namespace Dawn
 			Explode
 		};
 
-		EnemyKamikaze(Scene* scene, PlayerActor* player);
+		EnemyKamikaze(Scene* scene, PlayerActor* player, WaveManager* waveManager);
 		~EnemyKamikaze();
 
 		void Update(float deltaTime) override;
@@ -36,8 +37,10 @@ namespace Dawn
 		void Chase(float deltaTime);
 		void Exploding(float deltaTime);
 		void Explode(float deltaTime);
+		glm::vec3 GetFinalMoveDirection();
 
 	private:
+		WaveManager* mWaveManager = nullptr;
 		PlayerActor* mPlayer = nullptr;
 		SphereCollider* mCollider = nullptr;
 		PhongMaterial* mBodyMaterial = nullptr;
@@ -45,6 +48,7 @@ namespace Dawn
 		SoundEvent mEnemyPresence;
 
 		float mExplosionTimer = 1.5f;
+		const float mExplosionTriggerRadius = 1.5f;
 		const float mExplosionRadius = 4.0f;
 		const float mExplosionDamage = 55.0f;
 		const float mScaleAtExplosion = 2.0f;
@@ -56,7 +60,11 @@ namespace Dawn
 		const glm::vec3 mBodyHitColor = glm::vec3(0.8f, 0.0f, 0.0f);
 		const glm::vec3 mBodyExplosionPulseColor = glm::vec3(1.0f, 0.2f, 0.0f);
 
-		float mSpeed = 4.0f;
+		const float mSpeed = 4.0f;
+		const float mSteeringRange = 5.0f;
+		const float mSteeringCutOffRange = 2.0f;
+		const float mMoveDirectionSmoothing = 2.5f;
+		glm::vec3 mMoveDirection = glm::vec3(0);
 
 		bool mIsInImpactState = false;
 		float mHitImpactTimer = 0.0f;

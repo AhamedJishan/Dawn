@@ -74,10 +74,10 @@ namespace Dawn
 
 		glm::vec3 targetLocation;
 
-		if (mScene->RayCast(ray, 100.0f, hitinfo))
+		if (mScene->RayCast(ray, 1000.0f, hitinfo))
 			targetLocation = hitinfo.position;
 		else
-			targetLocation = ray.origin + ray.direction * 100.0f;
+			targetLocation = ray.origin + ray.direction * 1000.0f;
 
 		glm::vec3 projectileDirection = glm::normalize(targetLocation - GetPosition());
 		glm::quat projectileRotation = glm::quatLookAt(projectileDirection, glm::vec3(0, 1, 0));
