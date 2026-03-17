@@ -49,6 +49,63 @@ namespace Dawn
 			delete actor;					// Actor::~Actor() calls Scene::RemoveActor() to remove itself from mActors
 		deadActors.clear();
 	}
+
+	void Scene::ResolveCollisions()
+	{
+		unsigned int numColliders = mColliders.size();
+
+		if (numColliders < 2) return;
+
+		for (unsigned int i = 0; i < numColliders - 1; i++)
+		{
+			SphereCollider* a = mColliders[i];
+
+			if (a->IsTrigger())
+				continue;
+
+			for (unsigned int j = i + 1; j < numColliders; j++)
+			{
+				Physics::Sphere aSphere = a->GetWorldSphere();
+
+				SphereCollider* b = mColliders[j];
+				Physics::Sphere bSphere = b->GetWorldSphere();
+				
+				if (b->IsTrigger())
+					continue;
+
+				glm::vec3 diffB_A = bSphere.center - aSphere.center;
+				diffB_A.y = 0;	// lock on y axis
+
+				float distance = glm::length(diffB_A);
+				float radiusA = aSphere.radius;
+				float radiusB = bSphere.radius;
+				float radiiSum = radiusA + radiusB;
+				float overlap = radiiSum - distance;
+
+				if (distance >= radiiSum || distance == 0.0f)
+					continue;
+
+				bool aIsDynamic = a->IsDynamic();
+				bool bIsDynamic = b->IsDynamic();
+
+				if (!aIsDynamic && !bIsDynamic)
+					continue;
+
+				glm::vec3 directionAtoB = glm::normalize(diffB_A);
+
+				if (aIsDynamic && bIsDynamic)
+				{
+					float factorA = radiusA / radiiSum;
+					a->GetOwner()->SetPosition(a->GetOwner()->GetPosition() - directionAtoB * factorA * overlap);
+					b->GetOwner()->SetPosition(b->GetOwner()->GetPosition() + directionAtoB * (1.0f - factorA) * overlap);
+				}
+				else if (aIsDynamic)
+					a->GetOwner()->SetPosition(a->GetOwner()->GetPosition() - directionAtoB * overlap);
+				else
+					b->GetOwner()->SetPosition(b->GetOwner()->GetPosition() + directionAtoB * overlap);
+			}
+		}
+	}
 	
 	void Scene::AddActor(Actor* actor)
 	{

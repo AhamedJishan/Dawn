@@ -42,6 +42,7 @@ namespace Dawn
 	private:
 		friend class Application;
 		void UpdateActors(float deltaTime);
+		void ResolveCollisions();
 
 		friend class Actor;
 		void AddActor(Actor* actor);

@@ -5,6 +5,7 @@
 #include "Core/Actor.h"
 #include "Core/Scene.h"
 #include "Core/Components/MeshRenderer.h"
+#include "Core/Components/SphereCollider.h"
 #include "Rendering/Materials/PhongMaterial.h"
 
 namespace Dawn
@@ -25,6 +26,10 @@ namespace Dawn
 				mat->SetSpecularColor(glm::vec3(1.0f));
 				mat->SetDiffuseColor(glm::vec3(1));
 			}
+
+			SphereCollider* collider = new SphereCollider(this);
+			collider->SetIsDynamic(true);
+			collider->SetIsTrigger(false);
 		}
 
 		~ExampleActor()

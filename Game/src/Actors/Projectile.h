@@ -16,6 +16,7 @@ namespace Dawn
 			,mDamage(damage)
 		{
 			mCollider = new SphereCollider(this);
+			mCollider->SetIsTrigger(true);
 			mCollider->SetRadius(0.3f);
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
 			SetScale(glm::vec3(0.3f));
@@ -40,7 +41,7 @@ namespace Dawn
 
 	private:
 		float mLifeTime = 1.0f;
-		float mSpeed = 40.0f;
+		float mSpeed = 100.0f;
 		float mDamage = 35.0f;
 
 		SphereCollider* mCollider = nullptr;

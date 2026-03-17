@@ -17,7 +17,7 @@ namespace Dawn
 		GroundPlane(Scene* scene)
 			:Actor(scene)
 		{
-			MeshRenderer::CreateFromModel(this, "Assets/Models/arena/arena.obj");
+			MeshRenderer::CreateFromModel(this, "Assets/Models/arena02/arena.obj");
 
 			//PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
 			//if (mat);

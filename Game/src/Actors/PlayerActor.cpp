@@ -1,10 +1,10 @@
 #include "PlayerActor.h"
 #include "Utils/Log.h"
 
-#include "Gun.h"
 #include "Scenes/GameScene.h"
 #include "FPSCameraActor.h"
 #include "Components/Damageable.h"
+#include "Core/Components/SphereCollider.h"
 
 namespace Dawn
 {
@@ -20,6 +20,10 @@ namespace Dawn
 		mGameScene = scene;
 		mCamera = fpsCameraActor;
 		mDamageable = new Damageable(this, 100.0f);
+
+		SphereCollider* collider = new SphereCollider(this);
+		collider->SetIsKinematic(true);
+		collider->SetIsTrigger(false);
 
 		mGameScene->SetPlayerHealth(mDamageable->GetHealth());
 		mGameScene->SetMaxPlayerHealth(mDamageable->GetMaxHealth());

@@ -19,9 +19,13 @@ namespace Dawn
 		,mPlayer(player)
 		,mWaveManager(waveManager)
 	{
+		LOG_INFO("Enemy spawned");
+
 		MeshRenderer::CreateFromModel(this, "Assets/Models/enemy/enemy.obj");
 		mCollider = new SphereCollider(this);
-		LOG_INFO("Enemy spawned");
+		mCollider->SetIsDynamic(true);
+		mCollider->SetIsTrigger(false);
+
 		// Fetch the body material
 		const std::vector<MeshRenderer*> meshRenderers = GetComponents<MeshRenderer>();
 		for (MeshRenderer* meshRenderer : meshRenderers)
