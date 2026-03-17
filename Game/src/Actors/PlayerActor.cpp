@@ -22,7 +22,7 @@ namespace Dawn
 		mDamageable = new Damageable(this, 100.0f);
 
 		SphereCollider* collider = new SphereCollider(this);
-		collider->SetIsKinematic(true);
+		collider->SetIsDynamic(true);
 		collider->SetIsTrigger(false);
 
 		mGameScene->SetPlayerHealth(mDamageable->GetHealth());
