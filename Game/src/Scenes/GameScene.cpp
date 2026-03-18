@@ -19,7 +19,7 @@ namespace Dawn
 	{
 		GetEnvironmentSettings().fogDensity = 0.03f;
 		GetEnvironmentSettings().fogColor = glm::vec3(0.12f, 0.15f, 0.20f);
-		GetEnvironmentSettings().ambientColor = glm::vec3(0.10f, 0.12f, 0.15f);
+		GetEnvironmentSettings().ambientColor = glm::vec3(0.4f);
 		GetEnvironmentSettings().directionalLight.color = glm::vec3(0.6f, 0.7f, 0.85f);
 		GetEnvironmentSettings().directionalLight.direction = glm::vec3(-0.5f, -0.8f, -0.2f);;
 	}
@@ -39,7 +39,7 @@ namespace Dawn
 		ImGuiIO& io = ImGui::GetIO();
 		mFontBold = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-SemiBold.ttf");
 		mFontRegular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-Regular.ttf");
-		mFontLight = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-Regular.ttf");
+		mFontLight = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-Light.ttf");
 
 		// TEST ACTOR
 		ExampleActor* ea = new ExampleActor(this);
@@ -92,9 +92,9 @@ namespace Dawn
 		if (IsPaused() && !mIsGameOver)
 			DrawPauseWindow();
 		else if (mIsGameOver && mWaveManager->GetWaveState() != WaveState::End)
-			DrawGameOver();
+			DrawGameOver(false);
 		else if (mIsGameOver && mWaveManager->GetWaveState() == WaveState::End)
-			DrawVictoryUI();
+			DrawGameOver(true);
 	}
 
 	void GameScene::GameOver()
@@ -123,9 +123,9 @@ namespace Dawn
 
 		// --- Style Tweaks
 		ImGuiStyle& style = ImGui::GetStyle();
-		style.WindowBorderSize = 0;
-		style.FrameRounding = 6.0f;
-		style.FrameBorderSize = 0;
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, ImVec2(6, 6));
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, ImVec2(0, 0));
 
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
@@ -196,6 +196,7 @@ namespace Dawn
 		ImGui::PopFont();
 
 		ImGui::PopStyleColor(4);
+		ImGui::PopStyleVar(3);
 
 		ImGui::End();	// Pause Menu
 		ImGui::End();	// Overlay
@@ -231,7 +232,7 @@ namespace Dawn
 		drawList->AddCircleFilled(center, 2.0f, IM_COL32(255, 255, 255, 255), 8);
 	}
 
-	void GameScene::DrawGameOver()
+	void GameScene::DrawGameOver(bool win)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 
@@ -255,7 +256,11 @@ namespace Dawn
 
 		ImGui::PushFont(mFontBold, 50.0f);
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.15f, 1.0f));
-		const char* gameOverText = "GAME OVER";
+		const char* gameOverText;
+		if (win)
+			gameOverText = "YOU WIN";
+		else
+			gameOverText = "GAME OVER";
 		ImVec2 textSize = ImGui::CalcTextSize(gameOverText);
 		ImGui::SetCursorPos(ImVec2(center.x - textSize.x/2.0f, center.y - 100));
 
@@ -293,89 +298,6 @@ namespace Dawn
 			mRestartButtonHovered = false;
 
 		ImGui::Dummy(ImVec2(0, 10)); 
-		// --- EXIT TO MAIN MENU ---
-		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-		if (ImGui::Button("MAIN MENU", ImVec2(buttonWidth, buttonHeight)))
-		{
-			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
-			Application::Get()->LoadScene<MainMenuScene>();
-		}
-		if (!mMainMenuButtonHovered && ImGui::IsItemHovered())
-		{
-			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
-			mMainMenuButtonHovered = true;
-		}
-		else if (!ImGui::IsItemHovered())
-			mMainMenuButtonHovered = false;
-
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::End();
-	}
-
-	void GameScene::DrawVictoryUI()
-	{
-		ImGuiIO& io = ImGui::GetIO();
-
-		// --- BackGround Window ---
-		ImGui::SetNextWindowPos(ImVec2(0, 0));
-		ImGui::SetNextWindowSize(io.DisplaySize);
-
-		float alpha = mTimeSinceGameOver / mGameOverTransitionDuration;
-		alpha = glm::clamp(alpha, 0.0f, 1.0f);
-		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, alpha));
-
-		ImGui::Begin("Game Over Window", NULL,
-			ImGuiWindowFlags_NoDecoration |
-			ImGuiWindowFlags_NoBringToFrontOnFocus |
-			ImGuiWindowFlags_NoMove);
-
-		ImGui::PopStyleColor();
-
-		// --- VICTORY TEXT ---
-		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-
-		ImGui::PushFont(mFontBold, 50.0f);
-		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.15f, 1.0f));
-		const char* gameOverText = "YOU WON!";
-		ImVec2 textSize = ImGui::CalcTextSize(gameOverText);
-		ImGui::SetCursorPos(ImVec2(center.x - textSize.x / 2.0f, center.y - 100));
-
-		ImGui::Text(gameOverText);
-
-		ImGui::PopStyleColor();
-		ImGui::PopFont();
-
-		// --- BUTTONS ---
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.5f, 0.15f, 0.8f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.15f, 0.3f));
-
-		float windowWidth = ImGui::GetWindowSize().x;
-
-		ImGui::PushFont(mFontLight, 25.0f);
-		float buttonHeight = ImGui::CalcTextSize("DUMMY").y + 4;
-		float buttonWidth = 200.0f;
-		ImGui::SetCursorPosY(center.y + 100);
-		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-
-		// --- RESTART GAME ---
-		if (ImGui::Button("RESTART", ImVec2(buttonWidth, buttonHeight)))
-		{
-			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
-			Application::Get()->LoadScene<GameScene>();
-			Input::SetCursorLocked(true);
-		}
-		if (!mRestartButtonHovered && ImGui::IsItemHovered())
-		{
-			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_hover");
-			mRestartButtonHovered = true;
-		}
-		else if (!ImGui::IsItemHovered())
-			mRestartButtonHovered = false;
-
-		ImGui::Dummy(ImVec2(0, 10)); // spacing
 		// --- EXIT TO MAIN MENU ---
 		ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 		if (ImGui::Button("MAIN MENU", ImVec2(buttonWidth, buttonHeight)))
