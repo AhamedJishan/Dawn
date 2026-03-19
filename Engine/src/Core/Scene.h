@@ -34,6 +34,7 @@ namespace Dawn
 		{
 			glm::vec3 direction = glm::vec3(-1);
 			glm::vec3 color = glm::vec3(1);
+			float intensity = 1.0f;
 		} directionalLight;
 	};
 

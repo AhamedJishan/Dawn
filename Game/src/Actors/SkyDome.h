@@ -22,7 +22,7 @@ namespace Dawn
 
 			Sky* skyMat = new Sky();
 			skyMat->SetTopColor(glm::vec3(0));
-			skyMat->SetHorizonColor(glm::vec3(0.15f));
+			skyMat->SetHorizonColor(glm::vec3(0.12f));
 
 			mr->SetMaterial(skyMat);
 

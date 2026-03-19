@@ -77,6 +77,7 @@ namespace Dawn
 			shader->SetVec3("u_AmbientColor", environmentSettings.ambientColor);
 			shader->SetVec3("u_DirectionalLightColor", environmentSettings.directionalLight.color);
 			shader->SetVec3("u_DirectionalLightDirection", environmentSettings.directionalLight.direction);
+			shader->SetFloat("u_DirectionalLightIntensity", environmentSettings.directionalLight.intensity);
 			
 			glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, NULL);
 		}
