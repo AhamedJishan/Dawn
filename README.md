@@ -3,6 +3,8 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ## TODO
 
+- Fix hdr framebuffer size issue
+
 ### Phase 1: Gameplay Lock & Integration (The "Friction")
 - [Done] Refactor GameScene: Break down the 500-line file, abstracting repeating logic into clean, manageable helper functions.
 - [ ] Refine Wave UI: Polish the game flow by displaying clear, on-screen messages (e.g., "Starting Wave #", "Wave Cleared").

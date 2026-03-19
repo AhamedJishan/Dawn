@@ -149,6 +149,10 @@ namespace Dawn
         {
             shader = new Shader("Assets/Shaders/sky.vert", "Assets/Shaders/sky.frag");
         }
+        else if (name == "post_process")
+        {
+            shader = new Shader("Assets/Shaders/post_process.vert", "Assets/Shaders/post_process.frag");
+        }
 
         if (!shader || !shader->IsValid())
         {

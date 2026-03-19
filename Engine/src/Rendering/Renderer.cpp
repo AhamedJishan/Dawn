@@ -5,11 +5,13 @@
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
 #include "Core/Application.h"
+#include "Core/Assets.h"
 #include "Core/Window.h"
 #include "Core/Actor.h"
 #include "Core/Scene.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/MeshRenderer.h"
+#include "HDRFramebuffer.h"
 #include "Shader.h"
 #include "Material.h"
 #include "Mesh.h"
@@ -22,6 +24,10 @@ namespace Dawn
 
 	Renderer::~Renderer()
 	{
+		glDeleteVertexArrays(1, &mQuadVAO);
+		glDeleteBuffers(1, &mQuadVBO);
+
+		if (mHDRFrameBuffer) delete mHDRFrameBuffer;
 	}
 	
 	bool Renderer::Init()
@@ -34,18 +40,54 @@ namespace Dawn
 
 		Application::Get()->GetWindow()->SetFrameBufferSizeCallback([this](int width, int height) { glViewport(0, 0, width, height);});
 
+		mHDRFrameBuffer = new HDRFramebuffer();
+
+		InitQuad();
+		mPostProcessShader = Assets::GetShader("post_process");
+
 		return true;
 	}
 	
 	void Renderer::Draw()
 	{
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		// --- HDR FRAMEBUFFER RENDER PASS --- 
+		mHDRFrameBuffer->BindFrameBuffer();
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// Set Opengl state, like depth testing, etc.
 		glEnable(GL_DEPTH_TEST);
-		glDisable(GL_BLEND);
+		glEnable(GL_BLEND);
+		DrawScene();
 
+		// --- POST PROCESS QUAD TO SCREEN ---
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
+		DrawQuad();
+	}
+
+	void Renderer::AddMeshRenderer(MeshRenderer* meshRenderer)
+	{
+		unsigned int updateOrder = meshRenderer->GetUpdateOrder();
+
+		auto it = mMeshRenderers.begin();
+		for (; it != mMeshRenderers.end(); it++)
+			if ((*it)->GetUpdateOrder() > updateOrder)
+				break;
+
+		mMeshRenderers.insert(it, meshRenderer);
+	}
+	
+	void Renderer::RemoveMeshRenderer(MeshRenderer* meshRenderer)
+	{
+		auto it = std::find(mMeshRenderers.begin(), mMeshRenderers.end(), meshRenderer);
+		if (it != mMeshRenderers.end())
+			mMeshRenderers.erase(it);
+	}
+
+	void Renderer::DrawScene()
+	{
 		Camera* cam = Application::Get()->GetScene()->GetActiveCamera();
 		if (!cam)
 			return;
@@ -66,7 +108,7 @@ namespace Dawn
 			shader->Bind();
 			mat->Apply();
 			mesh->Bind();
-			
+
 			shader->SetMat4("u_Model", modelMatrix);
 			shader->SetMat4("u_View", viewMatrix);
 			shader->SetMat4("u_Projection", projectionMatrix);
@@ -78,27 +120,38 @@ namespace Dawn
 			shader->SetVec3("u_DirectionalLightColor", environmentSettings.directionalLight.color);
 			shader->SetVec3("u_DirectionalLightDirection", environmentSettings.directionalLight.direction);
 			shader->SetFloat("u_DirectionalLightIntensity", environmentSettings.directionalLight.intensity);
-			
+
 			glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, NULL);
 		}
 	}
 
-	void Renderer::AddMeshRenderer(MeshRenderer* meshRenderer)
+	void Renderer::InitQuad()
 	{
-		unsigned int updateOrder = meshRenderer->GetUpdateOrder();
-
-		auto it = mMeshRenderers.begin();
-		for (; it != mMeshRenderers.end(); it++)
-			if ((*it)->GetUpdateOrder() > updateOrder)
-				break;
-
-		mMeshRenderers.insert(it, meshRenderer);
+		float vertices[] = {
+			// positions        // texcoords
+			-1.0f,  1.0f, 0.0f,  0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f,  0.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
+			 1.0f, -1.0f, 0.0f,  1.0f, 0.0f,
+		};
+		glGenVertexArrays(1, &mQuadVAO);
+		glGenBuffers(1, &mQuadVBO);
+		glBindVertexArray(mQuadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, mQuadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	}
-	
-	void Renderer::RemoveMeshRenderer(MeshRenderer* meshRenderer)
+
+	void Renderer::DrawQuad()
 	{
-		auto it = std::find(mMeshRenderers.begin(), mMeshRenderers.end(), meshRenderer);
-		if (it != mMeshRenderers.end())
-			mMeshRenderers.erase(it);
+		mPostProcessShader->Bind();
+		mPostProcessShader->SetInt("u_DiffuseTexture", 0);
+		mHDRFrameBuffer->BindTexture();
+
+		glBindVertexArray(mQuadVAO);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
 }

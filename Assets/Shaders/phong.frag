@@ -83,7 +83,7 @@ void main()
     float dist = length(frag_in.FragPos - u_CameraPosition);
     float fogIntensity = 1 - exp(-pow(dist * u_FogDensity, 2.0));
 
-    vec3 finalColor = LinearToSRGB(mix(phong, SRGBToLinear(u_FogColor), fogIntensity));
+    vec3 finalColor = mix(phong, SRGBToLinear(u_FogColor), fogIntensity);
     
     OutColor = vec4(finalColor, baseColor.a);
 }

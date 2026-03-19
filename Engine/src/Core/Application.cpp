@@ -34,17 +34,18 @@ namespace Dawn
 			return;
 		}
 
+		mAudioSystem = new AudioSystem();
+		mInputSystem = new InputSystem();
+		mImGuiSystem = new ImGuiSystem();
+		mAssetManager = new AssetManager();
+
+		// needs to happen after AssetManager init
 		mRenderer = new Renderer();
 		if (!mRenderer->Init())
 		{
 			mIsRunning = false;
 			return;
 		}
-
-		mAudioSystem = new AudioSystem();
-		mInputSystem = new InputSystem();
-		mImGuiSystem = new ImGuiSystem();
-		mAssetManager = new AssetManager();
 	}
 
 	Application::~Application()

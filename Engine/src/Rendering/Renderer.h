@@ -6,6 +6,7 @@
 namespace Dawn
 {
 	// Forward declaration
+	class HDRFramebuffer;
 	class MeshRenderer;
 	class Shader;
 
@@ -25,6 +26,15 @@ namespace Dawn
 		void RemoveMeshRenderer(MeshRenderer* meshRenderer);
 
 	private:
+		void DrawScene();
+		void InitQuad();
+		void DrawQuad();
+
+	private:
 		std::vector<MeshRenderer*> mMeshRenderers;
+		HDRFramebuffer* mHDRFrameBuffer = nullptr;
+
+		unsigned int mQuadVAO = 0, mQuadVBO = 0;
+		Shader* mPostProcessShader = nullptr;
 	};
 }

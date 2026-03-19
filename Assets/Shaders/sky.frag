@@ -4,6 +4,8 @@ out vec4 OutColor;
 
 uniform vec3 u_TopColor;
 uniform vec3 u_HorizonColor;
+uniform float u_TopIntensity;
+uniform float u_HorizonIntensity;
 
 in VS_OUT
 {
@@ -12,15 +14,6 @@ in VS_OUT
 
 vec3 SRGBToLinear(vec3 c) {
     return pow(c, vec3(2.2));
-}
-vec4 SRGBToLinear(vec4 c) {
-    return vec4(pow(c.rgb, vec3(2.2)), c.a);
-}
-vec3 LinearToSRGB(vec3 c) {
-    return pow(c, vec3(1.0 / 2.2));
-}
-vec4 LinearToSRGB(vec4 c) {
-    return vec4(pow(c.rgb, vec3(1.0 / 2.2)), c.a);
 }
 
 void main()
@@ -31,7 +24,7 @@ void main()
     vec3 top = SRGBToLinear(u_TopColor);
     vec3 horizon = SRGBToLinear(u_HorizonColor);
 
-    vec3 color = LinearToSRGB(mix(horizon, top, t));
+    vec3 color = mix(horizon, top, t);
 
     OutColor = vec4(color, 1.0);
 }
