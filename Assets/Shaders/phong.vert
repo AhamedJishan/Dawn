@@ -6,7 +6,8 @@ layout (location = 2) in vec2 a_TexCoord;
 
 // to be set by Renderer
 uniform mat4 u_Model;
-uniform mat4 u_ViewProjection;
+uniform mat4 u_View;
+uniform mat4 u_Projection;
 
 out VS_OUT
 {
@@ -18,7 +19,7 @@ out VS_OUT
 void main()
 {
 	vec4 worldPos = u_Model * vec4(a_Position, 1.0);
-    gl_Position = u_ViewProjection * worldPos;
+    gl_Position = u_Projection * u_View * worldPos;
 
     vs_out.FragPos = worldPos.xyz;
     vs_out.Normal = mat3(transpose(inverse(u_Model))) * a_Normal;

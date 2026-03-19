@@ -7,6 +7,7 @@
 #include "Actors/PlayerActor.h"
 #include "Actors/FPSCameraActor.h"
 #include "Actors/Gun.h"
+#include "Actors/SkyDome.h"
 #include "Core/Components/Camera.h"
 #include "Core/Application.h"
 #include "Audio/AudioSystem.h"
@@ -41,6 +42,9 @@ namespace Dawn
 		mFontRegular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-Regular.ttf");
 		mFontLight = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-Light.ttf");
 
+		// Sky dome
+		SkyDome* sky = new SkyDome(this);
+
 		// TEST ACTOR
 		ExampleActor* ea = new ExampleActor(this);
 		ea->SetPosition(glm::vec3(5, 0, -5));
@@ -60,6 +64,7 @@ namespace Dawn
 		Camera* cam = cameraActor->GetComponent<Camera>();
 		if (cam)
 		{
+			cam->SetFarPlane(500.0f);	// So that skydome is visible
 			SetActiveCamera(cam);
 		}
 

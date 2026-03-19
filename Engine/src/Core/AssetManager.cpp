@@ -145,9 +145,9 @@ namespace Dawn
         {
             shader = new Shader("Assets/Shaders/phong.vert", "Assets/Shaders/phong.frag");
         }
-        else if (name == "ui_unlit")
+        else if (name == "sky")
         {
-            shader = new Shader("Assets/Shaders/ui_unlit.vert", "Assets/Shaders/ui_unlit.frag");
+            shader = new Shader("Assets/Shaders/sky.vert", "Assets/Shaders/sky.frag");
         }
 
         if (!shader || !shader->IsValid())

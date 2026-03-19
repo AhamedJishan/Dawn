@@ -68,7 +68,8 @@ namespace Dawn
 			mesh->Bind();
 			
 			shader->SetMat4("u_Model", modelMatrix);
-			shader->SetMat4("u_ViewProjection", projectionMatrix * viewMatrix);
+			shader->SetMat4("u_View", viewMatrix);
+			shader->SetMat4("u_Projection", projectionMatrix);
 
 			shader->SetFloat("u_FogDensity", environmentSettings.fogDensity);
 			shader->SetVec3("u_FogColor", environmentSettings.fogColor);
