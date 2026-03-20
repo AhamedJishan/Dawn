@@ -41,10 +41,11 @@ namespace Dawn
 			return false;
 		}
 
-		// Opengl 3.3
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
 		// Window Create
 		mWindow = glfwCreateWindow(mWindowConfig.Width, mWindowConfig.Height, mWindowConfig.Title, NULL, NULL);
 		if (!mWindow)
