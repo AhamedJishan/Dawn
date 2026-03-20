@@ -122,6 +122,10 @@ namespace Dawn
 		aiColor3D specularColor;
 		if (aiMat->Get(AI_MATKEY_COLOR_SPECULAR, specularColor) == aiReturn_SUCCESS)
 			rawMaterial->SetSpecularColor(glm::vec3(specularColor.r, specularColor.g, specularColor.b));
+		// Emissive Color
+		aiColor3D emissiveColor;
+		if (aiMat->Get(AI_MATKEY_COLOR_EMISSIVE, emissiveColor) == aiReturn_SUCCESS)
+			rawMaterial->SetEmissiveColor(glm::vec3(emissiveColor.r, emissiveColor.g, emissiveColor.b));
 		
 		aiString path;
 		// Albedo map
@@ -139,6 +143,9 @@ namespace Dawn
 		// Height Map
 		if (aiMat->GetTexture(aiTextureType_HEIGHT, 0, &path) == aiReturn_SUCCESS)
 			rawMaterial->SetHeightTexturePath(mDirectory + path.C_Str());
+		// Emission Map
+		if (aiMat->GetTexture(aiTextureType_EMISSIVE, 0, &path) == aiReturn_SUCCESS)
+			rawMaterial->SetEmissiveTexturePath(mDirectory + path.C_Str());
 
 		return rawMaterial;
 	}

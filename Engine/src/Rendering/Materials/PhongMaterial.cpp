@@ -28,15 +28,18 @@ namespace Dawn
 		Texture* specularMap = nullptr;
 		Texture* normalMap = nullptr;
 		Texture* heightMap = nullptr;
+		Texture* emissiveMap = nullptr;
 
 		if (!rawMaterial->GetAlbedoTexturePath().empty())	albedoMap = Assets::GetTexture(rawMaterial->GetAlbedoTexturePath());
 		if (!rawMaterial->GetDiffuseTexturePath().empty())	diffuseMap = Assets::GetTexture(rawMaterial->GetDiffuseTexturePath());
 		if (!rawMaterial->GetSpecularTexturePath().empty()) specularMap = Assets::GetTexture(rawMaterial->GetSpecularTexturePath());
 		if (!rawMaterial->GetNormalTexturePath().empty())	normalMap = Assets::GetTexture(rawMaterial->GetNormalTexturePath());
 		if (!rawMaterial->GetHeightTexturePath().empty())	heightMap = Assets::GetTexture(rawMaterial->GetHeightTexturePath());
+		if (!rawMaterial->GetEmissiveTexturePath().empty())	emissiveMap = Assets::GetTexture(rawMaterial->GetEmissiveTexturePath());
 
 		phongMaterial->SetDiffuseColor(rawMaterial->GetDiffuseColor());
 		phongMaterial->SetSpecularColor(rawMaterial->GetSpecularColor());
+		phongMaterial->SetEmissiveColor(rawMaterial->GetEmissiveColor());
 		phongMaterial->SetShininess(rawMaterial->GetShininess());
 
 		if (diffuseMap)
@@ -51,6 +54,9 @@ namespace Dawn
 			phongMaterial->SetNormalMap(normalMap);
 		else if (heightMap)
 			phongMaterial->SetNormalMap(heightMap);
+
+		if (emissiveMap)
+			phongMaterial->SetEmissiveMap(emissiveMap);
 
 		return phongMaterial;
 	}
@@ -86,8 +92,18 @@ namespace Dawn
 		else
 			mShader->SetBool("u_HasNormalMap", false);
 
+		if (mEmissiveMap)
+		{
+			mEmissiveMap->Bind(3);
+			mShader->SetInt("u_EmissiveTexture", 3);
+			mShader->SetBool("u_HasEmissiveMap", true);
+		}
+		else
+			mShader->SetBool("u_HasEmissiveMap", false);
+
 		mShader->SetVec3("u_DiffuseColor", mDiffuseColor);
 		mShader->SetVec3("u_SpecularColor", mSpecularColor);
+		mShader->SetVec3("u_EmissiveColor", mEmissiveColor);
 		mShader->SetFloat("u_Shininess", mShininess);
 	}
 }

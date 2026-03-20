@@ -6,11 +6,16 @@ out vec4 OutColor;
 uniform sampler2D u_DiffuseTexture;
 uniform sampler2D u_SpecularTexture;
 uniform sampler2D u_NormalTexture;
+uniform sampler2D u_EmissiveTexture;
+
 uniform bool u_HasDiffuseMap;
 uniform bool u_HasSpecularMap;
 uniform bool u_HasNormalMap;
+uniform bool u_HasEmissiveMap;
+
 uniform vec3 u_DiffuseColor;
 uniform vec3 u_SpecularColor;
+uniform vec3 u_EmissiveColor;
 uniform float u_Shininess;
 
 // to be set by Renderer
@@ -84,6 +89,15 @@ void main()
     float fogIntensity = 1 - exp(-pow(dist * u_FogDensity, 2.0));
 
     vec3 finalColor = mix(phong, SRGBToLinear(u_FogColor), fogIntensity);
+
+    // --- EMISSIVE ---
+    vec3 emissiveColor = SRGBToLinear(vec3(u_EmissiveColor));
+    if (u_HasEmissiveMap)
+    {
+        emissiveColor *= SRGBToLinear(texture(u_EmissiveTexture, frag_in.TexCoord).rgb);
+    }
+
+    finalColor += emissiveColor;
     
     OutColor = vec4(finalColor, baseColor.a);
 }
