@@ -12,6 +12,7 @@
 #include "Core/Components/Camera.h"
 #include "Core/Components/MeshRenderer.h"
 #include "HDRFramebuffer.h"
+#include "BloomPass.h"
 #include "Shader.h"
 #include "Material.h"
 #include "Mesh.h"
@@ -41,6 +42,7 @@ namespace Dawn
 		Application::Get()->GetWindow()->SetFrameBufferSizeCallback([this](int width, int height) { glViewport(0, 0, width, height);});
 
 		mHDRFrameBuffer = new HDRFramebuffer();
+		mBloomPass = new BloomPass(x, y);
 
 		InitQuad();
 		mPostProcessShader = Assets::GetShader("post_process");
