@@ -128,10 +128,9 @@ namespace Dawn
 		ImGui::PopStyleColor();
 
 		// --- Style Tweaks
-		ImGuiStyle& style = ImGui::GetStyle();
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, ImVec2(0, 0));
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, ImVec2(6, 6));
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0);
 
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
