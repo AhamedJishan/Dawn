@@ -20,10 +20,10 @@ namespace Dawn
 	{
 		GetEnvironmentSettings().fogDensity = 0.03f;
 		GetEnvironmentSettings().fogColor = glm::vec3(0.07f, 0.09f, 0.12f);
-		GetEnvironmentSettings().ambientColor = glm::vec3(0.25f);
+		GetEnvironmentSettings().ambientColor = glm::vec3(0.55f);
 		GetEnvironmentSettings().directionalLight.color = glm::vec3(0.6f, 0.7f, 0.85f);
 		GetEnvironmentSettings().directionalLight.direction = glm::vec3(-0.5f, -0.8f, -0.2f);
-		GetEnvironmentSettings().directionalLight.intensity = 0.5f;
+		GetEnvironmentSettings().directionalLight.intensity = 1.0f;
 	}
 
 	GameScene::~GameScene()

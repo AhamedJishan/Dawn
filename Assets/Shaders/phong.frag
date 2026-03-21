@@ -91,7 +91,8 @@ void main()
     vec3 finalColor = mix(phong, SRGBToLinear(u_FogColor), fogIntensity);
 
     // --- EMISSIVE ---
-    vec3 emissiveColor = SRGBToLinear(vec3(u_EmissiveColor));
+    // no gamma correction here, since the emissive color provided is hdr value
+    vec3 emissiveColor = vec3(u_EmissiveColor);
     if (u_HasEmissiveMap)
     {
         emissiveColor *= SRGBToLinear(texture(u_EmissiveTexture, frag_in.TexCoord).rgb);
@@ -99,5 +100,5 @@ void main()
 
     finalColor += emissiveColor;
     
-    OutColor = vec4(finalColor, baseColor.a);
+    OutColor = vec4(finalColor.rgb, baseColor.a);
 }

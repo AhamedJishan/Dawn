@@ -22,7 +22,7 @@ namespace Dawn
 		void SetDiffuseMap(Texture* texture) { mDiffuseMap = texture; }
 		void SetSpecularMap(Texture* texture) { mSpecularMap = texture; }
 		void SetNormalMap(Texture* texture) { mNormalMap = texture; }
-		void SetEmissiveMap(Texture* texture) { mDiffuseMap = texture; }
+		void SetEmissiveMap(Texture* texture) { mEmissiveMap = texture; }
 
 		void SetDiffuseColor(const glm::vec3& color) { mDiffuseColor = color; }
 		void SetSpecularColor(const glm::vec3& color) { mSpecularColor = color; }

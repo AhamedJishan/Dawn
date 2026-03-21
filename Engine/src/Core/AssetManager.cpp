@@ -141,18 +141,7 @@ namespace Dawn
     {
         Shader* shader = nullptr;
 
-        if (name == "phong")
-        {
-            shader = new Shader("Assets/Shaders/phong.vert", "Assets/Shaders/phong.frag");
-        }
-        else if (name == "sky")
-        {
-            shader = new Shader("Assets/Shaders/sky.vert", "Assets/Shaders/sky.frag");
-        }
-        else if (name == "post_process")
-        {
-            shader = new Shader("Assets/Shaders/post_process.vert", "Assets/Shaders/post_process.frag");
-        }
+        shader = new Shader("Assets/Shaders/" + name + ".vert", "Assets/Shaders/" + name + ".frag");
 
         if (!shader || !shader->IsValid())
         {

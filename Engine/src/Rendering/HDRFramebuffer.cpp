@@ -25,9 +25,9 @@ namespace Dawn
 		glBindFramebuffer(GL_FRAMEBUFFER, mId);
 	}
 
-	void HDRFramebuffer::BindTexture()
+	void HDRFramebuffer::BindTexture(unsigned int slot)
 	{
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, mColorTexture);
 	}
 

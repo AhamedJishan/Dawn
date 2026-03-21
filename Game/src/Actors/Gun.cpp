@@ -8,6 +8,7 @@
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/Audio.h"
+#include "Rendering/Materials/PhongMaterial.h"
 #include "Input/Input.h"
 #include "Physics/Physics.h"
 #include "PlayerActor.h"
@@ -19,6 +20,10 @@ namespace Dawn
 		:Actor(scene)
 	{
 		MeshRenderer::CreateFromModel(this, "Assets/Models/gun/gun.obj");
+		PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
+		if (mat)
+			mat->SetEmissiveColor(glm::vec3(5.0f));
+
 		mAudioComponent = new Audio(this);
 		mPlayer = player;
 	}

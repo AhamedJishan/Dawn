@@ -2,7 +2,9 @@
 
 out vec4 OutColor;
 
-uniform sampler2D u_DiffuseTexture;
+uniform sampler2D u_HDRTexture;
+uniform sampler2D u_BloomTexture;
+uniform float u_BloomStrength;
 
 in VS_OUT
 {
@@ -24,10 +26,13 @@ vec3 LinearToSRGB(vec3 c) {
 
 void main() 
 {
-    vec3 hdrColor = texture(u_DiffuseTexture, frag_in.TexCoord).rgb;
+    vec3 hdrColor = texture(u_HDRTexture, frag_in.TexCoord).rgb;
+    vec3 bloomColor = texture(u_BloomTexture, frag_in.TexCoord).rgb;
+
+    vec3 combined = hdrColor + bloomColor * u_BloomStrength;
 
     // Tonemap
-    vec3 mapped = TonemapACES(hdrColor * 1.0);
+    vec3 mapped = TonemapACES(combined * 1.0);
 
     // Gamma correct
     mapped = LinearToSRGB(mapped);

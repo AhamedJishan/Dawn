@@ -2,12 +2,16 @@
 #include "Utils/Log.h"
 
 #include <glad/glad.h>
+#include "Core/Application.h"
+#include "Core/Window.h"
+#include "Core/Assets.h"
+#include "Shader.h"
 
 namespace Dawn
 {
-	BloomPass::BloomPass(unsigned int windowWidth, unsigned int windowHeight, unsigned int mipCount)
+	BloomPass::BloomPass(unsigned int mipCount)
 	{
-		Init(windowWidth, windowHeight, mipCount);
+		Init(mipCount);
 	}
 
 	BloomPass::~BloomPass()
@@ -15,10 +19,11 @@ namespace Dawn
 		Shutdown();
 	}
 	
-	void BloomPass::Init(unsigned int windowWidth, unsigned int windowHeight, unsigned int mipCount)
+	void BloomPass::Init(unsigned int mipCount)
 	{
-		mSourceWidth = windowWidth;
-		mSourceHeight = windowHeight;
+		mSourceWidth;
+		mSourceHeight;
+		Application::Get()->GetWindow()->GetFrameBufferSize(mSourceWidth, mSourceHeight);
 
 		// Init FBO
 		glGenFramebuffers(1, &mFBO);
@@ -65,6 +70,9 @@ namespace Dawn
 
 		LOG_INFO("BloomPass initialized: %d mip count", mMipChain.size());
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		mUpsampleShader = Assets::GetShader("bloom_upsample");
+		mDownsampleShader = Assets::GetShader("bloom_downsample");
 	}
 	
 	void BloomPass::Shutdown()
@@ -76,5 +84,72 @@ namespace Dawn
 
 		if (mFBO)
 			glDeleteFramebuffers(1, &mFBO);
+	}
+
+	void BloomPass::Render(unsigned int hdrTexture, unsigned int quadVAO, float bloomRadius)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+		glClearColor(0, 0, 0, 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		Downsample(hdrTexture, quadVAO);
+		Upsample(quadVAO, bloomRadius);
+
+		glViewport(0, 0, mSourceWidth, mSourceHeight);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void BloomPass::Downsample(unsigned int hdrTexture, unsigned int quadVAO)
+	{
+		mDownsampleShader->Bind();
+
+		glDisable(GL_BLEND);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, hdrTexture);
+		mDownsampleShader->SetInt("u_SrcTexture", 0);
+		mDownsampleShader->SetVec2("u_SrcResolution", glm::vec2(mSourceWidth, mSourceHeight));
+
+		for (int i = 0; i < mMipChain.size(); i++)
+		{
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mMipChain[i].texture, 0);
+			glViewport(0, 0, static_cast<GLsizei>(mMipChain[i].size.x), static_cast<GLsizei>(mMipChain[i].size.y));
+
+			glBindVertexArray(quadVAO);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+			// For the next iteration
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mMipChain[i].texture);
+			mDownsampleShader->SetInt("u_SrcTexture", 0);
+			mDownsampleShader->SetVec2("u_SrcResolution", mMipChain[i].size);
+		}
+	}
+
+	void BloomPass::Upsample(unsigned int quadVAO, float bloomRadius)
+	{
+		mUpsampleShader->Bind();
+		mUpsampleShader->SetFloat("u_BloomRadius", bloomRadius);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
+		glBlendEquation(GL_FUNC_ADD);
+
+		for (int i = mMipChain.size() - 2; i >= 0; i--)
+		{
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mMipChain[i].texture, 0);
+			glViewport(0, 0, static_cast<GLsizei>(mMipChain[i].size.x), static_cast<GLsizei>(mMipChain[i].size.y));
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mMipChain[i + 1].texture);
+			mUpsampleShader->SetInt("u_SrcTexture", 0);
+			mUpsampleShader->SetVec2("u_SrcResolution", mMipChain[i + 1].size);
+
+			glBindVertexArray(quadVAO);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		}
+
+		glDisable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 }

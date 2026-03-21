@@ -145,7 +145,11 @@ namespace Dawn
 			rawMaterial->SetHeightTexturePath(mDirectory + path.C_Str());
 		// Emission Map
 		if (aiMat->GetTexture(aiTextureType_EMISSIVE, 0, &path) == aiReturn_SUCCESS)
+		{
 			rawMaterial->SetEmissiveTexturePath(mDirectory + path.C_Str());
+			// NOTE: Temporary fix
+			rawMaterial->SetEmissiveColor(glm::vec3(1));
+		}
 
 		return rawMaterial;
 	}

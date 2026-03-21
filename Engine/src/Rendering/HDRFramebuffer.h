@@ -9,7 +9,9 @@ namespace Dawn
 		~HDRFramebuffer();
 
 		void BindFrameBuffer();
-		void BindTexture();
+		void BindTexture(unsigned int slot = 0);
+
+		unsigned int GetHDRTextureId() const { return mColorTexture; }
 
 	private:
 		void Init(int width, int height);

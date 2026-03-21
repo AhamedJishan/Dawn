@@ -42,7 +42,7 @@ namespace Dawn
 		Application::Get()->GetWindow()->SetFrameBufferSizeCallback([this](int width, int height) { glViewport(0, 0, width, height);});
 
 		mHDRFrameBuffer = new HDRFramebuffer();
-		mBloomPass = new BloomPass(x, y);
+		mBloomPass = new BloomPass(6);
 
 		InitQuad();
 		mPostProcessShader = Assets::GetShader("post_process");
@@ -60,12 +60,25 @@ namespace Dawn
 		glEnable(GL_BLEND);
 		DrawScene();
 
+		// --- BLOOM PASS ---
+		mBloomPass->Render(mHDRFrameBuffer->GetHDRTextureId(), mQuadVAO, 2.0f);
+
 		// --- POST PROCESS QUAD TO SCREEN ---
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_BLEND);
+		mPostProcessShader->Bind();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mHDRFrameBuffer->GetHDRTextureId());
+		mPostProcessShader->SetInt("u_HDRTexture", 0);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, mBloomPass->GetBloomTextureId());
+		mPostProcessShader->SetInt("u_BloomTexture", 1);
+		mPostProcessShader->SetFloat("u_BloomStrength", 0.01f);
+
 		DrawQuad();
 	}
 
@@ -149,10 +162,6 @@ namespace Dawn
 
 	void Renderer::DrawQuad()
 	{
-		mPostProcessShader->Bind();
-		mPostProcessShader->SetInt("u_DiffuseTexture", 0);
-		mHDRFrameBuffer->BindTexture();
-
 		glBindVertexArray(mQuadVAO);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
