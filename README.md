@@ -6,7 +6,7 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - [Done] Add arena bounds
 - [Done] Bigger wave text, "Wave 1"
 - add dmg multiplier / simple drop powerup
-- enemy speed variety
+- [Done] enemy speed variety
 - Add a goal, Time taken
 - hell Mode (waves survived, enemies killed)
 

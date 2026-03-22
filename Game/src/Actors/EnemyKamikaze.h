@@ -49,7 +49,7 @@ namespace Dawn
 
 		float mExplosionTimer = 1.5f;
 		const float mExplosionTriggerRadius = 1.5f;
-		const float mExplosionRadius = 4.0f;
+		const float mExplosionRadius = 5.0f;
 		const float mExplosionDamage = 55.0f;
 		const float mScaleAtExplosion = 2.0f;
 		const float mExplosionScaleDuration = 0.1f;
@@ -60,7 +60,8 @@ namespace Dawn
 		const glm::vec3 mBodyHitColor = glm::vec3(0.4f, 0.0f, 0.0f);
 		const glm::vec3 mBodyExplosionPulseColor = glm::vec3(1.0f, 0.2f, 0.0f);
 
-		const float mSpeed = 4.0f;
+		float mSpeed = 4.0f;
+		const float mSpeedVariation = 2.0f;
 		const float mSteeringRange = 5.0f;
 		const float mSteeringCutOffRange = 2.0f;
 		const float mMoveDirectionSmoothing = 2.5f;

@@ -24,7 +24,7 @@ namespace Dawn
 		GameScene* mGameScene = nullptr;
 		Damageable* mDamageable = nullptr;
 
-		float mSpeed = 3.0f;
+		float mSpeed = 5.0f;
 
 		FPSCameraActor* mCamera = nullptr;
 		glm::vec3 mCameraOffset = glm::vec3(0, 2, 0);

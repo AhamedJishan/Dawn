@@ -1,6 +1,8 @@
 #include "EnemyKamikaze.h"
 #include "Utils/Log.h"
 
+#include <stdlib.h>
+#include <time.h>
 #include "Rendering/Mesh.h"
 #include "Rendering/Materials/PhongMaterial.h"
 #include "Core/Components/MeshRenderer.h"
@@ -48,6 +50,10 @@ namespace Dawn
 		mEnemyPresence.SetVolume(10.0f);
 
 		mMoveDirection = glm::normalize(mPlayer->GetPosition() - GetPosition());
+
+		srand(time(0));
+		float variation = ((rand() % 10) / 10.0f) * mSpeedVariation;
+		mSpeed += variation;
 	}
 
 	EnemyKamikaze::~EnemyKamikaze()

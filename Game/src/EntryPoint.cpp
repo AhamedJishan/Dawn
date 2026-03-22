@@ -9,8 +9,8 @@ int main(int argc, char** argv)
 	Dawn::WindowConfig config;
 	config.Title = "Dawn";
 	config.IconPath = "Assets/Icons/dawn_icon.png";
-	config.Width = 1280;
-	config.Height = 720;
+	config.Width = 1440;
+	config.Height = 786;
 
 	Dawn::DawnGame dawn;
 
