@@ -1,5 +1,6 @@
 #include "GameScene.h"
 
+#include <string>
 #include <glm/vec3.hpp>
 #include "ExampleActor.h"
 #include "Actors/Arena.h"
@@ -153,7 +154,7 @@ namespace Dawn
 
 		// --- Title ---
 		ImGui::PushFont(mFontBold, 50.0f);
-		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.85f, 1.0f, 1.0f, 1.0f));
 		const char* title = "PAUSED";
 		float textWidth = ImGui::CalcTextSize(title).x;
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
@@ -263,7 +264,7 @@ namespace Dawn
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
 		ImGui::PushFont(mFontBold, 50.0f);
-		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.85f, 1.0f, 1.0f, 1.0f));
 		const char* gameOverText;
 		if (win)
 			gameOverText = "YOU WIN";
@@ -333,10 +334,12 @@ namespace Dawn
 		unsigned int currentWaveNumber = mWaveManager->GetCurrentWaveIndex() + 1;
 
 		ImGuiIO& io = ImGui::GetIO();
-		float windowCenterX = ImGui::GetMainViewport()->GetCenter().x;
+		float viewPortCenterX = ImGui::GetMainViewport()->GetCenter().x;
+		float viewPortCenterY = ImGui::GetMainViewport()->GetCenter().y;
 
-		ImGui::SetNextWindowBgAlpha(0.4f);
-		ImGui::SetNextWindowPos(ImVec2(windowCenterX, 0.0f), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
+		ImGui::SetNextWindowBgAlpha(0.0f);
+		ImGui::SetNextWindowPos(ImVec2(viewPortCenterX, 0.0f), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
+		ImGui::SetNextWindowSize(io.DisplaySize);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.0f);
 
@@ -351,17 +354,25 @@ namespace Dawn
 			break;
 		case Dawn::WaveState::WaveStarting:
 		{
-			ImGui::PushFont(mFontRegular, 20.0f);
-			int waveTimer = (int)std::ceil(mWaveManager->GetWaveCountdown());
-			ImGui::Text("WAVE %d STARTS IN: %d", currentWaveNumber, waveTimer);
+			float waveTimer = mWaveManager->GetWaveCountdown();
+			float timeBetweenWaves = mWaveManager->GetTimeBetweenWaves();
+			float alpha = glm::sin((waveTimer / timeBetweenWaves) * glm::pi<float>());
+			ImGui::PushFont(mFontLight, 45.0f);
+			std::string waveText = "WAVE " + std::to_string(currentWaveNumber);
+			ImVec2 textSize = ImGui::CalcTextSize(waveText.c_str());
+			float x = viewPortCenterX - textSize.x / 2.0f;
+			float y = viewPortCenterY - textSize.y;
+			ImGui::SetCursorPos(ImVec2(x, y));
+			ImGui::TextColored(ImVec4(0.8f, 1, 1, alpha), waveText.c_str());
 			ImGui::PopFont();
 			break;
 		}
 		case Dawn::WaveState::WaveActive:
 		{
-			ImGui::PushFont(mFontRegular, 20.0f);
 			unsigned int enemiesRemaining = mWaveManager->GetWaveEnemiesRemaining();
-			ImGui::Text("WAVE %d | ENEMIES REMAINING: %d", currentWaveNumber, enemiesRemaining);
+			ImGui::PushFont(mFontRegular, 25.0f);
+			ImGui::SetCursorPosX(viewPortCenterX);
+			ImGui::Text("%d", enemiesRemaining);
 			ImGui::PopFont();
 			break;
 		}

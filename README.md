@@ -4,7 +4,7 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 ## TODO
 
 - [Done] Add arena bounds
-- Bigger wave text, "Wave 1", "Wave 1 Cleared"
+- [Done] Bigger wave text, "Wave 1"
 - add dmg multiplier / simple drop powerup
 - enemy speed variety
 - Add a goal, Time taken

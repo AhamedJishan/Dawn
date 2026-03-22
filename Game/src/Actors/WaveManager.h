@@ -9,7 +9,7 @@
 namespace Dawn
 {
 	const unsigned int NUM_SPAWN_LOCATIONS = 4;
-	const float ARENA_RADIUS = 35.0f;
+	const float ARENA_RADIUS = 27.0f;
 
 	// A wave will have multiple phases
 	struct Phase
@@ -64,6 +64,7 @@ namespace Dawn
 		unsigned int GetWaveEnemiesRemaining() const { return mWaveEnemiesRemaining; }
 		unsigned int GetCurrentWaveIndex() const { return mCurrentWaveIndex; }
 		float GetWaveCountdown() const { return mTimeBetweenWaves - mWaveTimer; }
+		float GetTimeBetweenWaves() const { return mTimeBetweenWaves; }
 
 	private:
 		void QueueSpawn(unsigned int enemyCount, unsigned int spawnLocationIndex);
@@ -91,7 +92,7 @@ namespace Dawn
 		std::vector<Wave> mWaves;
 		float mWaveTimer = 0.0f;
 		float mPhaseTimer = 0.0f;
-		const float mTimeBetweenWaves = 5.0f;
+		const float mTimeBetweenWaves = 3.0f;
 		unsigned int mCurrentWaveIndex = 0;
 		unsigned int mCurrentPhaseIndex = 0;
 
