@@ -2,7 +2,7 @@
 
 #include <glm/vec3.hpp>
 #include "ExampleActor.h"
-#include "Actors/GroundPlane.h"
+#include "Actors/Arena.h"
 #include "Actors/WaveManager.h"
 #include "Actors/PlayerActor.h"
 #include "Actors/FPSCameraActor.h"
@@ -53,13 +53,14 @@ namespace Dawn
 		ea->SetPosition(glm::vec3(5, 0, -5));
 		ea->SetScale(glm::vec3(0.6f));
 
-		// GROUND
-		GroundPlane* ground = new GroundPlane(this);
 		// PLAYER
 		FPSCameraActor* cameraActor = new FPSCameraActor(this);
 		PlayerActor* player = new PlayerActor(this, cameraActor);
 		player->SetPosition(glm::vec3(0, 0, 4));
 		Gun* gun = new Gun(this, player);
+
+		// ARENA
+		Arena* arena = new Arena(this, player);
 
 		// --- WAVE MANAGER ---
 		mWaveManager = new WaveManager(this, player);

@@ -3,7 +3,12 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ## TODO
 
-- move bloom strength and radius to Scene
+- [Done] Add arena bounds
+- Bigger wave text, "Wave 1", "Wave 1 Cleared"
+- add dmg multiplier / simple drop powerup
+- enemy speed variety
+- Add a goal, Time taken
+- hell Mode (waves survived, enemies killed)
 
 ### Phase 1: Gameplay Lock & Integration (The "Friction")
 - [Done] Refactor GameScene: Break down the 500-line file, abstracting repeating logic into clean, manageable helper functions.
