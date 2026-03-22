@@ -25,6 +25,11 @@ namespace Dawn
 
 	struct EnvironmentSettings
 	{
+		// Default 1.0f
+		float bloomRadius = 1.0f;
+		// Default 0.01f
+		float bloomStrength = 0.01f;
+
 		float fogDensity = 0.0f;
 		glm::vec3 fogColor = glm::vec3(1);
 

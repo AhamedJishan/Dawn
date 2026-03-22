@@ -34,11 +34,16 @@ project "Game"
 
     postbuildcommands {
         -- Assets
+        "{RMDIR} %{cfg.targetdir}/Assets",
         "{COPYDIR} %{wks.location}/Assets %{cfg.targetdir}/Assets",
         -- Assimp
+        "{DELETE} %{cfg.targetdir}/assimp.dll",
+        "{DELETE} %{cfg.targetdir}/assimp.pdb",
         "{COPY} %{wks.location}/Engine/vendor/bin/assimp.dll %{cfg.targetdir}",
         "{COPY} %{wks.location}/Engine/vendor/bin/assimp.pdb %{cfg.targetdir}",
         -- FMOD
+        "{DELETE} %{cfg.targetdir}/fmod.dll",
+        "{DELETE} %{cfg.targetdir}/fmodstudio.dll",
         "{COPY} %{wks.location}/Engine/vendor/bin/fmod.dll %{cfg.targetdir}",
         "{COPY} %{wks.location}/Engine/vendor/bin/fmodstudio.dll %{cfg.targetdir}"
     }

@@ -34,7 +34,10 @@ namespace Dawn
 			{
 				PhongMaterial* mat = dynamic_cast<PhongMaterial*>(meshRenderer->GetMaterial());
 				if (mat)
+				{
 					mBodyMaterial = mat;
+					mBodyBaseColor = mat->GetDiffuseColor();
+				}
 			}
 		}
 
@@ -83,6 +86,7 @@ namespace Dawn
 			if (mBodyMaterial)
 				mBodyMaterial->SetDiffuseColor(mBodyBaseColor);
 		}
+
 	}
 
 	void EnemyKamikaze::TakeDamage(float dmg)

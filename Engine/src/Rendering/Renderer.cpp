@@ -77,7 +77,7 @@ namespace Dawn
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, mBloomPass->GetBloomTextureId());
 		mPostProcessShader->SetInt("u_BloomTexture", 1);
-		mPostProcessShader->SetFloat("u_BloomStrength", 0.01f);
+		mPostProcessShader->SetFloat("u_BloomStrength", Application::Get()->GetScene()->GetEnvironmentSettings().bloomStrength);
 
 		DrawQuad();
 	}

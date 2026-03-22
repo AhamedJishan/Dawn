@@ -18,10 +18,6 @@ namespace Dawn
 			:Actor(scene)
 		{
 			MeshRenderer::CreateFromModel(this, "Assets/Models/arena02/arena.obj");
-
-			//PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
-			//if (mat);
-			//	mat->SetDiffuseColor(glm::vec3(0.5f));
 		}
 	};
 }

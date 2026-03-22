@@ -21,8 +21,8 @@ void main()
     float t = clamp(normalize(frag_in.VertPosModelSpace).y, 0.0, 1.0);
     t = pow(t, 0.6);
 
-    vec3 top = SRGBToLinear(u_TopColor);
-    vec3 horizon = SRGBToLinear(u_HorizonColor);
+    vec3 top = u_TopColor;
+    vec3 horizon = u_HorizonColor;
 
     vec3 color = mix(horizon, top, t);
 

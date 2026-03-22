@@ -56,8 +56,8 @@ namespace Dawn
 		Damageable* mDamageable = nullptr;
 		ActionState mActionState = ActionState::Chasing;
 
-		const glm::vec3 mBodyBaseColor = glm::vec3(0.2f);
-		const glm::vec3 mBodyHitColor = glm::vec3(0.8f, 0.0f, 0.0f);
+		glm::vec3 mBodyBaseColor;
+		const glm::vec3 mBodyHitColor = glm::vec3(0.4f, 0.0f, 0.0f);
 		const glm::vec3 mBodyExplosionPulseColor = glm::vec3(1.0f, 0.2f, 0.0f);
 
 		const float mSpeed = 4.0f;

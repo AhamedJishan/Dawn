@@ -19,6 +19,17 @@ namespace Dawn
 
 		void Apply() override;
 
+		Texture* GetDiffuseMap() { return mDiffuseMap; }
+		Texture* GetSpecularMap() { return mSpecularMap; }
+		Texture* GetNormalMap() { return mNormalMap; }
+		Texture* GetEmissiveMap() { return mEmissiveMap; }
+
+		glm::vec3 GetDiffuseColor() { return mDiffuseColor; }
+		glm::vec3 GetSpecularColor() { return mSpecularColor; }
+		glm::vec3 GetEmissiveColor() { return mEmissiveColor; }
+
+		float GetShininess() { return mShininess; }
+
 		void SetDiffuseMap(Texture* texture) { mDiffuseMap = texture; }
 		void SetSpecularMap(Texture* texture) { mSpecularMap = texture; }
 		void SetNormalMap(Texture* texture) { mNormalMap = texture; }

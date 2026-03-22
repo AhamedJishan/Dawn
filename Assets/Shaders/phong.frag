@@ -51,16 +51,17 @@ void main()
 {
     vec3 phong;
 
-    vec4 baseColor = SRGBToLinear(vec4(u_DiffuseColor, 1));
+    // since i am using blender->obj, blender exports linear color, so need to gamma correct
+    vec4 baseColor = vec4(u_DiffuseColor, 1);
     if (u_HasDiffuseMap)
     {
         baseColor *= SRGBToLinear(texture(u_DiffuseTexture, frag_in.TexCoord));
     }
 
-    vec3 specularColor = SRGBToLinear(vec3(u_SpecularColor));
+    vec3 specularColor = vec3(u_SpecularColor);
     if (u_HasSpecularMap)
     {
-        specularColor *= SRGBToLinear(texture(u_SpecularTexture, frag_in.TexCoord).rgb);
+        specularColor *= texture(u_SpecularTexture, frag_in.TexCoord).rgb;
     }
 
     vec3 normal = normalize(frag_in.Normal);
@@ -68,17 +69,17 @@ void main()
     vec3 viewDir = normalize(u_CameraPosition - frag_in.FragPos);
     vec3 halfDir = normalize(lightDir + viewDir);
 
-    vec3 directionalLightColor = u_DirectionalLightIntensity * SRGBToLinear(u_DirectionalLightColor);
+    vec3 directionalLightColor = u_DirectionalLightIntensity * u_DirectionalLightColor;
 
     // --- AMBIENT ---
-    phong = SRGBToLinear(u_AmbientColor) * baseColor.rgb;
+    phong = u_AmbientColor * baseColor.rgb;
 
     // --- DIFFUSE ---
     float diffuseFactor = max(dot(lightDir, normal), 0);
     phong += diffuseFactor * directionalLightColor * baseColor.rgb;
 
     // --- SPECULAR ---
-    if (diffuseFactor > 0)
+    if (diffuseFactor > 0 && u_Shininess >= 1)
     {
         float specularFactor = pow(max(dot(normal, halfDir), 0), u_Shininess);
         phong += specularFactor * directionalLightColor * specularColor;
@@ -88,7 +89,7 @@ void main()
     float dist = length(frag_in.FragPos - u_CameraPosition);
     float fogIntensity = 1 - exp(-pow(dist * u_FogDensity, 2.0));
 
-    vec3 finalColor = mix(phong, SRGBToLinear(u_FogColor), fogIntensity);
+    vec3 finalColor = mix(phong, u_FogColor, fogIntensity);
 
     // --- EMISSIVE ---
     // no gamma correction here, since the emissive color provided is hdr value

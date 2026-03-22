@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include "Core/Application.h"
+#include "Core/Scene.h"
 #include "Core/Window.h"
 #include "Core/Assets.h"
 #include "Shader.h"
@@ -129,7 +130,7 @@ namespace Dawn
 	void BloomPass::Upsample(unsigned int quadVAO, float bloomRadius)
 	{
 		mUpsampleShader->Bind();
-		mUpsampleShader->SetFloat("u_BloomRadius", bloomRadius);
+		mUpsampleShader->SetFloat("u_BloomRadius", Application::Get()->GetScene()->GetEnvironmentSettings().bloomRadius);
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
