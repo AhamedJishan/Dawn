@@ -43,7 +43,7 @@ namespace Dawn
 			}
 		}
 
-		mDamageable = new Damageable(this, 100.0f);
+		mDamageable = new Damageable(this, 90.0f);
 
 		mAudioComponent = new Audio(this);
 		mEnemyPresence = mAudioComponent->PlayEvent("event:/enemy_presence");
@@ -95,9 +95,10 @@ namespace Dawn
 
 	}
 
-	void EnemyKamikaze::TakeDamage(float dmg)
+	float EnemyKamikaze::TakeDamage(float dmg)
 	{
-		mDamageable->TakeDamage(dmg);
+		float health = mDamageable->TakeDamage(dmg);
+
 		if (mDamageable->IsDead())
 			SetState(Actor::State::Dead);
 
@@ -106,6 +107,8 @@ namespace Dawn
 		if (mBodyMaterial)
 			mBodyMaterial->SetDiffuseColor(mBodyHitColor);
 		mIsInImpactState = true;
+
+		return health;
 	}
 
 	void EnemyKamikaze::Chase(float deltaTime)

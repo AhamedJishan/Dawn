@@ -4,6 +4,7 @@
 
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/SphereCollider.h"
+#include "Components/KillStreak.h"
 #include "EnemyKamikaze.h"
 
 namespace Dawn
@@ -11,22 +12,28 @@ namespace Dawn
 	class Projectile : public Actor
 	{
 	public:
-		Projectile(class Scene* scene, float damage = 35.0f)
+		Projectile(class Scene* scene, KillStreak* playerKillStreak, float damage = 30.0f)
 			:Actor(scene)
 			,mDamage(damage)
 		{
 			mCollider = new SphereCollider(this);
 			mCollider->SetIsTrigger(true);
 			mCollider->SetRadius(0.3f);
+
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
 			SetScale(glm::vec3(0.3f));
+
+			mPlayerKillStreak = playerKillStreak;
 		}
 
 		void Update(float deltaTime) override
 		{
 			mLifeTime -= deltaTime;
 			if (mLifeTime <= 0.0f)
+			{
 				SetState(Actor::State::Dead);
+				mPlayerKillStreak->ShotMissed();
+			}
 
 			SetPosition(GetPosition() + GetForward() * mSpeed * deltaTime);
 
@@ -35,7 +42,9 @@ namespace Dawn
 			if (enemy)
 			{
 				SetState(Actor::State::Dead);
-				enemy->TakeDamage(mDamage);
+				float enemyHealth = enemy->TakeDamage(mDamage);
+				if (enemyHealth <= 0.0f)
+					mPlayerKillStreak->EnemyKilled();
 			}
 		}
 
@@ -45,5 +54,6 @@ namespace Dawn
 		float mDamage = 35.0f;
 
 		SphereCollider* mCollider = nullptr;
+		KillStreak* mPlayerKillStreak = nullptr;
 	};
 }

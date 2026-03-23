@@ -17,13 +17,16 @@ namespace Dawn
 		{
 		}
 
-		void TakeDamage(float dmg)
+		// Returns health left after dmg is dealt
+		float TakeDamage(float dmg)
 		{
 			mHealth -= dmg;
 			mHealth = glm::clamp(mHealth, 0.0f, mMaxHealth);
 
 			if (mHealth == 0.0f)
 				mIsDead = true;
+
+			return mHealth;
 		}
 
 		bool IsDead() const { return mIsDead; }

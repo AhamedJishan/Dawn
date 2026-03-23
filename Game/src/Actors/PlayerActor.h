@@ -9,6 +9,7 @@ namespace Dawn
 	class GameScene;
 	class FPSCameraActor;
 	class Damageable;
+	class KillStreak;
 
 	class PlayerActor : public Actor
 	{
@@ -23,6 +24,7 @@ namespace Dawn
 	private:
 		GameScene* mGameScene = nullptr;
 		Damageable* mDamageable = nullptr;
+		KillStreak* mKillStreak = nullptr;
 
 		float mSpeed = 5.0f;
 

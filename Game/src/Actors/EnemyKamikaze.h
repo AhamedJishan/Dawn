@@ -31,7 +31,8 @@ namespace Dawn
 
 		void Update(float deltaTime) override;
 
-		void TakeDamage(float dmg);
+		// returns current health after dmg is dealt
+		float TakeDamage(float dmg);
 
 	private:
 		void Chase(float deltaTime);

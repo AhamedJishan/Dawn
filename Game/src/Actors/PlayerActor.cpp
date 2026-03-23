@@ -4,6 +4,7 @@
 #include "Scenes/GameScene.h"
 #include "FPSCameraActor.h"
 #include "Components/Damageable.h"
+#include "Components/KillStreak.h"
 #include "Core/Components/SphereCollider.h"
 
 namespace Dawn
@@ -20,6 +21,7 @@ namespace Dawn
 		mGameScene = scene;
 		mCamera = fpsCameraActor;
 		mDamageable = new Damageable(this, 100.0f);
+		mKillStreak = new KillStreak(this);
 
 		SphereCollider* collider = new SphereCollider(this);
 		collider->SetIsDynamic(true);

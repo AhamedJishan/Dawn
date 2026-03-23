@@ -7,6 +7,7 @@ namespace Dawn
 {
 	// Forward declarations
 	class PlayerActor;
+	class KillStreak;
 	class Scene;
 	class Audio;
 
@@ -34,9 +35,10 @@ namespace Dawn
 
 	private:
 		PlayerActor* mPlayer = nullptr;
+		KillStreak* mPlayerKillStreak = nullptr;
 		Audio* mAudioComponent = nullptr;
 
-		float mDamage = 35.0f;
+		float mDamage = 30.0f;
 		const float mFireCooldown = 0.1f;
 		float mTimeSinceLastFire = 0.0f;
 		glm::vec3 mProjectileSpawnOffset = glm::vec3(0.0f, 0.05f, 0.15f);
