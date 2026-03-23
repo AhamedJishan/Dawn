@@ -5,7 +5,7 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 - [Done] Add arena bounds
 - [Done] Bigger wave text, "Wave 1"
-- add dmg multiplier / simple drop powerup
+- [Done] add dmg multiplier
 - [Done] enemy speed variety
 - Add a goal, Time taken
 - hell Mode (waves survived, enemies killed)
@@ -29,19 +29,12 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - [ ] Audio Mixing: Do a cohesive final balance pass on the master volumes for BGM, explosions, fuses, and UI.
 - [ ] The Blind Playtest: Hand the executable to someone else and watch them play without giving instructions to check difficulty and pacing.
 - [ ] Release Build: Package the .exe, configure dynamic asset paths, and bundle the FMOD .dll files for a standalone build.
+- [ ] 1. The Plasma Overload
+    - 0x (Base): Teal / Cyan (Matches the arena, feels stable and cool).
+    - 1x (Streak Started): Golden Yellow (Warming up).
+    - 2x (Lethal): Fiery Orange/Red (Aggressive, high heat).
+    - 3x (Max Power): Deep Bluish-Purple or Violet (The color of extremely high-energy plasma).
 
 ### Stretch Goals (If Time Permits)
 - [ ] The Tactical Dash: Implement the high-skill i-frame dash mechanic to break through enemy walls.
 - [ ] Arsenal Expansion: Add one new enemy type and one new gun.
-
-### Polish
-- shooting
-- enemy chase
-- wave system
-- Dash into enemy to attack
-
-### Rendering
-- SpriteRenderer
-- SkinnedMeshRenderer
-- Skybox
-- bloom + hdr

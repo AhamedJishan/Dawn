@@ -13,6 +13,7 @@
 #include "Physics/Physics.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Components/KillStreak.h"
 
 namespace Dawn
 {
@@ -56,6 +57,9 @@ namespace Dawn
 		Rotate(mSwayRotationOffset.y, glm::vec3(1, 0, 0));
 		Rotate(mSwayRotationOffset.x, glm::vec3(0, 1, 0));
 		Rotate(mRecoilPitch, glm::vec3(1, 0, 0));
+
+		// Update bonus dmg multiplier
+		mBonusDamageMultiplier = mPlayer->GetComponent<KillStreak>()->GetKillStreak() / 2;
 	}
 
 	void Gun::Fire()
@@ -92,8 +96,10 @@ namespace Dawn
 		projectilePosition += GetRight() * mProjectileSpawnOffset.x;
 		projectilePosition += GetForward() * mProjectileSpawnOffset.z;
 
+		float finalDmg = mBaseDamage + mBonusDamage * mBonusDamageMultiplier;
+
 		// Spawn projectile
-		Projectile* projectile = new Projectile(mScene, mPlayer, mDamage);
+		Projectile* projectile = new Projectile(mScene, mPlayer, finalDmg);
 		projectile->SetPosition(GetPosition() + projectilePosition);
 		projectile->SetRotation(projectileRotation);
 	}

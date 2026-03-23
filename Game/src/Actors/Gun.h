@@ -36,7 +36,11 @@ namespace Dawn
 		Player* mPlayer = nullptr;
 		Audio* mAudioComponent = nullptr;
 
-		float mDamage = 30.0f;
+
+		const float mBaseDamage = 30.0f;
+		const float mBonusDamage = 30.0f;
+		unsigned int mBonusDamageMultiplier = 0;
+
 		const float mFireCooldown = 0.1f;
 		float mTimeSinceLastFire = 0.0f;
 		glm::vec3 mProjectileSpawnOffset = glm::vec3(0.0f, 0.05f, 0.15f);
