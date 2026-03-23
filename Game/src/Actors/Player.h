@@ -12,15 +12,17 @@ namespace Dawn
 	class Damageable;
 	class KillStreak;
 
-	class PlayerActor : public Actor
+	class Player : public Actor
 	{
 	public:
-		PlayerActor(GameScene* scene, FPSCameraActor* fpsCameraActor, Arena* arena);
+		Player(GameScene* scene, FPSCameraActor* fpsCameraActor, Arena* arena);
 
 		void Update(float deltaTime) override;
 
 		void TakeDamage(float dmg);
 		glm::vec3 GetGunPosition();
+
+		Arena* GetArena() const { return mArena; }
 
 	private:
 		GameScene* mGameScene = nullptr;

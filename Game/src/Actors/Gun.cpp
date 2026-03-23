@@ -10,14 +10,13 @@
 #include "Core/Components/Audio.h"
 #include "Rendering/Materials/PhongMaterial.h"
 #include "Input/Input.h"
-#include "Components/KillStreak.h"
 #include "Physics/Physics.h"
-#include "PlayerActor.h"
+#include "Player.h"
 #include "Projectile.h"
 
 namespace Dawn
 {
-	Gun::Gun(Scene* scene, PlayerActor* player)
+	Gun::Gun(Scene* scene, Player* player)
 		:Actor(scene)
 	{
 		MeshRenderer::CreateFromModel(this, "Assets/Models/gun/gun.obj");
@@ -27,7 +26,6 @@ namespace Dawn
 
 		mAudioComponent = new Audio(this);
 		mPlayer = player;
-		mPlayerKillStreak = mPlayer->GetComponent<KillStreak>();
 	}
 
 	void Gun::Update(float deltaTime)
@@ -95,7 +93,7 @@ namespace Dawn
 		projectilePosition += GetForward() * mProjectileSpawnOffset.z;
 
 		// Spawn projectile
-		Projectile* projectile = new Projectile(mScene, mPlayerKillStreak, mDamage);
+		Projectile* projectile = new Projectile(mScene, mPlayer, mDamage);
 		projectile->SetPosition(GetPosition() + projectilePosition);
 		projectile->SetRotation(projectileRotation);
 	}

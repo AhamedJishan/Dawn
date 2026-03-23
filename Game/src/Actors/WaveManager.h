@@ -47,12 +47,12 @@ namespace Dawn
 	// Forward declarations
 	class Scene;
 	class EnemyKamikaze;
-	class PlayerActor;
+	class Player;
 
 	class WaveManager : public Actor
 	{
 	public:
-		WaveManager(Scene* scene, PlayerActor* player);
+		WaveManager(Scene* scene, Player* player);
 		~WaveManager();
 
 		void Init();
@@ -73,7 +73,7 @@ namespace Dawn
 		void UpdateWaveEnemyState();
 
 	private:
-		PlayerActor* mPlayer = nullptr;
+		Player* mPlayer = nullptr;
 		WaveState mWaveState = WaveState::Begin;
 
 		std::array<glm::vec3, NUM_SPAWN_LOCATIONS> mSpawnLocations = 

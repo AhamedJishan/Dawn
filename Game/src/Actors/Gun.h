@@ -6,15 +6,14 @@
 namespace Dawn
 {
 	// Forward declarations
-	class PlayerActor;
-	class KillStreak;
+	class Player;
 	class Scene;
 	class Audio;
 
 	class Gun : public Actor
 	{
 	public:
-		Gun(Scene* scene, PlayerActor* player);
+		Gun(Scene* scene, Player* player);
 
 		void Update(float deltaTime) override;
 
@@ -34,8 +33,7 @@ namespace Dawn
 		glm::vec3 GetMoveInput();
 
 	private:
-		PlayerActor* mPlayer = nullptr;
-		KillStreak* mPlayerKillStreak = nullptr;
+		Player* mPlayer = nullptr;
 		Audio* mAudioComponent = nullptr;
 
 		float mDamage = 30.0f;

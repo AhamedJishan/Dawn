@@ -18,6 +18,11 @@ namespace Dawn
 
 		unsigned int GetKillStreak() const { return mKillStreak; }
 
+		void Update(float deltaTime) override
+		{
+			LOG_INFO("%d", mKillStreak);
+		}
+
 		void ShotMissed()
 		{
 			if (mKillStreak > 0)

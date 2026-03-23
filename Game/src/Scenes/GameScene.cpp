@@ -5,7 +5,7 @@
 #include "ExampleActor.h"
 #include "Actors/Arena.h"
 #include "Actors/WaveManager.h"
-#include "Actors/PlayerActor.h"
+#include "Actors/Player.h"
 #include "Actors/FPSCameraActor.h"
 #include "Actors/Gun.h"
 #include "Actors/SkyDome.h"
@@ -59,7 +59,7 @@ namespace Dawn
 
 		// PLAYER
 		FPSCameraActor* cameraActor = new FPSCameraActor(this);
-		PlayerActor* player = new PlayerActor(this, cameraActor, arena);
+		Player* player = new Player(this, cameraActor, arena);
 		player->SetPosition(glm::vec3(0, 0, 4));
 		Gun* gun = new Gun(this, player);
 

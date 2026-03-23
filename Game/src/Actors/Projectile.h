@@ -5,6 +5,8 @@
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/SphereCollider.h"
 #include "Components/KillStreak.h"
+#include "Player.h"
+#include "Arena.h"
 #include "EnemyKamikaze.h"
 
 namespace Dawn
@@ -12,7 +14,7 @@ namespace Dawn
 	class Projectile : public Actor
 	{
 	public:
-		Projectile(class Scene* scene, KillStreak* playerKillStreak, float damage = 30.0f)
+		Projectile(class Scene* scene, Player* player, float damage = 30.0f)
 			:Actor(scene)
 			,mDamage(damage)
 		{
@@ -23,7 +25,9 @@ namespace Dawn
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
 			SetScale(glm::vec3(0.3f));
 
-			mPlayerKillStreak = playerKillStreak;
+			mPlayer = player;
+			mArena = player->GetArena();
+			mPlayerKillStreak = mPlayer->GetComponent<KillStreak>();
 		}
 
 		void Update(float deltaTime) override
@@ -46,6 +50,12 @@ namespace Dawn
 				if (enemyHealth <= 0.0f)
 					mPlayerKillStreak->EnemyKilled();
 			}
+
+			if (mArena->IsOutOfBounds(GetPosition()))
+			{
+				SetState(Actor::State::Dead);
+				mPlayerKillStreak->ShotMissed();
+			}
 		}
 
 	private:
@@ -54,6 +64,8 @@ namespace Dawn
 		float mDamage = 35.0f;
 
 		SphereCollider* mCollider = nullptr;
+		Player* mPlayer = nullptr;
+		Arena* mArena = nullptr;
 		KillStreak* mPlayerKillStreak = nullptr;
 	};
 }

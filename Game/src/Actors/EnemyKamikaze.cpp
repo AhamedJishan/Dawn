@@ -12,11 +12,11 @@
 #include "Audio/AudioSystem.h"
 #include "Components/Damageable.h"
 #include "WaveManager.h"
-#include "PlayerActor.h"
+#include "Player.h"
 
 namespace Dawn
 {
-	EnemyKamikaze::EnemyKamikaze(Scene* scene, PlayerActor* player, WaveManager* waveManager)
+	EnemyKamikaze::EnemyKamikaze(Scene* scene, Player* player, WaveManager* waveManager)
 		:Actor(scene)
 		,mPlayer(player)
 		,mWaveManager(waveManager)

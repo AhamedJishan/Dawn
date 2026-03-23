@@ -1,4 +1,4 @@
-#include "PlayerActor.h"
+#include "Player.h"
 #include "Utils/Log.h"
 
 #include "Scenes/GameScene.h"
@@ -10,7 +10,7 @@
 
 namespace Dawn
 {
-	PlayerActor::PlayerActor(GameScene* scene, FPSCameraActor* fpsCameraActor, Arena* arena)
+	Player::Player(GameScene* scene, FPSCameraActor* fpsCameraActor, Arena* arena)
 		:Actor(scene)
 	{
 		if (!fpsCameraActor)
@@ -33,7 +33,7 @@ namespace Dawn
 		mGameScene->SetMaxPlayerHealth(mDamageable->GetMaxHealth());
 	}
 
-	void PlayerActor::Update(float deltaTime)
+	void Player::Update(float deltaTime)
 	{
 		if (mDamageable->IsDead())
 			mGameScene->GameOver();
@@ -69,7 +69,7 @@ namespace Dawn
 		}
 	}
 
-	void PlayerActor::TakeDamage(float dmg)
+	void Player::TakeDamage(float dmg)
 	{
 		mDamageable->TakeDamage(dmg);
 		mGameScene->SetPlayerHealth(mDamageable->GetHealth());
@@ -80,7 +80,7 @@ namespace Dawn
 			mGameScene->GameOver();
 		}
 	}
-	glm::vec3 PlayerActor::GetGunPosition()
+	glm::vec3 Player::GetGunPosition()
 	{
 		glm::vec3 gunPos = mCamera->GetPosition();
 

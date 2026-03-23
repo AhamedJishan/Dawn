@@ -2,11 +2,12 @@
 #include "Utils/Log.h"
 
 #include "Core/Scene.h"
+#include "Player.h"
 #include "EnemyKamikaze.h"
 
 namespace Dawn
 {
-	WaveManager::WaveManager(Scene* scene, PlayerActor* player)
+	WaveManager::WaveManager(Scene* scene, Player* player)
 		:Actor(scene)
 		,mPlayer(player)
 	{
