@@ -54,14 +54,14 @@ namespace Dawn
 		ea->SetPosition(glm::vec3(5, 0, -5));
 		ea->SetScale(glm::vec3(0.6f));
 
+		// ARENA
+		Arena* arena = new Arena(this);
+
 		// PLAYER
 		FPSCameraActor* cameraActor = new FPSCameraActor(this);
-		PlayerActor* player = new PlayerActor(this, cameraActor);
+		PlayerActor* player = new PlayerActor(this, cameraActor, arena);
 		player->SetPosition(glm::vec3(0, 0, 4));
 		Gun* gun = new Gun(this, player);
-
-		// ARENA
-		Arena* arena = new Arena(this, player);
 
 		// --- WAVE MANAGER ---
 		mWaveManager = new WaveManager(this, player);

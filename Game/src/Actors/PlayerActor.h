@@ -6,6 +6,7 @@ namespace Dawn
 {
 	// Forward declarations
 	class Gun;
+	class Arena;
 	class GameScene;
 	class FPSCameraActor;
 	class Damageable;
@@ -14,7 +15,7 @@ namespace Dawn
 	class PlayerActor : public Actor
 	{
 	public:
-		PlayerActor(GameScene* scene, FPSCameraActor* fpsCameraActor);
+		PlayerActor(GameScene* scene, FPSCameraActor* fpsCameraActor, Arena* arena);
 
 		void Update(float deltaTime) override;
 
@@ -25,6 +26,7 @@ namespace Dawn
 		GameScene* mGameScene = nullptr;
 		Damageable* mDamageable = nullptr;
 		KillStreak* mKillStreak = nullptr;
+		Arena* mArena = nullptr;
 
 		float mSpeed = 5.0f;
 

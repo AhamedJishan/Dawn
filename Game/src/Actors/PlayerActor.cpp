@@ -6,10 +6,11 @@
 #include "Components/Damageable.h"
 #include "Components/KillStreak.h"
 #include "Core/Components/SphereCollider.h"
+#include "Arena.h"
 
 namespace Dawn
 {
-	PlayerActor::PlayerActor(GameScene* scene, FPSCameraActor* fpsCameraActor)
+	PlayerActor::PlayerActor(GameScene* scene, FPSCameraActor* fpsCameraActor, Arena* arena)
 		:Actor(scene)
 	{
 		if (!fpsCameraActor)
@@ -20,6 +21,7 @@ namespace Dawn
 
 		mGameScene = scene;
 		mCamera = fpsCameraActor;
+		mArena = arena;
 		mDamageable = new Damageable(this, 100.0f);
 		mKillStreak = new KillStreak(this);
 
@@ -47,6 +49,24 @@ namespace Dawn
 		if (Input::GetKey(Key::S)) mPosition -= mSpeed * GetForward() * deltaTime;
 		if (Input::GetKey(Key::A)) mPosition -= mSpeed * GetRight() * deltaTime;
 		if (Input::GetKey(Key::D)) mPosition += mSpeed * GetRight() * deltaTime;
+
+		// Resolve Arena Bound Collision
+		if (mArena->IsOutOfBounds(GetPosition()))
+		{
+			glm::vec3 pos = GetPosition();
+			glm::vec2 bounds = mArena->GetBounds();
+
+			if (pos.x > bounds.x)
+				pos.x = bounds.x;
+			if (pos.x < -bounds.x)
+				pos.x = -bounds.x;
+			if (pos.z > bounds.y)
+				pos.z = bounds.y;
+			if (pos.z < -bounds.y)
+				pos.z = -bounds.y;
+
+			SetPosition(pos);
+		}
 	}
 
 	void PlayerActor::TakeDamage(float dmg)

@@ -4,7 +4,6 @@
 
 #include <glm/vec3.hpp>
 #include "Core/Components/MeshRenderer.h"
-#include "Rendering/Materials/PhongMaterial.h"
 
 namespace Dawn
 {
@@ -14,34 +13,28 @@ namespace Dawn
 	class Arena : public Actor
 	{
 	public:
-		Arena(Scene* scene, Actor* player)
+		Arena(Scene* scene)
 			:Actor(scene)
 		{
-			mPlayer = player;
 			MeshRenderer::CreateFromModel(this, "Assets/Models/arena02/arena.obj");
 		}
 
-		void Update(float deltaTime) override
+		// Ignores top bound
+		bool IsOutOfBounds(glm::vec3 position)
 		{
-			if (!mPlayer)
-				return;
+			if (position.x > mBounds.x	|| 
+				position.x < -mBounds.x ||
+				position.z > mBounds.y	||
+				position.z < -mBounds.y ||
+				position.y < 0.0f)
+				return true;
 
-			glm::vec3 playerPos = mPlayer->GetPosition();
-	
-			if (playerPos.x > mBounds.x)
-				playerPos.x = mBounds.x;
-			if (playerPos.x < -mBounds.x)
-				playerPos.x = -mBounds.x;
-			if (playerPos.z > mBounds.y)
-				playerPos.z = mBounds.y;
-			if (playerPos.z < -mBounds.y)
-				playerPos.z = -mBounds.y;
-
-			mPlayer->SetPosition(playerPos);
+			return false;
 		}
 
+		glm::vec2 GetBounds() const { return mBounds; }
+
 	private:
-		Actor* mPlayer = nullptr;
 		glm::vec2 mBounds = glm::vec2(25.0f);
 	};
 }
