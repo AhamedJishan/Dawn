@@ -16,6 +16,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "ParticleSystem.h"
 
 namespace Dawn
 {
@@ -46,6 +47,8 @@ namespace Dawn
 
 		InitQuad();
 		mPostProcessShader = Assets::GetShader("post_process");
+
+		mParticleShader = Assets::GetShader("particle");
 
 		return true;
 	}
@@ -137,6 +140,14 @@ namespace Dawn
 			shader->SetFloat("u_DirectionalLightIntensity", environmentSettings.directionalLight.intensity);
 
 			glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, NULL);
+		}
+
+		mParticleShader->Bind();
+		mParticleShader->SetMat4("u_View", viewMatrix);
+		mParticleShader->SetMat4("u_Projection", projectionMatrix);
+		for (ParticleSystem* particleSystem : Application::Get()->GetScene()->GetParticleSystems())
+		{
+			particleSystem->Render(mParticleShader);
 		}
 	}
 

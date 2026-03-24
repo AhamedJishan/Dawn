@@ -11,6 +11,7 @@ namespace Dawn
 	class Camera;
 	class SphereCollider;
 	class Application;
+	class ParticleSystem;
 	namespace Physics
 	{
 		struct Ray;
@@ -58,6 +59,10 @@ namespace Dawn
 		void AddSphereCollider(SphereCollider* collider);
 		void RemoveSphereCollider(SphereCollider* collider);
 
+		friend class ParticleSystem;
+		void AddParticleSystem(ParticleSystem* particleSystem);
+		void RemoveParticleSystem(ParticleSystem* particleSystem);
+
 	public:
 		Scene();
 		virtual ~Scene();
@@ -79,6 +84,7 @@ namespace Dawn
 
 		void SetActiveCamera(Camera* camera) { mActiveCamera = camera; }
 		Camera* GetActiveCamera() const { return mActiveCamera; }
+		const std::vector<ParticleSystem*>& GetParticleSystems() const { return mParticleSystems; }
 
 		// Physics Utilities
 		const std::vector<SphereCollider*>& GetColliderList() const { return mColliders; }
@@ -95,6 +101,8 @@ namespace Dawn
 		std::vector<Actor*> mPendingActors;
 
 		std::vector<SphereCollider*> mColliders;
+
+		std::vector<ParticleSystem*> mParticleSystems;
 
 		EnvironmentSettings mEnvironmentSettings;
 	};

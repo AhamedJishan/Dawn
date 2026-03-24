@@ -38,5 +38,7 @@ namespace Dawn
 
 		unsigned int mQuadVAO = 0, mQuadVBO = 0;
 		Shader* mPostProcessShader = nullptr;
+
+		Shader* mParticleShader = nullptr;
 	};
 }

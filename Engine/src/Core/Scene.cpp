@@ -4,6 +4,7 @@
 #include "Actor.h"
 #include "Physics/Physics.h"
 #include "Components/SphereCollider.h"
+#include "Rendering/ParticleSystem.h"
 
 namespace Dawn
 {
@@ -20,6 +21,9 @@ namespace Dawn
 
 		while (!mPendingActors.empty())
 			delete mPendingActors.back();
+
+		while (!mParticleSystems.empty())
+			delete mParticleSystems.back();
 	}
 	
 	void Scene::UpdateActors(float deltaTime)
@@ -48,6 +52,10 @@ namespace Dawn
 		for (Actor* actor : deadActors)
 			delete actor;					// Actor::~Actor() calls Scene::RemoveActor() to remove itself from mActors
 		deadActors.clear();
+
+		// Update particles
+		for (ParticleSystem* particle : mParticleSystems)
+			particle->Update(deltaTime);
 	}
 
 	void Scene::ResolveCollisions()
@@ -153,6 +161,18 @@ namespace Dawn
 		auto it = std::find(mColliders.begin(), mColliders.end(), collider);
 		if (it != mColliders.end())
 			mColliders.erase(it);
+	}
+
+	void Scene::AddParticleSystem(ParticleSystem* particleSystem)
+	{
+		mParticleSystems.push_back(particleSystem);
+	}
+
+	void Scene::RemoveParticleSystem(ParticleSystem* particleSystem)
+	{
+		auto it = std::find(mParticleSystems.begin(), mParticleSystems.end(), particleSystem);
+		if (it != mParticleSystems.end())
+			mParticleSystems.erase(it);
 	}
 
 	bool Scene::RayCast(const Physics::Ray& ray, float maxDistance, RaycastHit& outHitInfo)

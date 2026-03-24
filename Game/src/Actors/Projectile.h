@@ -4,6 +4,7 @@
 
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/SphereCollider.h"
+#include "Rendering/ParticleSystem.h"
 #include "Components/KillStreak.h"
 #include "Player.h"
 #include "Arena.h"
@@ -28,6 +29,12 @@ namespace Dawn
 			mPlayer = player;
 			mArena = player->GetArena();
 			mPlayerKillStreak = mPlayer->GetComponent<KillStreak>();
+
+			mDesc.initialBurst = 10;
+			mDesc.particleLifetime = 0.05f;
+			mDesc.directionMin = glm::vec3(-1.0f, -1.0f, -1.0f);
+			mDesc.directionMax = glm::vec3(1.0f, 1.0f, 1.0f);
+			mDesc.speed = 60.0f;
 		}
 
 		void Update(float deltaTime) override
@@ -49,12 +56,15 @@ namespace Dawn
 				float enemyHealth = enemy->TakeDamage(mDamage);
 				if (enemyHealth <= 0.0f)
 					mPlayerKillStreak->EnemyKilled();
+
+				new ParticleSystem(mScene, mDesc, GetPosition());
 			}
 
 			if (mArena->IsOutOfBounds(GetPosition()))
 			{
 				SetState(Actor::State::Dead);
 				mPlayerKillStreak->ShotMissed();
+				new ParticleSystem(mScene, mDesc, GetPosition());
 			}
 		}
 
@@ -67,5 +77,7 @@ namespace Dawn
 		Player* mPlayer = nullptr;
 		Arena* mArena = nullptr;
 		KillStreak* mPlayerKillStreak = nullptr;
+
+		ParticleSystemDesc mDesc;
 	};
 }

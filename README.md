@@ -7,8 +7,12 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - [Done] Bigger wave text, "Wave 1"
 - [Done] add dmg multiplier
 - [Done] enemy speed variety
-- Add a goal, Time taken
-- hell Mode (waves survived, enemies killed)
+- [ ] Add a goal, Time taken
+- [ ] Enemy knockback on hit
+- [ ] Refine Recoil, gun bob, and sway. Make shooting feel fun.
+- [ ] Create custom Gun model that makes it possible for the neon charge up glow to be shown.
+- [ ] Refine enemy model in blender.
+- [ ] hell Mode (waves survived, enemies killed)
 
 ### Phase 1: Gameplay Lock & Integration (The "Friction")
 - [Done] Refactor GameScene
