@@ -177,6 +177,13 @@ namespace Dawn
 			glUniform3f(location, value.x, value.y, value.z);
 	}
 
+	void Shader::SetVec3s(const std::string& name, const const glm::vec3* values, int count) const
+	{
+		int location = GetUniformLocation(name);
+		if (location != -1 && count != 0)
+			glUniform3fv(location, count, glm::value_ptr(values[0]));
+	}
+
 	void Shader::SetMat4(const std::string& name, const glm::mat4& value) const
 	{
 		int location = GetUniformLocation(name);

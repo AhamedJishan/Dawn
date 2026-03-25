@@ -1,41 +1,43 @@
 #pragma once
+#include "Utils/Log.h"
 
+#include <array>
 #include <vector>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <glm/gtc/quaternion.hpp>
 
 namespace Dawn
 {
-	// Generic struct for over lifetime data types
+	// should remain in sync with particle.vert shader
+	const unsigned int OVERTIME_MAX_KEYS = 5;
+
+	// Generic struct for over time data types
 	template<typename T>
-	struct OverLifetime
+	struct OverTime
 	{
-		struct Key
+		void AddKey(float time, T value)
 		{
-			T value;
-			float t;
-		};
-
-		// should be provided sorted
-		std::vector<Key> keys;
-
-		T Sample(float t)
-		{
-			if (keys.size() == 0) return T{};
-			if (t <= keys.front().t) return keys.front().value;
-			if (t >= keys.back().t) return keys.back().value;
-
-			for (int i = 0; i < keys.size() - 1; i++)
+			if (mKeyCount >= OVERTIME_MAX_KEYS)
 			{
-				if (t >= keys[i].t)
-				{
-					float localT = (t - keys[i].t) / (keys[i + 1].t - keys[i].t);
-					return glm::mix(keys[i].value, keys[i + 1].value, localT);
-				}
+				LOG_WARN("OverLifetime struct can only have max 5 keys!");
+				return;
 			}
-			return keys.back().value;
+
+			mValues[mKeyCount] = value;
+			mTimes[mKeyCount] = time;
+
+			mKeyCount++;
 		}
+
+		int GetKeyCount() const { return mKeyCount; }
+		const std::array<T, OVERTIME_MAX_KEYS>& GetValues() const { return mValues; }
+		const std::array<float, OVERTIME_MAX_KEYS>& GetTimes() const { return mTimes; }
+
+	private:
+		// should be provided sorted
+		std::array<T, OVERTIME_MAX_KEYS> mValues{};
+		std::array<float, OVERTIME_MAX_KEYS> mTimes{};
+		int mKeyCount = 0;
 	};
 
 	struct ParticleSystemDesc
@@ -53,8 +55,8 @@ namespace Dawn
 		glm::vec3 directionMin = glm::vec3(0);
 		glm::vec3 directionMax = glm::vec3(0);
 
-		OverLifetime<glm::vec3> scaleOverLifeTime;
-		OverLifetime<glm::vec4> colorOverLifeTime;
+		OverTime<glm::vec3> scaleOverTime;
+		OverTime<glm::vec4> colorOverTime;
 	};
 
 	struct ParticlePool
@@ -81,6 +83,7 @@ namespace Dawn
 
 		const ParticlePool* GetParticlePool() const { return mParticlePool; }
 
+		bool IsStopped() { return mIsStopped; }
 		glm::vec3 GetPosition() const { return mPosition; }
 		void SetPosition(glm::vec3 position) { mPosition = position; }
 

@@ -31,10 +31,12 @@ namespace Dawn
 			mPlayerKillStreak = mPlayer->GetComponent<KillStreak>();
 
 			mDesc.initialBurst = 10;
-			mDesc.particleLifetime = 0.05f;
+			mDesc.particleLifetime = 0.1f;
 			mDesc.directionMin = glm::vec3(-1.0f, -1.0f, -1.0f);
 			mDesc.directionMax = glm::vec3(1.0f, 1.0f, 1.0f);
-			mDesc.speed = 60.0f;
+			mDesc.speed = 10.0f;
+			mDesc.scaleOverTime.AddKey(0.0f, glm::vec3(2.2f));
+			mDesc.scaleOverTime.AddKey(1.0f, glm::vec3(1.0f));
 		}
 
 		void Update(float deltaTime) override

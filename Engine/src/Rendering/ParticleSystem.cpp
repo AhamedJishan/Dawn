@@ -76,6 +76,10 @@ namespace Dawn
 		if (mParticlePool->particleCount == 0)
 			return;
 
+		shader->SetVec3s("u_ScaleOverTime",
+			mParticleSystemDesc.scaleOverTime.GetValues().data(),
+			mParticleSystemDesc.scaleOverTime.GetKeyCount());
+
 		// upload tValues
 		glBindBuffer(GL_ARRAY_BUFFER, mParticleTVBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, mParticlePool->particleCount * sizeof(float), mParticlePool->tValues.data());

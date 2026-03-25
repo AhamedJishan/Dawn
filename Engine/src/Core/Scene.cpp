@@ -53,9 +53,16 @@ namespace Dawn
 			delete actor;					// Actor::~Actor() calls Scene::RemoveActor() to remove itself from mActors
 		deadActors.clear();
 
-		// Update particles
+		// Particle System
+		std::vector<ParticleSystem*> psToBeDeleted;
 		for (ParticleSystem* particle : mParticleSystems)
+		{
 			particle->Update(deltaTime);
+			if (particle->IsStopped())
+				psToBeDeleted.push_back(particle);
+		}
+		for (ParticleSystem* particle : psToBeDeleted)
+			delete particle;
 	}
 
 	void Scene::ResolveCollisions()
