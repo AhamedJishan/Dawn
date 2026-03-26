@@ -163,6 +163,13 @@ namespace Dawn
 			glUniform1f(location, value);
 	}
 
+	void Shader::SetFloats(const std::string& name, const float* values, int count) const
+	{
+		int location = GetUniformLocation(name);
+		if (location != -1 && count != 0)
+			glUniform1fv(location, count, values);
+	}
+
 	void Shader::SetVec2(const std::string& name, const glm::vec2& value) const
 	{
 		int location = GetUniformLocation(name);
@@ -182,6 +189,13 @@ namespace Dawn
 		int location = GetUniformLocation(name);
 		if (location != -1 && count != 0)
 			glUniform3fv(location, count, glm::value_ptr(values[0]));
+	}
+
+	void Shader::SetVec4s(const std::string& name, const glm::vec4* values, int count) const
+	{
+		int location = GetUniformLocation(name);
+		if (location != -1 && count != 0)
+			glUniform4fv(location, count, glm::value_ptr(values[0]));
 	}
 
 	void Shader::SetMat4(const std::string& name, const glm::mat4& value) const

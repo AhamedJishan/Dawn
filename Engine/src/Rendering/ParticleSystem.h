@@ -9,35 +9,35 @@
 namespace Dawn
 {
 	// should remain in sync with particle.vert shader
-	const unsigned int OVERTIME_MAX_KEYS = 5;
+	const unsigned int MAX_CURVE_KEYS = 5;
 
 	// Generic struct for over time data types
 	template<typename T>
-	struct OverTime
+	struct Curve
 	{
 		void AddKey(float time, T value)
 		{
-			if (mKeyCount >= OVERTIME_MAX_KEYS)
+			if (mNumKeys >= MAX_CURVE_KEYS)
 			{
-				LOG_WARN("OverLifetime struct can only have max 5 keys!");
+				LOG_WARN("Curve can only have max 5 keys!");
 				return;
 			}
 
-			mValues[mKeyCount] = value;
-			mTimes[mKeyCount] = time;
+			mKeyValues[mNumKeys] = value;
+			mKeyTimes[mNumKeys] = time;
 
-			mKeyCount++;
+			mNumKeys++;
 		}
 
-		int GetKeyCount() const { return mKeyCount; }
-		const std::array<T, OVERTIME_MAX_KEYS>& GetValues() const { return mValues; }
-		const std::array<float, OVERTIME_MAX_KEYS>& GetTimes() const { return mTimes; }
+		int GetNumKeys() const { return mNumKeys; }
+		const std::array<T, MAX_CURVE_KEYS>& GetKeyValues() const { return mKeyValues; }
+		const std::array<float, MAX_CURVE_KEYS>& GetKeyTimes() const { return mKeyTimes; }
 
 	private:
 		// should be provided sorted
-		std::array<T, OVERTIME_MAX_KEYS> mValues{};
-		std::array<float, OVERTIME_MAX_KEYS> mTimes{};
-		int mKeyCount = 0;
+		std::array<T, MAX_CURVE_KEYS> mKeyValues{};
+		std::array<float, MAX_CURVE_KEYS> mKeyTimes{};
+		int mNumKeys = 0;
 	};
 
 	struct ParticleSystemDesc
@@ -50,13 +50,12 @@ namespace Dawn
 		float speed = 1.0f;
 		
 		unsigned int initialBurst = 0;
-		unsigned int maxParticleCount = 50;
 		
 		glm::vec3 directionMin = glm::vec3(0);
 		glm::vec3 directionMax = glm::vec3(0);
 
-		OverTime<glm::vec3> scaleOverTime;
-		OverTime<glm::vec4> colorOverTime;
+		Curve<glm::vec3> scaleOverTime;
+		Curve<glm::vec4> colorOverTime;
 	};
 
 	struct ParticlePool
@@ -78,6 +77,10 @@ namespace Dawn
 		ParticleSystem(Scene* scene, ParticleSystemDesc particleSystemDesc, glm::vec3 position);
 		~ParticleSystem();
 
+		// initialized in Renderer
+		static void Init(unsigned int maxParticleCount = 50);
+		static void Shutdown();
+
 		void Update(float deltaTime);
 		void Render(Shader* shader);
 
@@ -88,8 +91,8 @@ namespace Dawn
 		void SetPosition(glm::vec3 position) { mPosition = position; }
 
 	private:
-		void InitCubeVAO();
-		void DestroyCubeVAO();
+		static void InitCubeVAO();
+		static void DestroyCubeVAO();
 		void SpawnParticles(unsigned int count);
 
 	private:
@@ -104,7 +107,13 @@ namespace Dawn
 		ParticleSystemDesc mParticleSystemDesc;
 		ParticlePool* mParticlePool = nullptr;
 
-		unsigned int mCubeVAO = 0, mCubeVBO = 0, mCubeEBO = 0;
-		unsigned int mParticleTVBO = 0, mParticlePositionVBO = 0;
+		static bool sIsInitialized;
+
+		static unsigned int sCubeVAO;
+		static unsigned int sCubeVBO;
+		static unsigned int sCubeEBO;
+		static unsigned int sParticleTVBO;
+		static unsigned int sParticlePositionVBO;
+		static unsigned int sMaxParticleCount;
 	};
 }

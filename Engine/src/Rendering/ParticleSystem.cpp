@@ -7,6 +7,15 @@
 
 namespace Dawn
 {
+	bool ParticleSystem::sIsInitialized = false;
+
+	unsigned  int ParticleSystem::sCubeVAO = 0;
+	unsigned  int ParticleSystem::sCubeVBO = 0;
+	unsigned  int ParticleSystem::sCubeEBO = 0;
+	unsigned  int ParticleSystem::sParticleTVBO = 0;
+	unsigned  int ParticleSystem::sParticlePositionVBO = 0;
+	unsigned  int ParticleSystem::sMaxParticleCount = 0;
+
 	ParticleSystem::ParticleSystem(Scene* scene, ParticleSystemDesc particleSystemDesc, glm::vec3 position)
 		:mScene(scene)
 		,mParticleSystemDesc(particleSystemDesc)
@@ -15,18 +24,44 @@ namespace Dawn
 	{
 		mScene->AddParticleSystem(this);
 
-		InitCubeVAO();
+		if (!sIsInitialized)
+		{
+			mIsStopped = true;
+			LOG_WARN("ParticleSystem hasn't been initialized yet!");
+			return;
+		}
+
 		SpawnParticles(mParticleSystemDesc.initialBurst);
 	}
 
 	ParticleSystem::~ParticleSystem()
 	{
+		delete mParticlePool;
 		mScene->RemoveParticleSystem(this);
+	}
+
+	void ParticleSystem::Init(unsigned int maxParticleCount)
+	{
+		sIsInitialized = true;
+		sMaxParticleCount = maxParticleCount;
+		InitCubeVAO();
+	}
+
+	void ParticleSystem::Shutdown()
+	{
+		sIsInitialized = false;
 		DestroyCubeVAO();
 	}
 	
 	void ParticleSystem::Update(float deltaTime)
 	{
+		if (!sIsInitialized)
+		{
+			mIsStopped = true;
+			LOG_WARN("ParticleSystem hasn't been initialized yet!");
+			return;
+		}
+
 		mSystemTime += deltaTime;
 
 		if (!mParticleSystemDesc.isLooping && mSystemTime >= mParticleSystemDesc.duration + mParticleSystemDesc.particleLifetime)
@@ -35,7 +70,8 @@ namespace Dawn
 			return;
 		}
 
-		bool emissionActive = mParticleSystemDesc.isLooping || mSystemTime < mParticleSystemDesc.duration;
+		bool emissionActive = mParticleSystemDesc.emissionRate > 0.0f && 
+			(mParticleSystemDesc.isLooping || mSystemTime < mParticleSystemDesc.duration);
 		if (emissionActive)
 		{
 			mTimeSinceLastSpawn += deltaTime;
@@ -73,37 +109,63 @@ namespace Dawn
 
 	void ParticleSystem::Render(Shader* shader)
 	{
+		if (!sIsInitialized)
+		{
+			mIsStopped = true;
+			LOG_WARN("ParticleSystem hasn't been initialized yet!");
+			return;
+		}
+
 		if (mParticlePool->particleCount == 0)
 			return;
 
-		shader->SetVec3s("u_ScaleOverTime",
-			mParticleSystemDesc.scaleOverTime.GetValues().data(),
-			mParticleSystemDesc.scaleOverTime.GetKeyCount());
+		shader->SetInt("u_NumScaleKeys", mParticleSystemDesc.scaleOverTime.GetNumKeys());
+		shader->SetVec3s("u_ScaleKeyValues",
+			mParticleSystemDesc.scaleOverTime.GetKeyValues().data(),
+			mParticleSystemDesc.scaleOverTime.GetNumKeys());
+		shader->SetFloats("u_ScaleKeyTimes",
+			mParticleSystemDesc.scaleOverTime.GetKeyTimes().data(),
+			mParticleSystemDesc.scaleOverTime.GetNumKeys());
+
+		shader->SetInt("u_NumColorKeys", mParticleSystemDesc.colorOverTime.GetNumKeys());
+		shader->SetVec4s("u_ColorKeyValues",
+			mParticleSystemDesc.colorOverTime.GetKeyValues().data(),
+			mParticleSystemDesc.colorOverTime.GetNumKeys());
+		shader->SetFloats("u_ColorKeyTimes",
+			mParticleSystemDesc.colorOverTime.GetKeyTimes().data(),
+			mParticleSystemDesc.colorOverTime.GetNumKeys());
 
 		// upload tValues
-		glBindBuffer(GL_ARRAY_BUFFER, mParticleTVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, sParticleTVBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, mParticlePool->particleCount * sizeof(float), mParticlePool->tValues.data());
 
 		// upload positions
-		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, sParticlePositionVBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, mParticlePool->particleCount * 3 * sizeof(float), mParticlePool->positions.data());
 
-		glBindVertexArray(mCubeVAO);
+		glBindVertexArray(sCubeVAO);
 		glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, mParticlePool->particleCount);
 		glBindVertexArray(0);
 	}
 
 	void ParticleSystem::SpawnParticles(unsigned int count)
 	{
+		if (!sIsInitialized)
+		{
+			mIsStopped = true;
+			LOG_WARN("ParticleSystem hasn't been initialized yet!");
+			return;
+		}
+
 		if (count == 0)
 			return;
 
 		unsigned int particleCount = mParticlePool->particleCount;
-		if (particleCount > mParticleSystemDesc.maxParticleCount)
+		if (particleCount > sMaxParticleCount)
 			return;
 
-		if (particleCount + count > mParticleSystemDesc.maxParticleCount)
-			count = mParticleSystemDesc.maxParticleCount - particleCount;
+		if (particleCount + count > sMaxParticleCount)
+			count = sMaxParticleCount - particleCount;
 
 
 		mParticlePool->tValues.reserve(mParticlePool->tValues.size() + count);
@@ -161,20 +223,20 @@ namespace Dawn
 			6, 7, 3
 		};
 
-		glGenVertexArrays(1, &mCubeVAO);
-		glGenBuffers(1, &mCubeVBO);
-		glGenBuffers(1, &mCubeEBO);
-		glGenBuffers(1, &mParticleTVBO);
-		glGenBuffers(1, &mParticlePositionVBO);
+		glGenVertexArrays(1, &sCubeVAO);
+		glGenBuffers(1, &sCubeVBO);
+		glGenBuffers(1, &sCubeEBO);
+		glGenBuffers(1, &sParticleTVBO);
+		glGenBuffers(1, &sParticlePositionVBO);
 
-		glBindVertexArray(mCubeVAO);
+		glBindVertexArray(sCubeVAO);
 
 		// EBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mCubeEBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sCubeEBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 		// VBO
-		glBindBuffer(GL_ARRAY_BUFFER, mCubeVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, sCubeVBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 		// Position attribute
@@ -182,15 +244,15 @@ namespace Dawn
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 		// Particle tValues
-		glBindBuffer(GL_ARRAY_BUFFER, mParticleTVBO);
-		glBufferData(GL_ARRAY_BUFFER, mParticleSystemDesc.maxParticleCount * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, sParticleTVBO);
+		glBufferData(GL_ARRAY_BUFFER, sMaxParticleCount * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
 		glEnableVertexAttribArray(1);
 		glVertexAttribDivisor(1, 1);
 		glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 1 * sizeof(float), (void*)0);
 		
 		// Particle ppositions
-		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionVBO);
-		glBufferData(GL_ARRAY_BUFFER, mParticleSystemDesc.maxParticleCount * 3 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, sParticlePositionVBO);
+		glBufferData(GL_ARRAY_BUFFER, sMaxParticleCount* 3 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
 		glEnableVertexAttribArray(2);
 		glVertexAttribDivisor(2, 1);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -200,10 +262,10 @@ namespace Dawn
 
 	void ParticleSystem::DestroyCubeVAO()
 	{
-		glDeleteBuffers(1, &mCubeVBO);
-		glDeleteBuffers(1, &mCubeEBO);
-		glDeleteBuffers(1, &mParticleTVBO);
-		glDeleteBuffers(1, &mParticlePositionVBO);
-		glDeleteVertexArrays(1, &mCubeVAO);
+		glDeleteBuffers(1, &sCubeVBO);
+		glDeleteBuffers(1, &sCubeEBO);
+		glDeleteBuffers(1, &sParticleTVBO);
+		glDeleteBuffers(1, &sParticlePositionVBO);
+		glDeleteVertexArrays(1, &sCubeVAO);
 	}
 }
