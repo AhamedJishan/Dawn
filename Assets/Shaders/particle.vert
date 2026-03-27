@@ -25,7 +25,7 @@ vec3 SampleCurve(float t, float keyTimes[MAX_CURVE_KEYS], int numKeys)
 
     for (int i = 0; i < numKeys - 1; i++)
     {
-        if (t >= keyTimes[i])
+        if (t >= keyTimes[i] && t <= keyTimes[i + 1])
         {
             float localT = (t - keyTimes[i]) / (keyTimes[i + 1] - keyTimes[i]);
             return vec3(i, i + 1, localT);

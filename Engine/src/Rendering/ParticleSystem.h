@@ -6,6 +6,12 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
+// NOTE:	Right now each Particle system has their own gpu buffers,
+//			So when there are too many particle systems(around 5000) draw calls would increase
+//			and drop the fps.
+// FIX:		use a global buffer for particle system, all particle system append their data to that buffer
+//			this will reduce the draw calls, as well as buffer swapping
+
 namespace Dawn
 {
 	// should remain in sync with particle.vert shader

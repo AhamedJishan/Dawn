@@ -76,7 +76,7 @@ namespace Dawn
 		{
 			mTimeSinceLastSpawn += deltaTime;
 			unsigned int particlesToSpawn = 0;
-			float spawnInterval = 1.0f / mParticleSystemDesc.emissionRate;
+			float spawnInterval = 1.0f / glm::max(mParticleSystemDesc.emissionRate, 0.0001f);
 			while (mTimeSinceLastSpawn >= spawnInterval)
 			{
 				mTimeSinceLastSpawn -= spawnInterval;
@@ -137,10 +137,12 @@ namespace Dawn
 
 		// upload tValues
 		glBindBuffer(GL_ARRAY_BUFFER, sParticleTVBO);
+		glBufferData(GL_ARRAY_BUFFER, mParticlePool->particleCount * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, mParticlePool->particleCount * sizeof(float), mParticlePool->tValues.data());
 
 		// upload positions
 		glBindBuffer(GL_ARRAY_BUFFER, sParticlePositionVBO);
+		glBufferData(GL_ARRAY_BUFFER, mParticlePool->particleCount * 3 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, mParticlePool->particleCount * 3 * sizeof(float), mParticlePool->positions.data());
 
 		glBindVertexArray(sCubeVAO);

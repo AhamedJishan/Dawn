@@ -30,15 +30,16 @@ namespace Dawn
 			mArena = player->GetArena();
 			mPlayerKillStreak = mPlayer->GetComponent<KillStreak>();
 
-			mDesc.initialBurst = 10;
-			mDesc.emissionRate = 0.0f;
-			mDesc.particleLifetime = 0.2f;
-			mDesc.directionMin = glm::vec3(-1.0f, -1.0f, -1.0f);
-			mDesc.directionMax = glm::vec3(1.0f, 1.0f, 1.0f);
-			mDesc.speed = 15.0f;
-			mDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.1f));
-			mDesc.scaleOverTime.AddKey(1.0f, glm::vec4(0.2f));
-			mDesc.colorOverTime.AddKey(0.0f, glm::vec4(10.0f, 7.0f, 2.5f, 1.0f));
+			mHitParticleDesc.initialBurst = 10;
+			mHitParticleDesc.emissionRate = 0.0f;
+			mHitParticleDesc.particleLifetime = 0.2f;
+			mHitParticleDesc.directionMin = glm::vec3(-1.0f, -1.0f, -1.0f);
+			mHitParticleDesc.directionMax = glm::vec3(1.0f, 1.0f, 1.0f);
+			mHitParticleDesc.speed = 30.0f;
+			mHitParticleDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.3f));
+			mHitParticleDesc.scaleOverTime.AddKey(1.0f, glm::vec4(0.1f));
+			mHitParticleDesc.colorOverTime.AddKey(0.0f, glm::vec4(15.0f, 14.0f, 5.0f, 1.0f));
+			mHitParticleDesc.colorOverTime.AddKey(1.0f, glm::vec4(5.0f, 2.0f, 0.5f, 1.0f));
 		}
 
 		void Update(float deltaTime) override
@@ -61,14 +62,14 @@ namespace Dawn
 				if (enemyHealth <= 0.0f)
 					mPlayerKillStreak->EnemyKilled();
 
-				new ParticleSystem(mScene, mDesc, GetPosition());
+				new ParticleSystem(mScene, mHitParticleDesc, GetPosition());
 			}
 
 			if (mArena->IsOutOfBounds(GetPosition()))
 			{
 				SetState(Actor::State::Dead);
 				mPlayerKillStreak->ShotMissed();
-				new ParticleSystem(mScene, mDesc, GetPosition());
+				new ParticleSystem(mScene, mHitParticleDesc, GetPosition());
 			}
 		}
 
@@ -82,6 +83,6 @@ namespace Dawn
 		Arena* mArena = nullptr;
 		KillStreak* mPlayerKillStreak = nullptr;
 
-		ParticleSystemDesc mDesc;
+		ParticleSystemDesc mHitParticleDesc;
 	};
 }
