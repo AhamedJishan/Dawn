@@ -2,6 +2,7 @@
 
 #include "Core/Actor.h"
 #include "glm/vec3.hpp"
+#include "Rendering/ParticleSystem.h"
 
 namespace Dawn
 {
@@ -36,14 +37,16 @@ namespace Dawn
 		Player* mPlayer = nullptr;
 		Audio* mAudioComponent = nullptr;
 
-
+		// Damage
 		const float mBaseDamage = 30.0f;
 		const float mBonusDamage = 30.0f;
 		unsigned int mBonusDamageMultiplier = 0;
 
 		const float mFireCooldown = 0.1f;
 		float mTimeSinceLastFire = 0.0f;
+
 		glm::vec3 mProjectileSpawnOffset = glm::vec3(0.0f, 0.05f, 0.15f);
+		ParticleSystemDesc mMuzzleFlashDesc;
 
 		// Recoil
 		glm::vec3 mRecoilOffset = glm::vec3(0.0f);

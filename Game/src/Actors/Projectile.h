@@ -32,14 +32,14 @@ namespace Dawn
 
 			mHitParticleDesc.initialBurst = 10;
 			mHitParticleDesc.emissionRate = 0.0f;
-			mHitParticleDesc.particleLifetime = 0.2f;
+			mHitParticleDesc.particleLifetime = 0.1f;
 			mHitParticleDesc.directionMin = glm::vec3(-1.0f, -1.0f, -1.0f);
 			mHitParticleDesc.directionMax = glm::vec3(1.0f, 1.0f, 1.0f);
-			mHitParticleDesc.speed = 30.0f;
+			mHitParticleDesc.speed = 10.0f;
 			mHitParticleDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.3f));
-			mHitParticleDesc.scaleOverTime.AddKey(1.0f, glm::vec4(0.1f));
+			mHitParticleDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.1f));
 			mHitParticleDesc.colorOverTime.AddKey(0.0f, glm::vec4(15.0f, 14.0f, 5.0f, 1.0f));
-			mHitParticleDesc.colorOverTime.AddKey(1.0f, glm::vec4(5.0f, 2.0f, 0.5f, 1.0f));
+			mHitParticleDesc.colorOverTime.AddKey(1.0f, glm::vec4(2.0f, 1.0f, 0.3f, 1.0f));
 		}
 
 		void Update(float deltaTime) override
@@ -62,6 +62,9 @@ namespace Dawn
 				if (enemyHealth <= 0.0f)
 					mPlayerKillStreak->EnemyKilled();
 
+				glm::vec3 hitDirection = glm::normalize(mPlayer->GetPosition() - enemy->GetPosition());
+				mHitParticleDesc.directionMin = hitDirection - glm::vec3(2);
+				mHitParticleDesc.directionMax = hitDirection + glm::vec3(2);
 				new ParticleSystem(mScene, mHitParticleDesc, GetPosition());
 			}
 
@@ -69,6 +72,9 @@ namespace Dawn
 			{
 				SetState(Actor::State::Dead);
 				mPlayerKillStreak->ShotMissed();
+
+				mHitParticleDesc.directionMin = glm::vec3(-1.0f, -1.0f, -1.0f);
+				mHitParticleDesc.directionMax = glm::vec3(1.0f, 1.0f, 1.0f);
 				new ParticleSystem(mScene, mHitParticleDesc, GetPosition());
 			}
 		}

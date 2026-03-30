@@ -53,7 +53,7 @@ namespace Dawn
 		float duration = 1.0f;
 		float particleLifetime = 1.0f;
 		float emissionRate = 1.0f;
-		float speed = 1.0f;
+		float speed = 0.0f;
 		
 		unsigned int initialBurst = 0;
 		

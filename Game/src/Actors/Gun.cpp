@@ -27,6 +27,16 @@ namespace Dawn
 
 		mAudioComponent = new Audio(this);
 		mPlayer = player;
+
+		mMuzzleFlashDesc.initialBurst = 10;
+		mMuzzleFlashDesc.colorOverTime.AddKey(0.0f, glm::vec4(15.0f, 8.0f, 2.0f, 1.0f));
+		mMuzzleFlashDesc.colorOverTime.AddKey(1.0f, glm::vec4(3.0f, 0.8f, 0.5f, 1.0f));
+		mMuzzleFlashDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.1f));
+		mMuzzleFlashDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.0f));
+		mMuzzleFlashDesc.directionMax = glm::vec3(1);
+		mMuzzleFlashDesc.directionMin = glm::vec3(-1);
+		mMuzzleFlashDesc.particleLifetime = .05f;
+		mMuzzleFlashDesc.speed = 5.0f;
 	}
 
 	void Gun::Update(float deltaTime)
@@ -95,13 +105,18 @@ namespace Dawn
 		projectilePosition += GetUp() * mProjectileSpawnOffset.y;
 		projectilePosition += GetRight() * mProjectileSpawnOffset.x;
 		projectilePosition += GetForward() * mProjectileSpawnOffset.z;
+		projectilePosition += GetPosition();
 
 		float finalDmg = mBaseDamage + mBonusDamage * mBonusDamageMultiplier;
 
 		// Spawn projectile
 		Projectile* projectile = new Projectile(mScene, mPlayer, finalDmg);
-		projectile->SetPosition(GetPosition() + projectilePosition);
+		projectile->SetPosition(projectilePosition);
 		projectile->SetRotation(projectileRotation);
+		// Muzzle flash
+		mMuzzleFlashDesc.directionMax = GetForward() + glm::vec3(2);
+		mMuzzleFlashDesc.directionMin = GetForward() - glm::vec3(2);
+		ParticleSystem* muzzleFlash = new ParticleSystem(mScene, mMuzzleFlashDesc, projectilePosition);
 	}
 
 	glm::vec2 Gun::GetSwayMovementOffset()
