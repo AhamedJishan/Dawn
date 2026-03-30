@@ -3,10 +3,13 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ## TODO
 
+- FIX: enemy sounds keeps playing even on pause screen
+  
 - [Done] Add arena bounds
 - [Done] Bigger wave text, "Wave 1"
 - [Done] add dmg multiplier
 - [Done] enemy speed variety
+- [Done] enemy explosion particle effect
 - [ ] Enemy knockback on hit
 - [ ] Refine Recoil, gun bob, and sway. Make shooting feel fun.
 - [ ] Create custom Gun model that makes it possible for the neon charge up glow to be shown.

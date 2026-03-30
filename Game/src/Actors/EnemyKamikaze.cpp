@@ -1,8 +1,7 @@
 #include "EnemyKamikaze.h"
 #include "Utils/Log.h"
+#include "Utils/Random.h"
 
-#include <stdlib.h>
-#include <time.h>
 #include "Rendering/Mesh.h"
 #include "Rendering/Materials/PhongMaterial.h"
 #include "Core/Components/MeshRenderer.h"
@@ -51,9 +50,17 @@ namespace Dawn
 
 		mMoveDirection = glm::normalize(mPlayer->GetPosition() - GetPosition());
 
-		srand(time(0));
-		float variation = ((rand() % 10) / 10.0f) * mSpeedVariation;
+		float variation = Random::Float(0.0f, 1.0f) * mSpeedVariation;
 		mSpeed += variation;
+
+		mExplosionFXDesc.initialBurst = 30;
+		mExplosionFXDesc.scaleOverTime.AddKey(0.0f, glm::vec3(1.5f));
+		mExplosionFXDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.1f));
+		mExplosionFXDesc.colorOverTime.AddKey(0.0f, glm::vec4(10.0f, 7.0f, 1.0f, 1.0f));
+		mExplosionFXDesc.directionMax = glm::vec3(1);
+		mExplosionFXDesc.directionMin = glm::vec3(-1);
+		mExplosionFXDesc.particleLifetime = 0.2f;
+		mExplosionFXDesc.speed = 10.0f;
 	}
 
 	EnemyKamikaze::~EnemyKamikaze()
@@ -77,7 +84,6 @@ namespace Dawn
 			Explode(deltaTime);
 		}
 
-
 		// --- FEEDBACK STUFF ---
 		if (mActionState == ActionState::Chasing && mHitImpactTimer > 0.0f)
 		{
@@ -100,7 +106,10 @@ namespace Dawn
 		float health = mDamageable->TakeDamage(dmg);
 
 		if (mDamageable->IsDead())
+		{
 			SetState(Actor::State::Dead);
+			new ParticleSystem(mScene, mExplosionFXDesc, GetPosition());
+		}
 
 		mHitImpactTimer = mHitImpactDuration;
 
@@ -145,6 +154,7 @@ namespace Dawn
 		{
 			Application::Get()->GetAudioSystem()->PlayEvent("event:/enemy_explode", GetPosition());
 			mActionState = ActionState::Explode;
+			new ParticleSystem(mScene, mExplosionFXDesc, GetPosition());
 		}
 		else if (mExplosionTimer <= mExplosionScaleDuration)
 		{

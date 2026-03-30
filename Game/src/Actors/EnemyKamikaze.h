@@ -4,6 +4,7 @@
 
 #include <glm/vec3.hpp>
 #include "Audio/SoundEvent.h"
+#include "Rendering/ParticleSystem.h"
 
 namespace Dawn
 {
@@ -47,15 +48,16 @@ namespace Dawn
 		PhongMaterial* mBodyMaterial = nullptr;
 		Audio* mAudioComponent = nullptr;
 		SoundEvent mEnemyPresence;
+		Damageable* mDamageable = nullptr;
+		ActionState mActionState = ActionState::Chasing;
 
 		float mExplosionTimer = 1.5f;
 		const float mExplosionTriggerRadius = 1.5f;
 		const float mExplosionRadius = 5.0f;
 		const float mExplosionDamage = 55.0f;
-		const float mScaleAtExplosion = 2.0f;
+		const float mScaleAtExplosion = 1.3f;
 		const float mExplosionScaleDuration = 0.1f;
-		Damageable* mDamageable = nullptr;
-		ActionState mActionState = ActionState::Chasing;
+		ParticleSystemDesc mExplosionFXDesc;
 
 		glm::vec3 mBodyBaseColor;
 		const glm::vec3 mBodyHitColor = glm::vec3(0.4f, 0.0f, 0.0f);
@@ -70,7 +72,7 @@ namespace Dawn
 
 		bool mIsInImpactState = false;
 		float mHitImpactTimer = 0.0f;
-		const float mHitImpactDuration = 0.15f;
+		const float mHitImpactDuration = 0.1f;
 		const float mScalePunchAmount = 0.15f;
 	};
 }
