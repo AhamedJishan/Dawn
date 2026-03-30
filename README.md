@@ -3,14 +3,19 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 ## TODO
 
-- FIX: enemy sounds keeps playing even on pause screen
+- TODO: fix enemy sounds playing even on pause screen
   
 - [Done] Add arena bounds
 - [Done] Bigger wave text, "Wave 1"
 - [Done] add dmg multiplier
 - [Done] enemy speed variety
 - [Done] enemy explosion particle effect
-- [ ] Enemy knockback on hit
+- [Done] Enemy knockback on hit
+- [ ] The Plasma Overload
+    - 0x (Base): Teal / Cyan (Matches the arena, feels stable and cool).
+    - 1x (Streak Started): Golden Yellow (Warming up).
+    - 2x (Lethal): Fiery Orange/Red (Aggressive, high heat).
+    - 3x (Max Power): Deep Bluish-Purple or Violet (The color of extremely high-energy plasma).
 - [ ] Refine Recoil, gun bob, and sway. Make shooting feel fun.
 - [ ] Create custom Gun model that makes it possible for the neon charge up glow to be shown.
 - [ ] Refine enemy model in blender.
@@ -36,11 +41,6 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - [ ] Audio Mixing: Do a cohesive final balance pass on the master volumes for BGM, explosions, fuses, and UI.
 - [ ] The Blind Playtest: Hand the executable to someone else and watch them play without giving instructions to check difficulty and pacing.
 - [ ] Release Build: Package the .exe, configure dynamic asset paths, and bundle the FMOD .dll files for a standalone build.
-- [ ] 1. The Plasma Overload
-    - 0x (Base): Teal / Cyan (Matches the arena, feels stable and cool).
-    - 1x (Streak Started): Golden Yellow (Warming up).
-    - 2x (Lethal): Fiery Orange/Red (Aggressive, high heat).
-    - 3x (Max Power): Deep Bluish-Purple or Violet (The color of extremely high-energy plasma).
 
 ### Stretch Goals (If Time Permits)
 - [ ] The Tactical Dash: Implement the high-skill i-frame dash mechanic to break through enemy walls.

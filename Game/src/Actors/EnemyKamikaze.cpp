@@ -91,6 +91,10 @@ namespace Dawn
 			float t = 1 - mHitImpactTimer / mHitImpactDuration;
 			float scaleOffset = mScalePunchAmount * glm::sin(t * glm::pi<float>());
 			SetScale(glm::vec3(1.0f + scaleOffset));
+
+			// ease out
+			float knockbackT = 1 - (1 - t) * (1 - t);
+			SetPosition(GetPosition() - GetForward() * mKnockBackDistance * knockbackT);
 		}
 		else if (mIsInImpactState)
 		{

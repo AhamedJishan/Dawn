@@ -72,7 +72,8 @@ namespace Dawn
 
 		bool mIsInImpactState = false;
 		float mHitImpactTimer = 0.0f;
-		const float mHitImpactDuration = 0.1f;
+		const float mHitImpactDuration = 0.15f;
 		const float mScalePunchAmount = 0.15f;
+		const float mKnockBackDistance = 0.1f;
 	};
 }

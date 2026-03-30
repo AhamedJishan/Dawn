@@ -36,7 +36,7 @@ namespace Dawn
 		mMuzzleFlashDesc.directionMax = glm::vec3(1);
 		mMuzzleFlashDesc.directionMin = glm::vec3(-1);
 		mMuzzleFlashDesc.particleLifetime = .05f;
-		mMuzzleFlashDesc.speed = 5.0f;
+		mMuzzleFlashDesc.speed = 4.0f;
 	}
 
 	void Gun::Update(float deltaTime)
