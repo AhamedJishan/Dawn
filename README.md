@@ -11,12 +11,14 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - [Done] enemy speed variety
 - [Done] enemy explosion particle effect
 - [Done] Enemy knockback on hit
-- [ ] The Plasma Overload
+- [Done] The Plasma Overload
     - 0x (Base): Teal / Cyan (Matches the arena, feels stable and cool).
     - 1x (Streak Started): Golden Yellow (Warming up).
     - 2x (Lethal): Fiery Orange/Red (Aggressive, high heat).
     - 3x (Max Power): Deep Bluish-Purple or Violet (The color of extremely high-energy plasma).
+- [ ] Make enemy eyes red
 - [ ] Refine Recoil, gun bob, and sway. Make shooting feel fun.
+- [ ] Add Slight delay before showing game over
 - [ ] Create custom Gun model that makes it possible for the neon charge up glow to be shown.
 - [ ] Refine enemy model in blender.
 - [ ] hell Mode (waves survived, enemies killed)

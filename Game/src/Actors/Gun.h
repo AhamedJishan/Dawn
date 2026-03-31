@@ -40,7 +40,15 @@ namespace Dawn
 		// Damage
 		const float mBaseDamage = 30.0f;
 		const float mBonusDamage = 30.0f;
-		unsigned int mBonusDamageMultiplier = 0;
+		unsigned int mBonusDmgMultiplier = 0;
+		static constexpr unsigned int mMaxDmgMultiplier = 2;
+
+		glm::vec4 mChargeColors[mMaxDmgMultiplier + 1] =
+		{
+			glm::vec4(0.40f, 0.80f, 0.85f, 1.0f), // Level 0 (teal)
+			glm::vec4(0.75f, 0.10f, 0.65f, 1.0f), // Level 1 (purple)
+			glm::vec4(0.85f, 0.10f, 0.04f, 1.0f)  // Level 2 (orange)
+		};
 
 		const float mFireCooldown = 0.1f;
 		float mTimeSinceLastFire = 0.0f;

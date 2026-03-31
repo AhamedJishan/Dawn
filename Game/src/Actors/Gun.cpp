@@ -29,14 +29,14 @@ namespace Dawn
 		mPlayer = player;
 
 		mMuzzleFlashDesc.initialBurst = 10;
-		mMuzzleFlashDesc.colorOverTime.AddKey(0.0f, glm::vec4(15.0f, 8.0f, 2.0f, 1.0f));
-		mMuzzleFlashDesc.colorOverTime.AddKey(1.0f, glm::vec4(3.0f, 0.8f, 0.5f, 1.0f));
-		mMuzzleFlashDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.1f));
-		mMuzzleFlashDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.0f));
+		mMuzzleFlashDesc.colorOverTime.AddKey(0.0f, 10.0f * mChargeColors[mBonusDmgMultiplier]);
+		mMuzzleFlashDesc.colorOverTime.AddKey(0.8f, mChargeColors[mBonusDmgMultiplier]);
+		mMuzzleFlashDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.07f));
+		mMuzzleFlashDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.03f));
 		mMuzzleFlashDesc.directionMax = glm::vec3(1);
 		mMuzzleFlashDesc.directionMin = glm::vec3(-1);
 		mMuzzleFlashDesc.particleLifetime = .05f;
-		mMuzzleFlashDesc.speed = 4.0f;
+		mMuzzleFlashDesc.speed = 2.5f;
 	}
 
 	void Gun::Update(float deltaTime)
@@ -69,7 +69,8 @@ namespace Dawn
 		Rotate(mRecoilPitch, glm::vec3(1, 0, 0));
 
 		// Update bonus dmg multiplier
-		mBonusDamageMultiplier = mPlayer->GetComponent<KillStreak>()->GetKillStreak() / 2;
+		mBonusDmgMultiplier = mPlayer->GetComponent<KillStreak>()->GetKillStreak() / 2;
+		mBonusDmgMultiplier = glm::clamp(mBonusDmgMultiplier, (unsigned int)0, mMaxDmgMultiplier);
 	}
 
 	void Gun::Fire()
@@ -107,15 +108,19 @@ namespace Dawn
 		projectilePosition += GetForward() * mProjectileSpawnOffset.z;
 		projectilePosition += GetPosition();
 
-		float finalDmg = mBaseDamage + mBonusDamage * mBonusDamageMultiplier;
+		float finalDmg = mBaseDamage + mBonusDamage * mBonusDmgMultiplier;
 
 		// Spawn projectile
-		Projectile* projectile = new Projectile(mScene, mPlayer, finalDmg);
+		Projectile* projectile = new Projectile(mScene, mPlayer, finalDmg, mChargeColors[mBonusDmgMultiplier]);
 		projectile->SetPosition(projectilePosition);
 		projectile->SetRotation(projectileRotation);
 		// Muzzle flash
 		mMuzzleFlashDesc.directionMax = GetForward() + glm::vec3(2);
 		mMuzzleFlashDesc.directionMin = GetForward() - glm::vec3(2);
+		mMuzzleFlashDesc.colorOverTime.Reset();
+		mMuzzleFlashDesc.colorOverTime.AddKey(0.0f, 10.0f * mChargeColors[mBonusDmgMultiplier]);
+		mMuzzleFlashDesc.colorOverTime.AddKey(0.7f, mChargeColors[mBonusDmgMultiplier]);
+		mMuzzleFlashDesc.colorOverTime.AddKey(1.0f, glm::vec4(0.0f));
 		ParticleSystem* muzzleFlash = new ParticleSystem(mScene, mMuzzleFlashDesc, projectilePosition);
 	}
 

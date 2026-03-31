@@ -21,6 +21,11 @@ namespace Dawn
 	template<typename T>
 	struct Curve
 	{
+		void Reset()
+		{
+			mNumKeys = 0;
+		}
+
 		void AddKey(float time, T value)
 		{
 			if (mNumKeys >= MAX_CURVE_KEYS)

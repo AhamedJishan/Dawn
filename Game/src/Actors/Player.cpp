@@ -77,8 +77,6 @@ namespace Dawn
 		else if (mLastKillStreak < 2 && currentKillStreak == 2)
 			Application::Get()->GetAudioSystem()->PlayEvent("event:/phase_up").SetParameter("phase", 1);
 		else if (mLastKillStreak < 4 && currentKillStreak == 4)
-			Application::Get()->GetAudioSystem()->PlayEvent("event:/phase_up").SetParameter("phase", 2);
-		else if (mLastKillStreak < 6 && currentKillStreak == 6)
 			Application::Get()->GetAudioSystem()->PlayEvent("event:/phase_up").SetParameter("phase", 3);
 		mLastKillStreak = currentKillStreak;
 	}

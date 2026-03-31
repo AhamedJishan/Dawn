@@ -56,7 +56,11 @@ namespace Dawn
 		mExplosionFXDesc.initialBurst = 30;
 		mExplosionFXDesc.scaleOverTime.AddKey(0.0f, glm::vec3(1.5f));
 		mExplosionFXDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.1f));
-		mExplosionFXDesc.colorOverTime.AddKey(0.0f, glm::vec4(10.0f, 7.0f, 1.0f, 1.0f));
+		//mExplosionFXDesc.colorOverTime.AddKey(0.0f, glm::vec4(10.0f, 7.0f, 1.0f, 1.0f));
+		mExplosionFXDesc.colorOverTime.AddKey(0.0f, glm::vec4(0.6f, 0.9f, 0.9f, 1.0f) * 12.0f);
+		mExplosionFXDesc.colorOverTime.AddKey(0.2f, glm::vec4(0.9f, 0.5f, 0.2f, 1.0f) * 8.0f);
+		mExplosionFXDesc.colorOverTime.AddKey(0.6f, glm::vec4(0.85f, 0.10f, 0.04f, 1.0f));
+		mExplosionFXDesc.colorOverTime.AddKey(1.0f, glm::vec4(0.0f));
 		mExplosionFXDesc.directionMax = glm::vec3(1);
 		mExplosionFXDesc.directionMin = glm::vec3(-1);
 		mExplosionFXDesc.particleLifetime = 0.2f;

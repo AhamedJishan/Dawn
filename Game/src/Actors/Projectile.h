@@ -7,6 +7,7 @@
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/SphereCollider.h"
 #include "Rendering/ParticleSystem.h"
+#include "Rendering/Materials/PhongMaterial.h"
 #include "Components/KillStreak.h"
 #include "Player.h"
 #include "Arena.h"
@@ -17,16 +18,23 @@ namespace Dawn
 	class Projectile : public Actor
 	{
 	public:
-		Projectile(class Scene* scene, Player* player, float damage = 30.0f)
+		Projectile(class Scene* scene, Player* player, float damage, glm::vec4 projectileColor)
 			:Actor(scene)
 			,mDamage(damage)
 		{
 			mCollider = new SphereCollider(this);
 			mCollider->SetIsTrigger(true);
 			mCollider->SetRadius(0.3f);
+			SetScale(glm::vec3(0.3f));
 
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
-			SetScale(glm::vec3(0.3f));
+
+			PhongMaterial* projectileMat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
+			if (projectileMat)
+			{
+				projectileMat->SetDiffuseColor(projectileColor);
+				projectileMat->SetEmissiveColor(projectileColor * 10.0f);
+			}
 
 			mPlayer = player;
 			mArena = player->GetArena();
@@ -40,8 +48,9 @@ namespace Dawn
 			mHitParticleDesc.speed = 10.0f;
 			mHitParticleDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.3f));
 			mHitParticleDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.1f));
-			mHitParticleDesc.colorOverTime.AddKey(0.0f, glm::vec4(10.0f, 9.0f, 5.0f, 1.0f));
-			mHitParticleDesc.colorOverTime.AddKey(1.0f, glm::vec4(2.0f, 1.0f, 0.3f, 1.0f));
+			mHitParticleDesc.colorOverTime.AddKey(0.0f, projectileColor * 10.0f);
+			mHitParticleDesc.colorOverTime.AddKey(0.7f, projectileColor);
+			mHitParticleDesc.colorOverTime.AddKey(1.0f, glm::vec4(0.0f));
 		}
 
 		void Update(float deltaTime) override
