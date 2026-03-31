@@ -2,6 +2,8 @@
 
 #include "Core/Actor.h"
 
+#include "Core/Application.h"
+#include "Audio/AudioSystem.h"
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/SphereCollider.h"
 #include "Rendering/ParticleSystem.h"
@@ -66,6 +68,8 @@ namespace Dawn
 				mHitParticleDesc.directionMin = hitDirection - glm::vec3(2);
 				mHitParticleDesc.directionMax = hitDirection + glm::vec3(2);
 				new ParticleSystem(mScene, mHitParticleDesc, GetPosition());
+
+				Application::Get()->GetAudioSystem()->PlayEvent("event:/gunshot_impact");
 			}
 
 			if (mArena->IsOutOfBounds(GetPosition()))
