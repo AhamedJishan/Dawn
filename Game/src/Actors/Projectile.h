@@ -38,7 +38,7 @@ namespace Dawn
 			mHitParticleDesc.speed = 10.0f;
 			mHitParticleDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.3f));
 			mHitParticleDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.1f));
-			mHitParticleDesc.colorOverTime.AddKey(0.0f, glm::vec4(15.0f, 14.0f, 5.0f, 1.0f));
+			mHitParticleDesc.colorOverTime.AddKey(0.0f, glm::vec4(10.0f, 9.0f, 5.0f, 1.0f));
 			mHitParticleDesc.colorOverTime.AddKey(1.0f, glm::vec4(2.0f, 1.0f, 0.3f, 1.0f));
 		}
 

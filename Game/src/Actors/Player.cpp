@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "Utils/Log.h"
 
+#include "Core/Application.h"
+#include "Audio/AudioSystem.h"
 #include "Scenes/GameScene.h"
 #include "FPSCameraActor.h"
 #include "Components/Damageable.h"
@@ -67,6 +69,18 @@ namespace Dawn
 
 			SetPosition(pos);
 		}
+
+		// Killstreak sound
+		unsigned int currentKillStreak = mKillStreak->GetKillStreak();
+		if (mLastKillStreak > 2 && currentKillStreak == 0)
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/phase_up").SetParameter("phase", 0);
+		else if (mLastKillStreak < 2 && currentKillStreak == 2)
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/phase_up").SetParameter("phase", 1);
+		else if (mLastKillStreak < 4 && currentKillStreak == 4)
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/phase_up").SetParameter("phase", 2);
+		else if (mLastKillStreak < 6 && currentKillStreak == 6)
+			Application::Get()->GetAudioSystem()->PlayEvent("event:/phase_up").SetParameter("phase", 3);
+		mLastKillStreak = currentKillStreak;
 	}
 
 	void Player::TakeDamage(float dmg)
