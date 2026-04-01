@@ -69,8 +69,11 @@ namespace Dawn
 		Rotate(mRecoilPitch, glm::vec3(1, 0, 0));
 
 		// Update bonus dmg multiplier
-		mBonusDmgMultiplier = mPlayer->GetComponent<KillStreak>()->GetKillStreak() / 2;
-		mBonusDmgMultiplier = glm::clamp(mBonusDmgMultiplier, (unsigned int)0, mMaxDmgMultiplier);
+		int streak = mPlayer->GetComponent<KillStreak>()->GetKillStreak();
+
+		if (streak >= 4)       mBonusDmgMultiplier = 2;
+		else if (streak >= 2)  mBonusDmgMultiplier = 1;
+		else                   mBonusDmgMultiplier = 0;
 	}
 
 	void Gun::Fire()
