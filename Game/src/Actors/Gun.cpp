@@ -23,7 +23,11 @@ namespace Dawn
 		MeshRenderer::CreateFromModel(this, "Assets/Models/gun/gun.obj");
 		PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
 		if (mat)
-			mat->SetEmissiveColor(glm::vec3(5.0f));
+		{
+			mMaterial = mat;
+			mMaterial->SetDiffuseColor(glm::vec3(0.5f));
+			mMaterial->SetShininess(0.0f);
+		}
 
 		mAudioComponent = new Audio(this);
 		mPlayer = player;
@@ -74,6 +78,8 @@ namespace Dawn
 		if (streak >= 4)       mBonusDmgMultiplier = 2;
 		else if (streak >= 2)  mBonusDmgMultiplier = 1;
 		else                   mBonusDmgMultiplier = 0;
+
+		mMaterial->SetEmissiveColor(mChargeColors[mBonusDmgMultiplier] * 7.0f);
 	}
 
 	void Gun::Fire()

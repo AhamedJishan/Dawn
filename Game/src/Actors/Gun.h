@@ -10,6 +10,7 @@ namespace Dawn
 	class Player;
 	class Scene;
 	class Audio;
+	class PhongMaterial;
 
 	class Gun : public Actor
 	{
@@ -36,6 +37,7 @@ namespace Dawn
 	private:
 		Player* mPlayer = nullptr;
 		Audio* mAudioComponent = nullptr;
+		PhongMaterial* mMaterial = nullptr;
 
 		// Damage
 		const float mBaseDamage = 30.0f;
