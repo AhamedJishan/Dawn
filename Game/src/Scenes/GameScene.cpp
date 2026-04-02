@@ -2,7 +2,6 @@
 
 #include <string>
 #include <glm/vec3.hpp>
-#include "ExampleActor.h"
 #include "Actors/Arena.h"
 #include "Actors/WaveManager.h"
 #include "Actors/Player.h"
@@ -48,11 +47,6 @@ namespace Dawn
 
 		// Sky dome
 		SkyDome* sky = new SkyDome(this);
-
-		// TEST ACTOR
-		ExampleActor* ea = new ExampleActor(this);
-		ea->SetPosition(glm::vec3(5, 0, -5));
-		ea->SetScale(glm::vec3(0.6f));
 
 		// ARENA
 		Arena* arena = new Arena(this);
