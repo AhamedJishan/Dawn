@@ -78,10 +78,10 @@ namespace Dawn
 
 		std::array<glm::vec3, NUM_SPAWN_LOCATIONS> mSpawnLocations = 
 		{
-			glm::vec3(0.0f, 0.0f,  ARENA_RADIUS),
-			glm::vec3(ARENA_RADIUS, 0.0f, 0.0f),
-			glm::vec3(0.0f, 0.0f, -ARENA_RADIUS),
-			glm::vec3(-ARENA_RADIUS, 0.0f, 0.0f)
+			glm::vec3(0.0f, 1.0f,  ARENA_RADIUS),
+			glm::vec3(ARENA_RADIUS, 1.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, -ARENA_RADIUS),
+			glm::vec3(-ARENA_RADIUS, 1.0f, 0.0f)
 		};
 
 		std::array<unsigned int, NUM_SPAWN_LOCATIONS> mSpawnQueue = {0, 0, 0, 0};

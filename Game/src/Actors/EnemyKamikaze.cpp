@@ -22,8 +22,10 @@ namespace Dawn
 	{
 		LOG_INFO("Enemy spawned");
 
-		MeshRenderer::CreateFromModel(this, "Assets/Models/enemy/enemy.obj");
+		MeshRenderer::CreateFromModel(this, "Assets/Models/kamikaze/kamikaze.obj");
+		SetScale(glm::vec3(mBaseScale));
 		mCollider = new SphereCollider(this);
+		mCollider->SetRadius(0.75f);
 		mCollider->SetIsDynamic(true);
 		mCollider->SetIsTrigger(false);
 
@@ -31,13 +33,13 @@ namespace Dawn
 		const std::vector<MeshRenderer*> meshRenderers = GetComponents<MeshRenderer>();
 		for (MeshRenderer* meshRenderer : meshRenderers)
 		{
-			if (meshRenderer->GetMesh()->GetName() == "Body")
+			if (meshRenderer->GetMesh()->GetName() == "glow")
 			{
 				PhongMaterial* mat = dynamic_cast<PhongMaterial*>(meshRenderer->GetMaterial());
 				if (mat)
 				{
-					mBodyMaterial = mat;
-					mBodyBaseColor = mat->GetDiffuseColor();
+					mFuseMaterial = mat;
+					mFuseColor = mat->GetEmissiveColor();
 				}
 			}
 		}
@@ -56,15 +58,14 @@ namespace Dawn
 		mExplosionFXDesc.initialBurst = 30;
 		mExplosionFXDesc.scaleOverTime.AddKey(0.0f, glm::vec3(1.5f));
 		mExplosionFXDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.1f));
-		//mExplosionFXDesc.colorOverTime.AddKey(0.0f, glm::vec4(10.0f, 7.0f, 1.0f, 1.0f));
 		mExplosionFXDesc.colorOverTime.AddKey(0.0f, glm::vec4(0.6f, 0.9f, 0.9f, 1.0f) * 12.0f);
-		mExplosionFXDesc.colorOverTime.AddKey(0.2f, glm::vec4(0.9f, 0.5f, 0.2f, 1.0f) * 8.0f);
-		mExplosionFXDesc.colorOverTime.AddKey(0.6f, glm::vec4(0.85f, 0.10f, 0.04f, 1.0f));
+		mExplosionFXDesc.colorOverTime.AddKey(0.4f, glm::vec4(0.9f, 0.5f, 0.2f, 1.0f) * 8.0f);
+		mExplosionFXDesc.colorOverTime.AddKey(0.7f, glm::vec4(0.85f, 0.10f, 0.04f, 1.0f));
 		mExplosionFXDesc.colorOverTime.AddKey(1.0f, glm::vec4(0.0f));
 		mExplosionFXDesc.directionMax = glm::vec3(1);
 		mExplosionFXDesc.directionMin = glm::vec3(-1);
-		mExplosionFXDesc.particleLifetime = 0.2f;
-		mExplosionFXDesc.speed = 10.0f;
+		mExplosionFXDesc.particleLifetime = 0.25f;
+		mExplosionFXDesc.speed = 8.0f;
 	}
 
 	EnemyKamikaze::~EnemyKamikaze()
@@ -94,7 +95,7 @@ namespace Dawn
 			mHitImpactTimer -= deltaTime;
 			float t = 1 - mHitImpactTimer / mHitImpactDuration;
 			float scaleOffset = mScalePunchAmount * glm::sin(t * glm::pi<float>());
-			SetScale(glm::vec3(1.0f + scaleOffset));
+			SetScale(glm::vec3(mBaseScale + scaleOffset));
 
 			// ease out
 			float knockbackT = 1 - (1 - t) * (1 - t);
@@ -103,8 +104,8 @@ namespace Dawn
 		else if (mIsInImpactState)
 		{
 			mIsInImpactState = false;
-			if (mBodyMaterial)
-				mBodyMaterial->SetDiffuseColor(mBodyBaseColor);
+			if (mFuseMaterial)
+				mFuseMaterial->SetEmissiveColor(mFuseColor);
 		}
 
 	}
@@ -121,8 +122,8 @@ namespace Dawn
 
 		mHitImpactTimer = mHitImpactDuration;
 
-		if (mBodyMaterial)
-			mBodyMaterial->SetDiffuseColor(mBodyHitColor);
+		if (mFuseMaterial)
+			mFuseMaterial->SetEmissiveColor(mFuseColor * mFusePulseColorFactor);
 		mIsInImpactState = true;
 
 		return health;
@@ -171,14 +172,14 @@ namespace Dawn
 			SetScale(glm::vec3(1 + t * (mScaleAtExplosion - 1.0f)));
 		}
 
-		if (!mBodyMaterial)
+		if (!mFuseMaterial)
 			return;
 
 		bool pulse = (static_cast<int>(3 * mExplosionTimer) % 2) == 0;
 		if (pulse)
-			mBodyMaterial->SetDiffuseColor(mBodyExplosionPulseColor);
+			mFuseMaterial->SetEmissiveColor(mFuseColor * mFusePulseColorFactor);
 		else
-			mBodyMaterial->SetDiffuseColor(mBodyBaseColor);
+			mFuseMaterial->SetEmissiveColor(mFuseColor);
 	}
 
 	void EnemyKamikaze::Explode(float deltaTime)
