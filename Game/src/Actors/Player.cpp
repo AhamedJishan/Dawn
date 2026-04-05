@@ -23,6 +23,7 @@ namespace Dawn
 
 		mGameScene = scene;
 		mCamera = fpsCameraActor;
+		mCameraBaseFOV = mCamera->GetFOV();
 		mArena = arena;
 		mDamageable = new Damageable(this, 100.0f);
 		mKillStreak = new KillStreak(this);
@@ -47,10 +48,23 @@ namespace Dawn
 		SetRotation(glm::angleAxis(glm::radians(yaw), glm::vec3(0, 1, 0)));
 
 		// WASD movement
-		if (Input::GetKey(Key::W)) mPosition += mSpeed * GetForward() * deltaTime;
-		if (Input::GetKey(Key::S)) mPosition -= mSpeed * GetForward() * deltaTime;
-		if (Input::GetKey(Key::A)) mPosition -= mSpeed * GetRight() * deltaTime;
-		if (Input::GetKey(Key::D)) mPosition += mSpeed * GetRight() * deltaTime;
+		if (!mIsDashing)
+		{
+			if (Input::GetKey(Key::W)) mPosition += mSpeed * GetForward() * deltaTime;
+			if (Input::GetKey(Key::S)) mPosition -= mSpeed * GetForward() * deltaTime;
+			if (Input::GetKey(Key::A)) mPosition -= mSpeed * GetRight() * deltaTime;
+			if (Input::GetKey(Key::D)) mPosition += mSpeed * GetRight() * deltaTime;
+		}
+
+		// Dash should happen before arena bounds resolution
+		mDashCooldownTimer -= deltaTime;
+		if (!mIsDashing && mDashCooldownTimer <= 0.0f && Input::GetKeyDown(Key::LeftShift))
+			DashStart();
+		if (mIsDashing)
+			DashUpdate(deltaTime);
+		// dash recovery
+		if (mCamera->GetFOV() > mCameraBaseFOV)
+			mCamera->SetFOV(glm::mix(mCamera->GetFOV(), mCameraBaseFOV, 10 * deltaTime));
 
 		// Resolve Arena Bound Collision
 		if (mArena->IsOutOfBounds(GetPosition()))
@@ -83,6 +97,9 @@ namespace Dawn
 
 	void Player::TakeDamage(float dmg)
 	{
+		if (mIsDashing)
+			return;
+
 		mDamageable->TakeDamage(dmg);
 		mGameScene->SetPlayerHealth(mDamageable->GetHealth());
 
@@ -92,6 +109,7 @@ namespace Dawn
 			mGameScene->GameOver();
 		}
 	}
+
 	glm::vec3 Player::GetGunPosition()
 	{
 		glm::vec3 gunPos = mCamera->GetPosition();
@@ -101,5 +119,43 @@ namespace Dawn
 		gunPos += mCamera->GetForward() * mGunOffset.z;
 
 		return gunPos;
+	}
+
+	void Player::DashStart()
+	{
+		mIsDashing = true;
+		mDashTimer = mDashDuration;
+
+		mDashStartPos = GetPosition();
+		mDashEndPos = GetPosition() + GetForward() * mDashDistance;
+
+		// TODO: play audio cue
+	}
+	
+	void Player::DashUpdate(float deltaTime)
+	{
+		if (mDashTimer > 0.0f)
+			mDashTimer -= deltaTime;
+
+		float t = 1.0f - mDashTimer / mDashDuration;
+		t = glm::clamp(t, 0.0f, 1.0f);
+
+		float easedT = 1.0f - (1.0f - t) * (1.0f - t);
+
+		glm::vec3 newPos = glm::mix(mDashStartPos, mDashEndPos, easedT);
+		SetPosition(newPos);
+
+		float fovOffset = (1.0f - t) * mDashFOVBoost;
+		float newFOV = glm::mix(mCamera->GetFOV(), mCameraBaseFOV + fovOffset, 15 * deltaTime);
+		mCamera->SetFOV(newFOV);
+
+		if (mDashTimer <= 0.0f)
+			DashEnd();
+	}
+
+	void Player::DashEnd()
+	{
+		mIsDashing = false;
+		mDashCooldownTimer = mDashCooldownDuration;
 	}
 }

@@ -21,6 +21,9 @@ namespace Dawn
 
 		float GetYaw() const { return mCamera->GetYaw(); }
 		float GetPitch() const { return mCamera->GetPitch(); }
+		float GetFOV() const { return mCamera->GetFOV(); }
+
+		void SetFOV(float fov) { mCamera->SetFOV(fov); }
 	private:
 		FPSCamera* mCamera = nullptr;
 	};
