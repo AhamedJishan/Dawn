@@ -10,40 +10,34 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 ## TODO
 
 - TODO: fix enemy sounds playing even on pause screen
-  
-- [Done] Add arena bounds
-- [Done] Bigger wave text, "Wave 1"
-- [Done] add dmg multiplier
-- [Done] enemy speed variety
-- [Done] enemy explosion particle effect
-- [Done] Enemy knockback on hit
-- [Done] The Plasma Overload
-    - 0x (Base): Teal / Cyan (Matches the arena, feels stable and cool).
-    - 1x (Streak Started): Golden Yellow (Warming up).
-    - 2x (Lethal): Fiery Orange/Red (Aggressive, high heat).
-    - 3x (Max Power): Deep Bluish-Purple or Violet (The color of extremely high-energy plasma).
-- [ ] Make enemy eyes red
+
+- [ ] Remove killstrea, and 1 shot kill mechanic
+- [ ] Implement dash
+    - Cooldown system (5s → 2s scales down)
+    - Dash kills enemies on contact
+    - Add brief invulnerability
+    - Add visual feedback (screen effect)
+- [ ] Create upgrade selection UI (between waves)
+    - Show 3 random upgrades
+    - Player selects 1
+    - 5–10 second timer
+- [ ] CORE UPGRADES
+    - Damage upgrade, Reduce hits to kill (5 → 2 cap)
+    - Spread upgrade, 1 → 3 → 5 bullets, Cone-based shooting
+    - Dash cooldown upgrade, Reduce cooldown per level
+- [ ] After each wave, pause game, show upgrade choices, resume game
 - [ ] Refine Recoil, gun bob, and sway. Make shooting feel fun.
 - [ ] Add Slight delay before showing game over
-- [ ] Create custom Gun model that makes it possible for the neon charge up glow to be shown.
-- [ ] Refine enemy model in blender.
-- [ ] hell Mode (waves survived, enemies killed)
 - [ ] Add a goal, Time taken
-
-### Phase 1: Gameplay Lock & Integration (The "Friction")
-- [Done] Refactor GameScene
-- [Done] Refine Wave UI
-- [WIP] Arena Greybox Integration: Update the WaveManager to spawn enemies from specific glm::vec3 gates that match your Blender layout.
-- [WIP] Movement & Pacing Rebalance: Remove the player's infinite sprint, establish a strict base walk speed, and shorten the Kamikaze fuse timer.
-- [ ] Ammo Economy: Implement a magazine size, a reload timer, and hook it up to the HUD.
-
-### Phase 2: The "Vibe" & Graphics
-- [Done] HDR, Bloom & Gamma Correction
-- [Done] Skybox
 - [WIP] Final Art Asset Swap: Phase out the Blender greybox and drop in your final modeled/textured assets (Arena, Gun, Enemies).
 
-### Phase 3: Polish, Game Feel & Shipping
-- [ ] Release Mode Profiling: Compile in Release mode (-O2 or -O3) and stress-test 50+ enemies to verify your O(N^2) steering/collision loops perform well.
+### Balance
+- [ ] Enemy HP, 5 hits base, 2 hits at max level
+- [ ] Enemy deals 35 dmg, so 3 enemies can kill player
+
+
+### Polish, Game Feel & Shipping
+- [ ] Release Mode Profiling: Compile in Release mode (-O2 or -O3) and stress-test 50+ enemies to verify O(N^2) steering/collision loops perform well.
 - [WIP] Juice & Feedback: Add shooting visuals (muzzle flash, camera kick), damage feedback (camera shake, red screen vignette), and tweak recoil/bob variables.
 - [WIP] Non-Game UI Polish: Refine the ImGui styling, fonts, and button feedback for the Main Menu and Pause screens.
 - [ ] Audio Mixing: Do a cohesive final balance pass on the master volumes for BGM, explosions, fuses, and UI.
