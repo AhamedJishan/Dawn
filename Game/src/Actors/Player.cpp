@@ -129,7 +129,7 @@ namespace Dawn
 		mDashStartPos = GetPosition();
 		mDashEndPos = GetPosition() + GetForward() * mDashDistance;
 
-		// TODO: play audio cue
+		Application::Get()->GetAudioSystem()->PlayEvent("event:/dash");
 	}
 	
 	void Player::DashUpdate(float deltaTime)
