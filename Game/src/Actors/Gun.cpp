@@ -120,9 +120,13 @@ namespace Dawn
 		float finalDmg = mBaseDamage + mBonusDamage * mBonusDmgMultiplier;
 
 		// Spawn projectile
-		Projectile* projectile = new Projectile(mScene, mPlayer, finalDmg, mChargeColors[mBonusDmgMultiplier]);
-		projectile->SetPosition(projectilePosition);
-		projectile->SetRotation(projectileRotation);
+		for (int i = -mBulletSpread; i <= mBulletSpread; i++)
+		{
+			Projectile* projectile = new Projectile(mScene, mPlayer, finalDmg, mChargeColors[mBonusDmgMultiplier]);
+			projectile->SetPosition(projectilePosition);
+			projectile->SetRotation(glm::angleAxis(glm::radians(-mBulletSpreadAngle * i), glm::vec3(0, 1, 0)) * projectileRotation);
+		}
+
 		// Muzzle flash
 		mMuzzleFlashDesc.directionMax = GetForward() + glm::vec3(2);
 		mMuzzleFlashDesc.directionMin = GetForward() - glm::vec3(2);

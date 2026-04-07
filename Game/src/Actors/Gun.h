@@ -21,6 +21,8 @@ namespace Dawn
 
 		void Fire();
 
+		void IncreaseBulletSpread() { mBulletSpread = (mBulletSpread < mMaxBulletSpread) ? (mBulletSpread + 1) : mMaxBulletSpread; }
+
 	private:
 		// Updates 'mSwayMoveOffset' and 'mSwayRotationOffset'
 		void UpdateSwayOffsets(float deltaTime);
@@ -44,6 +46,10 @@ namespace Dawn
 		const float mBonusDamage = 30.0f;
 		unsigned int mBonusDmgMultiplier = 0;
 		static constexpr unsigned int mMaxDmgMultiplier = 2;
+
+		const float mBulletSpreadAngle = 5.f;
+		const int mMaxBulletSpread = 2;
+		int mBulletSpread = 0;
 
 		glm::vec4 mChargeColors[mMaxDmgMultiplier + 1] =
 		{

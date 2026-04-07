@@ -12,7 +12,7 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 - TODO: fix enemy sounds playing even on pause screen
 
 - [ ] Remove killstrea, and 1 shot kill mechanic
-- [ ] Implement dash
+- [WIP] Implement dash
     - Cooldown system (5s → 2s scales down)
     - Dash kills enemies on contact
     - Add brief invulnerability
