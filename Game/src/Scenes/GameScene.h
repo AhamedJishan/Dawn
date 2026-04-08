@@ -8,6 +8,7 @@ namespace Dawn
 {
 	// Forward declarations
 	class WaveManager;
+	class UpgradeManager;
 
 	class GameScene : public Scene
 	{
@@ -32,6 +33,7 @@ namespace Dawn
 
 	private:
 		WaveManager* mWaveManager = nullptr;
+		UpgradeManager* mUpgradeManager = nullptr;
 
 		ImFont* mFontBold = nullptr;
 		ImFont* mFontRegular = nullptr;

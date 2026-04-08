@@ -22,6 +22,7 @@ namespace Dawn
 		void Fire();
 
 		void IncreaseBulletSpread() { mBulletSpread = (mBulletSpread < mMaxBulletSpread) ? (mBulletSpread + 1) : mMaxBulletSpread; }
+		void IncreaseDamage() { mBonusDmgMultiplier = (mBonusDamage < mMaxDmgMultiplier) ? (mBonusDamage + 1) : mMaxDmgMultiplier; }
 
 	private:
 		// Updates 'mSwayMoveOffset' and 'mSwayRotationOffset'

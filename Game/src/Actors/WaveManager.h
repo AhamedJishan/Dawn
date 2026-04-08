@@ -63,8 +63,16 @@ namespace Dawn
 		WaveState GetWaveState() const { return mWaveState; }
 		unsigned int GetWaveEnemiesRemaining() const { return mWaveEnemiesRemaining; }
 		unsigned int GetCurrentWaveIndex() const { return mCurrentWaveIndex; }
-		float GetWaveCountdown() const { return mTimeBetweenWaves - mWaveTimer; }
-		float GetTimeBetweenWaves() const { return mTimeBetweenWaves; }
+
+		float GetWaveTimer() { return mWaveTimer; }
+		// time taken before wave active
+		float GetWaveStartDuration() const { return mWaveStartDuration; }
+		// time taken before next wave start
+		float GetWaveClearDuration() const { return mWaveClearDuration; }
+		void SkipWaveClearDelay() { 
+			if (mWaveState == WaveState::WaveClear)
+				mWaveTimer = mWaveClearDuration;
+		}
 
 	private:
 		void QueueSpawn(unsigned int enemyCount, unsigned int spawnLocationIndex);
@@ -92,7 +100,8 @@ namespace Dawn
 		std::vector<Wave> mWaves;
 		float mWaveTimer = 0.0f;
 		float mPhaseTimer = 0.0f;
-		const float mTimeBetweenWaves = 3.0f;
+		const float mWaveStartDuration = 3.0f;
+		const float mWaveClearDuration = 15.0f;
 		unsigned int mCurrentWaveIndex = 0;
 		unsigned int mCurrentPhaseIndex = 0;
 

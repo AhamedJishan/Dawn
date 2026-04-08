@@ -48,7 +48,7 @@ namespace Dawn
 			case Dawn::WaveState::WaveStarting:
 			{
 				mWaveTimer += deltaTime;
-				if (mWaveTimer >= mTimeBetweenWaves)
+				if (mWaveTimer >= mWaveStartDuration)
 				{
 					mWaveState = WaveState::WaveActive;
 
@@ -97,22 +97,29 @@ namespace Dawn
 				}
 				
 				if (mCurrentPhaseIndex >= currentWave.phases.size() && mWaveEnemiesRemaining == 0)
+				{
+					mWaveTimer = 0;
 					mWaveState = WaveState::WaveClear;
+				}
 
 				break;
 			}
 			case Dawn::WaveState::WaveClear:
 			{
-				mCurrentWaveIndex++;
-				mCurrentPhaseIndex = 0;
-
-				mWaveState = WaveState::WaveStarting;
-				mSpawnQueue.fill(0);
-				mTimeSinceLastSpawn.fill(0.0f);
-				mWaveTimer = 0.0f;
-
-				if (mCurrentWaveIndex >= mWaves.size())
+				if ((mCurrentWaveIndex + 1) >= mWaves.size())
 					mWaveState = WaveState::End;
+
+				mWaveTimer += deltaTime;
+				if (mWaveTimer >= mWaveClearDuration)
+				{
+					mCurrentWaveIndex++;
+					mCurrentPhaseIndex = 0;
+
+					mWaveState = WaveState::WaveStarting;
+					mSpawnQueue.fill(0);
+					mTimeSinceLastSpawn.fill(0.0f);
+					mWaveTimer = 0.0f;
+				}
 
 				break;
 			}

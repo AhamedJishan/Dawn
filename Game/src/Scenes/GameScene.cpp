@@ -13,6 +13,7 @@
 #include "Audio/AudioSystem.h"
 #include "Input/Input.h"
 #include "MainMenuScene.h"
+#include "Actors/UpgradeManager.h"
 
 namespace Dawn
 {
@@ -57,6 +58,9 @@ namespace Dawn
 		player->SetPosition(glm::vec3(0, 0, 4));
 		Gun* gun = new Gun(this, player);
 
+		// UPGRADE MANAGER
+		mUpgradeManager = new UpgradeManager(this, player, gun);
+
 		// --- WAVE MANAGER ---
 		mWaveManager = new WaveManager(this, player);
 
@@ -89,8 +93,9 @@ namespace Dawn
 		if (!mIsGameOver && !IsPaused())
 		{
 			DrawWaveUI();
-			DrawCrossHair();
 			DrawHealthBar();
+			if (mWaveManager->GetWaveState() == WaveState::WaveActive)
+				DrawCrossHair();
 		}
 
 		if (IsPaused() && !mIsGameOver)
@@ -348,9 +353,9 @@ namespace Dawn
 			break;
 		case Dawn::WaveState::WaveStarting:
 		{
-			float waveTimer = mWaveManager->GetWaveCountdown();
-			float timeBetweenWaves = mWaveManager->GetTimeBetweenWaves();
-			float alpha = glm::sin((waveTimer / timeBetweenWaves) * glm::pi<float>());
+			float waveTimer = mWaveManager->GetWaveTimer();
+			const float waveStartDuration = mWaveManager->GetWaveStartDuration();
+			float alpha = glm::sin((waveTimer / waveStartDuration) * glm::pi<float>());
 			ImGui::PushFont(mFontLight, 45.0f);
 			std::string waveText = "WAVE " + std::to_string(currentWaveNumber);
 			ImVec2 textSize = ImGui::CalcTextSize(waveText.c_str());
@@ -371,7 +376,62 @@ namespace Dawn
 			break;
 		}
 		case Dawn::WaveState::WaveClear:
+		{
+			// Background
+			ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+
+			drawList->AddRectFilled(ImVec2(viewPortCenterX - 300, viewPortCenterY - 200),
+				ImVec2(viewPortCenterX + 300, viewPortCenterY + 200),
+				ImGui::GetColorU32(ImVec4(0.1f, 0.1f, 0.1f, 0.5f)), 40.0f);
+
+			float timer = mWaveManager->GetWaveTimer();
+			float duration = mWaveManager->GetWaveClearDuration();
+			int timeLeft = (int)ceil(duration - timer);
+
+			// Title
+			ImGui::PushFont(mFontLight, 35.0f);
+			std::string title = "CHOOSE UPGRADE (" + std::to_string(timeLeft) + ")";
+			ImVec2 titleSize = ImGui::CalcTextSize(title.c_str());
+			ImGui::SetCursorPos(ImVec2(viewPortCenterX - titleSize.x / 2.0f, viewPortCenterY - 100));
+			ImGui::TextColored(ImVec4(0.8f, 1, 1, 1), title.c_str());
+			ImGui::PopFont();
+
+			ImGui::PushFont(mFontRegular, 22.0f);
+
+			float startY = viewPortCenterY - 20;
+
+			ImVec4 normal = ImVec4(1, 1, 1, 1);
+			ImVec4 highlight = ImVec4(1.0f, 0.8f, 0.2f, 1);
+
+			// Option 1
+			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY));
+			ImGui::TextColored(Input::GetKey(Key::Num1) ? highlight : normal, "[1] DAMAGE");
+			// Option 2
+			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY + 40));
+			ImGui::TextColored(Input::GetKey(Key::Num2) ? highlight : normal, "[2] SPREAD");
+			// Option 3
+			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY + 80));
+			ImGui::TextColored(Input::GetKey(Key::Num3) ? highlight : normal, "[3] DASH");
+
+			ImGui::PopFont();
+
+			if (Input::GetKeyUp(Key::Num1))
+			{
+				mUpgradeManager->UpgradeDamage();
+				mWaveManager->SkipWaveClearDelay();
+			}
+			if (Input::GetKeyUp(Key::Num2))
+			{
+				mUpgradeManager->UpgradeSpread();
+				mWaveManager->SkipWaveClearDelay();
+			}
+			if (Input::GetKeyUp(Key::Num3))
+			{
+				mUpgradeManager->UpgradeDash();
+				mWaveManager->SkipWaveClearDelay();
+			}
 			break;
+		}
 		case Dawn::WaveState::End:
 			GameOver();
 			break;

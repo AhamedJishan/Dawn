@@ -24,6 +24,9 @@ namespace Dawn
 
 		Arena* GetArena() const { return mArena; }
 
+		void DecreaseDashCooldown() { mDashCooldownDuration = 
+			(mDashCooldownDuration > mDashMinCooldownDuration) ? (mDashCooldownDuration - 1.0f) : mDashMinCooldownDuration; }
+
 	private:
 		void DashStart();
 		void DashUpdate(float deltaTime);
@@ -46,7 +49,8 @@ namespace Dawn
 
 		// Dash
 		bool mIsDashing = false;
-		const float mDashCooldownDuration = 5.0f;
+		const float mDashMinCooldownDuration = 2.0f;
+		float mDashCooldownDuration = 5.0f;
 		const float mDashDuration = 0.3f;
 		const float mDashDistance = 10.0f;
 		const float mDashFOVBoost = 8.0f;
