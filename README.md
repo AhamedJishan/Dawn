@@ -11,21 +11,6 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 
 - TODO: fix enemy sounds playing even on pause screen
 
-- [ ] Remove killstrea, and 1 shot kill mechanic
-- [WIP] Implement dash
-    - Cooldown system (5s → 2s scales down)
-    - Dash kills enemies on contact
-    - Add brief invulnerability
-    - Add visual feedback (screen effect)
-- [ ] Create upgrade selection UI (between waves)
-    - Show 3 random upgrades
-    - Player selects 1
-    - 5–10 second timer
-- [ ] CORE UPGRADES
-    - Damage upgrade, Reduce hits to kill (5 → 2 cap)
-    - Spread upgrade, 1 → 3 → 5 bullets, Cone-based shooting
-    - Dash cooldown upgrade, Reduce cooldown per level
-- [ ] After each wave, pause game, show upgrade choices, resume game
 - [ ] Refine Recoil, gun bob, and sway. Make shooting feel fun.
 - [ ] Add Slight delay before showing game over
 - [ ] Add a goal, Time taken

@@ -21,17 +21,37 @@ namespace Dawn
 	{
 		// === WAVE 1 ===
 		Wave wave1;
-		wave1.phases.push_back(Phase(0.0f, 5, 0));
-		wave1.phases.push_back(Phase(7.5f, 5, 2));
+		wave1.phases.push_back(Phase(0.0f, 3, 0));
+		wave1.phases.push_back(Phase(5.0f, 5, 2));
 
 		// === WAVE 2 ===
 		Wave wave2;
 		wave2.phases.push_back(Phase(0.0f, 5, 1));
-		wave2.phases.push_back(Phase(5.0f, 5, 3));
-		wave2.phases.push_back(Phase(0.0f, 5, 2));
+		wave2.phases.push_back(Phase(3.0f, 5, 2));
+		wave2.phases.push_back(Phase(0.0f, 5, 3));
+
+		// === WAVE 3 ===
+		Wave wave3;
+		wave3.phases.push_back(Phase(0.0f, 7, 0));
+		wave3.phases.push_back(Phase(3.0f, 5, 1));
+		wave3.phases.push_back(Phase(0.0f, 5, 2));
+		wave3.phases.push_back(Phase(0.0f, 5, 3));
+		wave3.phases.push_back(Phase(3.0f, 10, 0));
+
+		// === WAVE 4 ===
+		Wave wave4;
+		wave4.phases.push_back(Phase(0.0f, 10, 0));
+		wave4.phases.push_back(Phase(4.0f, 10, 1));
+		wave4.phases.push_back(Phase(0.0f, 5, 2));
+		wave4.phases.push_back(Phase(0.0f, 5, 3));
+		wave4.phases.push_back(Phase(3.0f, 10, 0));
+		wave4.phases.push_back(Phase(0.0f, 10, 1));
+		wave4.phases.push_back(Phase(0.0f, 10, 2));
 
 		mWaves.push_back(wave1);
 		mWaves.push_back(wave2);
+		mWaves.push_back(wave3);
+		mWaves.push_back(wave4);
 
 		mWaveState = WaveState::Begin;
 	}

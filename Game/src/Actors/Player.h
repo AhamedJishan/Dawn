@@ -44,14 +44,14 @@ namespace Dawn
 
 		unsigned int mLastKillStreak = 0;
 
-		float mSpeed = 5.0f;
+		float mSpeed = 7.0f;
 
 		// Dash
 		bool mIsDashing = false;
 		const float mDashMinCooldownDuration = 2.0f;
 		float mDashCooldownDuration = 5.0f;
 		const float mDashDuration = 0.3f;
-		const float mDashDistance = 10.0f;
+		const float mDashDistance = 14.0f;
 		const float mDashFOVBoost = 8.0f;
 		float mCameraBaseFOV;
 
