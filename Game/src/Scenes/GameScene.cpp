@@ -402,7 +402,7 @@ namespace Dawn
 
 			ImVec4 normal = ImVec4(1, 1, 1, 1);
 			ImVec4 highlight = ImVec4(1.0f, 0.8f, 0.2f, 1);
-			ImVec4 max = ImVec4(0.85f, 0.30f, 0.14f, 1);
+			ImVec4 max = ImVec4(0.85f, 0.10f, 0.04f, 1);
 
 			bool canUpgradeSpread = mUpgradeManager->IsSpreadUpgradeable();
 			bool canUpgradeDamage= mUpgradeManager->IsDamageUpgradeable();
@@ -410,13 +410,16 @@ namespace Dawn
 
 			// Option 1
 			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY));
-			ImGui::TextColored(canUpgradeDamage ? (Input::GetKey(Key::Num1) ? highlight : normal) : max, "[1] DAMAGE");
+			ImGui::TextColored( canUpgradeDamage ? (Input::GetKey(Key::Num1) ? highlight : normal) : max,
+								canUpgradeDamage ? "[1] DAMAGE" : "[1] DAMAGE (MAX)");
 			// Option 2
 			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY + 40));
-			ImGui::TextColored(canUpgradeSpread ? (Input::GetKey(Key::Num2) ? highlight : normal) : max, "[2] SPREAD");
+			ImGui::TextColored( canUpgradeSpread ? (Input::GetKey(Key::Num2) ? highlight : normal) : max, 
+								canUpgradeSpread ? "[2] SPREAD" : "[2] SPREAD (MAX)");
 			// Option 3
 			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY + 80));
-			ImGui::TextColored(canUpgradeDash ? (Input::GetKey(Key::Num3) ? highlight : normal) : max, "[3] DASH");
+			ImGui::TextColored(canUpgradeDash ? (Input::GetKey(Key::Num3) ? highlight : normal) : max, 
+								canUpgradeDash ? "[3] DASH" : "[3] DASH (MAX)");
 
 			ImGui::PopFont();
 

@@ -48,7 +48,7 @@ namespace Dawn
 		// Damage
 		const float mBaseDamage = 20.0f;
 		const float mBonusDamage = 20.0f;
-		unsigned int mBonusDmgMultiplier = 3;
+		unsigned int mBonusDmgMultiplier = 0;
 		static constexpr unsigned int mMaxDmgMultiplier = 3;
 
 		const float mBulletSpreadAngle = 5.f;
