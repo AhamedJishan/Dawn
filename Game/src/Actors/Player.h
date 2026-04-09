@@ -10,7 +10,6 @@ namespace Dawn
 	class GameScene;
 	class FPSCameraActor;
 	class Damageable;
-	class KillStreak;
 
 	class Player : public Actor
 	{
@@ -26,6 +25,7 @@ namespace Dawn
 
 		void DecreaseDashCooldown() { mDashCooldownDuration = 
 			(mDashCooldownDuration > mDashMinCooldownDuration) ? (mDashCooldownDuration - 1.0f) : mDashMinCooldownDuration; }
+		bool IsDashUpgradeable() { return mDashCooldownDuration > mDashMinCooldownDuration; }
 
 	private:
 		void DashStart();
@@ -35,7 +35,6 @@ namespace Dawn
 	private:
 		GameScene* mGameScene = nullptr;
 		Damageable* mDamageable = nullptr;
-		KillStreak* mKillStreak = nullptr;
 		Arena* mArena = nullptr;
 
 		FPSCameraActor* mCamera = nullptr;

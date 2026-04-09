@@ -8,7 +8,6 @@
 #include "Core/Components/SphereCollider.h"
 #include "Rendering/ParticleSystem.h"
 #include "Rendering/Materials/PhongMaterial.h"
-#include "Components/KillStreak.h"
 #include "Player.h"
 #include "Arena.h"
 #include "EnemyKamikaze.h"
@@ -38,7 +37,6 @@ namespace Dawn
 
 			mPlayer = player;
 			mArena = player->GetArena();
-			mPlayerKillStreak = mPlayer->GetComponent<KillStreak>();
 
 			mHitParticleDesc.initialBurst = 10;
 			mHitParticleDesc.emissionRate = 0.0f;
@@ -59,7 +57,6 @@ namespace Dawn
 			if (mLifeTime <= 0.0f)
 			{
 				SetState(Actor::State::Dead);
-				mPlayerKillStreak->ShotMissed();
 			}
 
 			SetPosition(GetPosition() + GetForward() * mSpeed * deltaTime);
@@ -70,8 +67,6 @@ namespace Dawn
 			{
 				SetState(Actor::State::Dead);
 				float enemyHealth = enemy->TakeDamage(mDamage);
-				if (enemyHealth <= 0.0f)
-					mPlayerKillStreak->EnemyKilled();
 
 				glm::vec3 hitDirection = glm::normalize(mPlayer->GetPosition() - enemy->GetPosition());
 				mHitParticleDesc.directionMin = hitDirection - glm::vec3(2);
@@ -84,7 +79,6 @@ namespace Dawn
 			if (mArena->IsOutOfBounds(GetPosition()))
 			{
 				SetState(Actor::State::Dead);
-				mPlayerKillStreak->ShotMissed();
 
 				mHitParticleDesc.directionMin = glm::vec3(-1.0f, -1.0f, -1.0f);
 				mHitParticleDesc.directionMax = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -100,7 +94,6 @@ namespace Dawn
 		SphereCollider* mCollider = nullptr;
 		Player* mPlayer = nullptr;
 		Arena* mArena = nullptr;
-		KillStreak* mPlayerKillStreak = nullptr;
 
 		ParticleSystemDesc mHitParticleDesc;
 	};

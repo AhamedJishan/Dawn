@@ -382,7 +382,7 @@ namespace Dawn
 
 			drawList->AddRectFilled(ImVec2(viewPortCenterX - 300, viewPortCenterY - 200),
 				ImVec2(viewPortCenterX + 300, viewPortCenterY + 200),
-				ImGui::GetColorU32(ImVec4(0.1f, 0.1f, 0.1f, 0.5f)), 40.0f);
+				ImGui::GetColorU32(ImVec4(0.1f, 0.1f, 0.1f, 0.3f)), 40.0f);
 
 			float timer = mWaveManager->GetWaveTimer();
 			float duration = mWaveManager->GetWaveClearDuration();
@@ -402,30 +402,35 @@ namespace Dawn
 
 			ImVec4 normal = ImVec4(1, 1, 1, 1);
 			ImVec4 highlight = ImVec4(1.0f, 0.8f, 0.2f, 1);
+			ImVec4 max = ImVec4(0.85f, 0.30f, 0.14f, 1);
+
+			bool canUpgradeSpread = mUpgradeManager->IsSpreadUpgradeable();
+			bool canUpgradeDamage= mUpgradeManager->IsDamageUpgradeable();
+			bool canUpgradeDash = mUpgradeManager->IsDashUpgradeable();
 
 			// Option 1
 			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY));
-			ImGui::TextColored(Input::GetKey(Key::Num1) ? highlight : normal, "[1] DAMAGE");
+			ImGui::TextColored(canUpgradeDamage ? (Input::GetKey(Key::Num1) ? highlight : normal) : max, "[1] DAMAGE");
 			// Option 2
 			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY + 40));
-			ImGui::TextColored(Input::GetKey(Key::Num2) ? highlight : normal, "[2] SPREAD");
+			ImGui::TextColored(canUpgradeSpread ? (Input::GetKey(Key::Num2) ? highlight : normal) : max, "[2] SPREAD");
 			// Option 3
 			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 80, startY + 80));
-			ImGui::TextColored(Input::GetKey(Key::Num3) ? highlight : normal, "[3] DASH");
+			ImGui::TextColored(canUpgradeDash ? (Input::GetKey(Key::Num3) ? highlight : normal) : max, "[3] DASH");
 
 			ImGui::PopFont();
 
-			if (Input::GetKeyUp(Key::Num1))
+			if (Input::GetKeyUp(Key::Num1) && canUpgradeDamage)
 			{
 				mUpgradeManager->UpgradeDamage();
 				mWaveManager->SkipWaveClearDelay();
 			}
-			if (Input::GetKeyUp(Key::Num2))
+			if (Input::GetKeyUp(Key::Num2) && canUpgradeSpread)
 			{
 				mUpgradeManager->UpgradeSpread();
 				mWaveManager->SkipWaveClearDelay();
 			}
-			if (Input::GetKeyUp(Key::Num3))
+			if (Input::GetKeyUp(Key::Num3) && canUpgradeDash)
 			{
 				mUpgradeManager->UpgradeDash();
 				mWaveManager->SkipWaveClearDelay();

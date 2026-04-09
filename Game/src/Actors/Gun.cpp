@@ -13,10 +13,11 @@
 #include "Physics/Physics.h"
 #include "Player.h"
 #include "Projectile.h"
-#include "Components/KillStreak.h"
 
 namespace Dawn
 {
+	const glm::vec4 COLOR_ORANGE = glm::vec4(0.85f, 0.10f, 0.04f, 1.0f);
+
 	Gun::Gun(Scene* scene, Player* player)
 		:Actor(scene)
 	{
@@ -27,14 +28,16 @@ namespace Dawn
 			mMaterial = mat;
 			mMaterial->SetDiffuseColor(glm::vec3(0.5f));
 			mMaterial->SetShininess(0.0f);
+			mMaterial->SetEmissiveColor(COLOR_ORANGE * 7.0f);
 		}
 
 		mAudioComponent = new Audio(this);
 		mPlayer = player;
 
 		mMuzzleFlashDesc.initialBurst = 10;
-		mMuzzleFlashDesc.colorOverTime.AddKey(0.0f, 10.0f * mChargeColors[mBonusDmgMultiplier]);
-		mMuzzleFlashDesc.colorOverTime.AddKey(0.8f, mChargeColors[mBonusDmgMultiplier]);
+		mMuzzleFlashDesc.colorOverTime.AddKey(0.0f, 10.0f * COLOR_ORANGE);
+		mMuzzleFlashDesc.colorOverTime.AddKey(0.7f, COLOR_ORANGE);
+		mMuzzleFlashDesc.colorOverTime.AddKey(1.0f, glm::vec4(0.0f));
 		mMuzzleFlashDesc.scaleOverTime.AddKey(0.0f, glm::vec3(0.07f));
 		mMuzzleFlashDesc.scaleOverTime.AddKey(1.0f, glm::vec3(0.03f));
 		mMuzzleFlashDesc.directionMax = glm::vec3(1);
@@ -71,15 +74,6 @@ namespace Dawn
 		Rotate(mSwayRotationOffset.y, glm::vec3(1, 0, 0));
 		Rotate(mSwayRotationOffset.x, glm::vec3(0, 1, 0));
 		Rotate(mRecoilPitch, glm::vec3(1, 0, 0));
-
-		// Update bonus dmg multiplier
-		int streak = mPlayer->GetComponent<KillStreak>()->GetKillStreak();
-
-		if (streak >= 4)       mBonusDmgMultiplier = 2;
-		else if (streak >= 2)  mBonusDmgMultiplier = 1;
-		else                   mBonusDmgMultiplier = 0;
-
-		mMaterial->SetEmissiveColor(mChargeColors[mBonusDmgMultiplier] * 7.0f);
 	}
 
 	void Gun::Fire()
@@ -122,7 +116,7 @@ namespace Dawn
 		// Spawn projectile
 		for (int i = -mBulletSpread; i <= mBulletSpread; i++)
 		{
-			Projectile* projectile = new Projectile(mScene, mPlayer, finalDmg, mChargeColors[mBonusDmgMultiplier]);
+			Projectile* projectile = new Projectile(mScene, mPlayer, finalDmg, glm::vec4(0.85f, 0.10f, 0.04f, 1.0f));
 			projectile->SetPosition(projectilePosition);
 			projectile->SetRotation(glm::angleAxis(glm::radians(-mBulletSpreadAngle * i), glm::vec3(0, 1, 0)) * projectileRotation);
 		}
@@ -130,11 +124,17 @@ namespace Dawn
 		// Muzzle flash
 		mMuzzleFlashDesc.directionMax = GetForward() + glm::vec3(2);
 		mMuzzleFlashDesc.directionMin = GetForward() - glm::vec3(2);
-		mMuzzleFlashDesc.colorOverTime.Reset();
-		mMuzzleFlashDesc.colorOverTime.AddKey(0.0f, 10.0f * mChargeColors[mBonusDmgMultiplier]);
-		mMuzzleFlashDesc.colorOverTime.AddKey(0.7f, mChargeColors[mBonusDmgMultiplier]);
-		mMuzzleFlashDesc.colorOverTime.AddKey(1.0f, glm::vec4(0.0f));
 		ParticleSystem* muzzleFlash = new ParticleSystem(mScene, mMuzzleFlashDesc, projectilePosition);
+	}
+
+	bool Gun::IsSpreadUpgradeable()
+	{
+		return mBulletSpread < mMaxBulletSpread;
+	}
+
+	bool Gun::IsDamageUpgradeable()
+	{
+		return mBonusDmgMultiplier < mMaxDmgMultiplier;
 	}
 
 	glm::vec2 Gun::GetSwayMovementOffset()

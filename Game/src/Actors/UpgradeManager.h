@@ -17,6 +17,10 @@ namespace Dawn
 		void UpgradeDamage();
 		void UpgradeDash();
 
+		bool IsSpreadUpgradeable();
+		bool IsDamageUpgradeable();
+		bool IsDashUpgradeable();
+
 	private:
 		Player* mPlayer = nullptr;
 		Gun* mGun = nullptr;

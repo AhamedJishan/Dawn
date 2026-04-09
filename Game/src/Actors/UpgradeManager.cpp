@@ -26,4 +26,19 @@ namespace Dawn
 	{
 		mPlayer->DecreaseDashCooldown();
 	}
+
+	bool UpgradeManager::IsSpreadUpgradeable()
+	{
+		return mGun->IsSpreadUpgradeable();
+	}
+	
+	bool UpgradeManager::IsDamageUpgradeable()
+	{
+		return mGun->IsDamageUpgradeable();
+	}
+	
+	bool UpgradeManager::IsDashUpgradeable()
+	{
+		return mPlayer->IsDashUpgradeable();
+	}
 }

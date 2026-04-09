@@ -22,7 +22,10 @@ namespace Dawn
 		void Fire();
 
 		void IncreaseBulletSpread() { mBulletSpread = (mBulletSpread < mMaxBulletSpread) ? (mBulletSpread + 1) : mMaxBulletSpread; }
-		void IncreaseDamage() { mBonusDmgMultiplier = (mBonusDamage < mMaxDmgMultiplier) ? (mBonusDamage + 1) : mMaxDmgMultiplier; }
+		void IncreaseDamage() { mBonusDmgMultiplier = (mBonusDmgMultiplier < mMaxDmgMultiplier) ? (mBonusDmgMultiplier + 1) : mMaxDmgMultiplier; }
+
+		bool IsSpreadUpgradeable();
+		bool IsDamageUpgradeable();
 
 	private:
 		// Updates 'mSwayMoveOffset' and 'mSwayRotationOffset'
@@ -43,21 +46,14 @@ namespace Dawn
 		PhongMaterial* mMaterial = nullptr;
 
 		// Damage
-		const float mBaseDamage = 30.0f;
-		const float mBonusDamage = 30.0f;
-		unsigned int mBonusDmgMultiplier = 0;
-		static constexpr unsigned int mMaxDmgMultiplier = 2;
+		const float mBaseDamage = 20.0f;
+		const float mBonusDamage = 20.0f;
+		unsigned int mBonusDmgMultiplier = 3;
+		static constexpr unsigned int mMaxDmgMultiplier = 3;
 
 		const float mBulletSpreadAngle = 5.f;
 		const int mMaxBulletSpread = 2;
 		int mBulletSpread = 0;
-
-		glm::vec4 mChargeColors[mMaxDmgMultiplier + 1] =
-		{
-			glm::vec4(0.40f, 0.80f, 0.85f, 1.0f), // Level 0 (teal)
-			glm::vec4(0.75f, 0.10f, 0.65f, 1.0f), // Level 1 (purple)
-			glm::vec4(0.85f, 0.10f, 0.04f, 1.0f)  // Level 2 (orange)
-		};
 
 		const float mFireCooldown = 0.1f;
 		float mTimeSinceLastFire = 0.0f;
