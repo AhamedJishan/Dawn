@@ -10,7 +10,6 @@ A small C++ game and custom engine built with OpenGL, focused on simplicity and 
 ## TODO
 
 - TODO: fix enemy sounds playing even on pause screen
-- [ ] Accelaration based movement
 - [ ] Refine Recoil, gun bob, and sway. Make shooting feel fun.
 - [ ] Add Slight delay before showing game over
 - [ ] Add a goal, Time taken

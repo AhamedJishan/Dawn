@@ -68,6 +68,7 @@ namespace Dawn
 		const float mRecoilPitchAmount = 0.2f;
 		const float mRecoilRecoverySpeed = 5.0f;
 
+
 		// Sway
 		const float mSwaySmooth = 8.0f;
 		const float mSwayMoveStep = 0.02f;

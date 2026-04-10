@@ -13,6 +13,7 @@
 #include "Physics/Physics.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Components/FPSCamera.h"
 
 namespace Dawn
 {
@@ -80,7 +81,7 @@ namespace Dawn
 	{
 		mAudioComponent->PlayEvent("event:/gunshot");
 
-		Camera* camera = mScene->GetActiveCamera();
+		FPSCamera* camera = dynamic_cast<FPSCamera*>(mScene->GetActiveCamera());
 		if (!camera)
 			return;
 
@@ -125,6 +126,9 @@ namespace Dawn
 		mMuzzleFlashDesc.directionMax = GetForward() + glm::vec3(2);
 		mMuzzleFlashDesc.directionMin = GetForward() - glm::vec3(2);
 		ParticleSystem* muzzleFlash = new ParticleSystem(mScene, mMuzzleFlashDesc, projectilePosition);
+
+		// Camera Pitch Recoil
+		camera->Recoil();
 	}
 
 	bool Gun::IsSpreadUpgradeable()

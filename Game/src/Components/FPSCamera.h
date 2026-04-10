@@ -30,9 +30,19 @@ namespace Dawn
 
 			mPitch = glm::clamp(mPitch, -60.0f, 60.0f);
 
-			glm::quat yawRotation = glm::angleAxis(glm::radians(mYaw), glm::vec3(0, 1, 0));
-			glm::quat pitchRotation = glm::angleAxis(glm::radians(mPitch), glm::vec3(1, 0, 0));
+			// Recoil
+			mRecoilPitchOffset = glm::mix(mRecoilPitchOffset, 0.0f, mRecoilRecoverySpeed * deltaTime);
+			float finalPitch = glm::clamp(mPitch + mRecoilPitchOffset, -60.0f, 60.0f);
+
+			glm::quat yawRotation	= glm::angleAxis(glm::radians(mYaw),		glm::vec3(0, 1, 0));
+			glm::quat pitchRotation = glm::angleAxis(glm::radians(finalPitch),	glm::vec3(1, 0, 0));
+
 			mOwner->SetRotation(yawRotation * pitchRotation);
+		}
+
+		void Recoil()
+		{
+			mRecoilPitchOffset = mRecoilPitchAmount;
 		}
 
 		float GetYaw() const { return mYaw; }
@@ -45,5 +55,10 @@ namespace Dawn
 
 		float mYaw = 0.0f;
 		float mPitch = 0.0f;
+
+		// Recoil
+		const float mRecoilRecoverySpeed = 5.0f;
+		const float mRecoilPitchAmount = 3.0f;
+		float mRecoilPitchOffset = 0.0f;
 	};
 }
