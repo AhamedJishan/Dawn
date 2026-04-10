@@ -46,19 +46,25 @@ namespace Dawn
 		SetRotation(glm::angleAxis(glm::radians(yaw), glm::vec3(0, 1, 0)));
 
 		// WASD movement
+		glm::vec3 moveDir = glm::vec3(0);
 		if (!mIsDashing)
 		{
-			if (Input::GetKey(Key::W)) mPosition += mSpeed * GetForward() * deltaTime;
-			if (Input::GetKey(Key::S)) mPosition -= mSpeed * GetForward() * deltaTime;
-			if (Input::GetKey(Key::A)) mPosition -= mSpeed * GetRight() * deltaTime;
-			if (Input::GetKey(Key::D)) mPosition += mSpeed * GetRight() * deltaTime;
+			if (Input::GetKey(Key::W)) moveDir += GetForward();
+			if (Input::GetKey(Key::S)) moveDir -= GetForward();
+			if (Input::GetKey(Key::A)) moveDir -= GetRight();
+			if (Input::GetKey(Key::D)) moveDir += GetRight();
+
+			if (glm::length(moveDir) > 0.0001f)
+				moveDir = glm::normalize(moveDir);
+
+			SetPosition(GetPosition() + moveDir * mSpeed * deltaTime);
 		}
 
 		// Dash should happen before arena bounds resolution
 		mDashCooldownTimer -= deltaTime;
 		mDashCooldownTimer = glm::clamp(mDashCooldownTimer, 0.0f, mDashCooldownDuration);
 		if (!mIsDashing && mDashCooldownTimer <= 0.0f && Input::GetKeyDown(Key::LeftShift))
-			DashStart();
+			DashStart(moveDir);
 		if (mIsDashing)
 			DashUpdate(deltaTime);
 		// dash recovery
@@ -110,13 +116,13 @@ namespace Dawn
 		return gunPos;
 	}
 
-	void Player::DashStart()
+	void Player::DashStart(glm::vec3 dashDirection)
 	{
 		mIsDashing = true;
 		mDashTimer = mDashDuration;
 
 		mDashStartPos = GetPosition();
-		mDashEndPos = GetPosition() + GetForward() * mDashDistance;
+		mDashEndPos = GetPosition() + dashDirection * mDashDistance;
 
 		Application::Get()->GetAudioSystem()->PlayEvent("event:/dash");
 	}

@@ -29,7 +29,7 @@ namespace Dawn
 		float GetDashCooldownTimer() { return mDashCooldownTimer; }
 
 	private:
-		void DashStart();
+		void DashStart(glm::vec3 dashDirection);
 		void DashUpdate(float deltaTime);
 		void DashEnd();
 
