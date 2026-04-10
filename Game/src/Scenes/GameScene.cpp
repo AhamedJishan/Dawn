@@ -54,15 +54,15 @@ namespace Dawn
 
 		// PLAYER
 		FPSCameraActor* cameraActor = new FPSCameraActor(this);
-		Player* player = new Player(this, cameraActor, arena);
-		player->SetPosition(glm::vec3(0, 0, 4));
-		Gun* gun = new Gun(this, player);
+		mPlayer = new Player(this, cameraActor, arena);
+		mPlayer->SetPosition(glm::vec3(0, 0, 4));
+		Gun* gun = new Gun(this, mPlayer);
 
 		// UPGRADE MANAGER
-		mUpgradeManager = new UpgradeManager(this, player, gun);
+		mUpgradeManager = new UpgradeManager(this, mPlayer, gun);
 
 		// --- WAVE MANAGER ---
-		mWaveManager = new WaveManager(this, player);
+		mWaveManager = new WaveManager(this, mPlayer);
 
 		Camera* cam = cameraActor->GetComponent<Camera>();
 		if (cam)
@@ -373,6 +373,33 @@ namespace Dawn
 			ImGui::SetCursorPosX(viewPortCenterX);
 			ImGui::Text("%d", enemiesRemaining);
 			ImGui::PopFont();
+
+			ImVec2 displaySize = ImGui::GetIO().DisplaySize;
+
+			ImGui::PushFont(mFontRegular, 25.0f);
+
+			const char* textShift = "SHIFT";
+			ImVec2 textShiftSize = ImGui::CalcTextSize(textShift);
+			float padding = 30.0f;
+
+			ImVec2 textShiftPos;
+			textShiftPos.x = displaySize.x - textShiftSize.x - padding;
+			textShiftPos.y = displaySize.y - textShiftSize.y - padding;
+
+			ImVec4 normalColor = ImVec4(0.8f, 1.0f, 0.9f, 1.0f);
+			ImVec4 highlightedColor = ImVec4(0.85f, 0.40f, 0.14f, 1.0f);
+
+			bool shiftPressed = Input::GetKey(Key::LeftShift);
+			float shiftCooldownTimer = mPlayer->GetDashCooldownTimer();
+
+			ImGui::SetCursorPos(textShiftPos);
+			if (shiftCooldownTimer <= 0.0f)
+				ImGui::TextColored(shiftPressed ? highlightedColor : normalColor, textShift);
+			else
+				ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 0.4f), "%.1f", shiftCooldownTimer);
+
+			ImGui::PopFont();
+
 			break;
 		}
 		case Dawn::WaveState::WaveClear:

@@ -56,6 +56,7 @@ namespace Dawn
 
 		// Dash should happen before arena bounds resolution
 		mDashCooldownTimer -= deltaTime;
+		mDashCooldownTimer = glm::clamp(mDashCooldownTimer, 0.0f, mDashCooldownDuration);
 		if (!mIsDashing && mDashCooldownTimer <= 0.0f && Input::GetKeyDown(Key::LeftShift))
 			DashStart();
 		if (mIsDashing)

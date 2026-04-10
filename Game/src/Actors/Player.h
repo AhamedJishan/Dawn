@@ -26,6 +26,7 @@ namespace Dawn
 		void DecreaseDashCooldown() { mDashCooldownDuration = 
 			(mDashCooldownDuration > mDashMinCooldownDuration) ? (mDashCooldownDuration - 1.0f) : mDashMinCooldownDuration; }
 		bool IsDashUpgradeable() { return mDashCooldownDuration > mDashMinCooldownDuration; }
+		float GetDashCooldownTimer() { return mDashCooldownTimer; }
 
 	private:
 		void DashStart();
@@ -51,7 +52,7 @@ namespace Dawn
 		const float mDashMinCooldownDuration = 2.0f;
 		float mDashCooldownDuration = 5.0f;
 		const float mDashDuration = 0.3f;
-		const float mDashDistance = 14.0f;
+		const float mDashDistance = 12.0f;
 		const float mDashFOVBoost = 8.0f;
 		float mCameraBaseFOV;
 

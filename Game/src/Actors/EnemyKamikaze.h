@@ -63,7 +63,7 @@ namespace Dawn
 		const float mFusePulseColorFactor = 30.0f;
 
 		float mSpeed = 6.0f;
-		const float mSpeedVariation = 6.0f;
+		const float mSpeedVariation = 4.0f;
 		const float mSteeringRange = 5.0f;
 		const float mSteeringCutOffRange = 2.0f;
 		const float mMoveDirectionSmoothing = 2.5f;
