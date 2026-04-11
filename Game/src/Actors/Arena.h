@@ -16,7 +16,7 @@ namespace Dawn
 		Arena(Scene* scene)
 			:Actor(scene)
 		{
-			MeshRenderer::CreateFromModel(this, "Assets/Models/arena02/arena.obj");
+			MeshRenderer::CreateFromModel(this, "Assets/Models/arena/arena.obj");
 		}
 
 		// Ignores top bound
@@ -35,6 +35,6 @@ namespace Dawn
 		glm::vec2 GetBounds() const { return mBounds; }
 
 	private:
-		glm::vec2 mBounds = glm::vec2(25.0f);
+		glm::vec2 mBounds = glm::vec2(29.0f);
 	};
 }

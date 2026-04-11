@@ -21,8 +21,8 @@ namespace Dawn
 	{
 		GetEnvironmentSettings().bloomRadius = 2.0f;
 		GetEnvironmentSettings().bloomStrength = 0.01f;
-		GetEnvironmentSettings().fogDensity = 0.06f;
-		GetEnvironmentSettings().fogColor = glm::vec3(0.02f, 0.03f, 0.04f);
+		GetEnvironmentSettings().fogDensity = 0.03f;
+		GetEnvironmentSettings().fogColor = glm::vec3(0.04f, 0.06f, 0.08f);
 		GetEnvironmentSettings().ambientColor = glm::vec3(0.25f);
 		GetEnvironmentSettings().directionalLight.color = glm::vec3(0.6f, 0.7f, 0.85f);
 		GetEnvironmentSettings().directionalLight.direction = glm::vec3(-0.5f, -0.2f, -0.2f);
