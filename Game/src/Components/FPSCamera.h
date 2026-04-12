@@ -58,7 +58,7 @@ namespace Dawn
 
 		// Recoil
 		const float mRecoilRecoverySpeed = 5.0f;
-		const float mRecoilPitchAmount = 3.0f;
+		const float mRecoilPitchAmount = 1.5f;
 		float mRecoilPitchOffset = 0.0f;
 	};
 }

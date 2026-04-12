@@ -21,8 +21,8 @@ namespace Dawn
 			MeshRenderer* mr = GetComponent<MeshRenderer>();
 
 			Sky* skyMat = new Sky();
-			skyMat->SetTopColor(glm::vec3(0.01f, 0.015f, 0.03f));
-			skyMat->SetHorizonColor(glm::vec3(0.05f, 0.06f, 0.07f));
+			skyMat->SetTopColor(glm::vec3(0.025f, 0.035f, 0.05f));
+			skyMat->SetHorizonColor(glm::vec3(0.06f, 0.075f, 0.10f) * 0.75f);
 
 			mr->SetMaterial(skyMat);
 

@@ -34,6 +34,6 @@ namespace Dawn
 		// in degrees
 		float mFOV = 60.0f;
 		float mNear = 0.01f;
-		float mFar = 100.0f;
+		float mFar = 1000.0f;
 	};
 }
