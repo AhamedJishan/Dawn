@@ -32,6 +32,7 @@ in VS_OUT
     vec3 FragPos;
     vec3 Normal;
     vec2 TexCoord;
+    vec3 Tangent;
 } frag_in;
 
 vec3 SRGBToLinear(vec3 c) {
@@ -64,7 +65,20 @@ void main()
         specularColor *= texture(u_SpecularTexture, frag_in.TexCoord).rgb;
     }
 
-    vec3 normal = normalize(frag_in.Normal);
+    // Setting the TBN
+    vec3 N = normalize(frag_in.Normal);
+    vec3 T = normalize(frag_in.Tangent);
+    T = normalize(T - dot(T, N) * N);       // Make sure T and N are perpendicular
+    vec3 B = normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+    vec3 normal = N;
+    if (u_HasNormalMap)
+    {
+        vec3 tangentNormal = texture(u_NormalTexture, frag_in.TexCoord).xyz;
+        tangentNormal = tangentNormal * 2.0 - 1.0;
+        normal = normalize(TBN * tangentNormal);
+    }
+
     vec3 lightDir = normalize(-u_DirectionalLightDirection);
     vec3 viewDir = normalize(u_CameraPosition - frag_in.FragPos);
     vec3 halfDir = normalize(lightDir + viewDir);

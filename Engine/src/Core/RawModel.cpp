@@ -40,10 +40,11 @@ namespace Dawn
 		const aiScene* scene = importer.ReadFile(filename, 
 			aiProcess_JoinIdenticalVertices | 
 			aiProcess_GenSmoothNormals |
+			aiProcess_CalcTangentSpace |
 			aiProcess_Triangulate );
-		if (!scene)
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			LOG_ERROR("Failed to load model: %s", filename.c_str());
+			LOG_ERROR("Assimp error: %s", importer.GetErrorString());
 			return false;
 		}
 		// Load Meshes
@@ -89,6 +90,10 @@ namespace Dawn
 				vertex.TexCoord.x = aiMesh->mTextureCoords[0][i].x;
 				vertex.TexCoord.y = aiMesh->mTextureCoords[0][i].y;
 			}
+
+			vertex.Tangent.x = aiMesh->mTangents[i].x;
+			vertex.Tangent.y = aiMesh->mTangents[i].y;
+			vertex.Tangent.z = aiMesh->mTangents[i].z;
 
 			vertices.emplace_back(vertex);
 		}

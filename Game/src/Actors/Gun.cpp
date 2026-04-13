@@ -22,15 +22,7 @@ namespace Dawn
 	Gun::Gun(Scene* scene, Player* player)
 		:Actor(scene)
 	{
-		MeshRenderer::CreateFromModel(this, "Assets/Models/gun_0/gun.obj");
-		PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
-		if (mat)
-		{
-			mMaterial = mat;
-			mMaterial->SetDiffuseColor(glm::vec3(0.5f));
-			mMaterial->SetShininess(0.0f);
-			mMaterial->SetEmissiveColor(COLOR_ORANGE * 7.0f);
-		}
+		MeshRenderer::CreateFromModel(this, "Assets/Models/gun/gun.obj");
 
 		mAudioComponent = new Audio(this);
 		mPlayer = player;

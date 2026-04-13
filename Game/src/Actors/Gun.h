@@ -43,7 +43,6 @@ namespace Dawn
 	private:
 		Player* mPlayer = nullptr;
 		Audio* mAudioComponent = nullptr;
-		PhongMaterial* mMaterial = nullptr;
 
 		// Damage
 		const float mBaseDamage = 20.0f;

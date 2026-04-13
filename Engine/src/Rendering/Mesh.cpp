@@ -49,6 +49,9 @@ namespace Dawn
 		// TexCoords
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, TexCoord)));
 		glEnableVertexAttribArray(2);
+		// Tangents
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, Tangent)));
+		glEnableVertexAttribArray(3);
 
 		// Indices
 		glGenBuffers(1, &mEBO);

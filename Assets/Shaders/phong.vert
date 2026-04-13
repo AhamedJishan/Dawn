@@ -3,6 +3,7 @@
 layout (location = 0) in vec3 a_Position;
 layout (location = 1) in vec3 a_Normal;
 layout (location = 2) in vec2 a_TexCoord;
+layout (location = 3) in vec3 a_Tangent;
 
 // to be set by Renderer
 uniform mat4 u_Model;
@@ -14,6 +15,7 @@ out VS_OUT
     vec3 FragPos;
     vec3 Normal;
     vec2 TexCoord;
+    vec3 Tangent;
 } vs_out;
 
 void main()
@@ -22,6 +24,9 @@ void main()
     gl_Position = u_Projection * u_View * worldPos;
 
     vs_out.FragPos = worldPos.xyz;
-    vs_out.Normal = mat3(transpose(inverse(u_Model))) * a_Normal;
     vs_out.TexCoord = a_TexCoord;
+
+    mat3 normalMatrix = mat3(transpose(inverse(u_Model)));
+    vs_out.Normal = normalize(normalMatrix * a_Normal);
+    vs_out.Tangent = normalize(normalMatrix * a_Tangent);
 }
