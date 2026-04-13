@@ -64,8 +64,8 @@ namespace Dawn
 
 		float mSpeed = 6.0f;
 		const float mSpeedVariation = 4.0f;
-		const float mSteeringRange = 5.0f;
-		const float mSteeringCutOffRange = 2.0f;
+		const float mSteeringRange = 4.0f;
+		const float mSteeringCutOffRange = 1.0f;
 		const float mMoveDirectionSmoothing = 2.5f;
 		glm::vec3 mMoveDirection = glm::vec3(0);
 

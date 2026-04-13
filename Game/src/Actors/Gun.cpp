@@ -22,7 +22,7 @@ namespace Dawn
 	Gun::Gun(Scene* scene, Player* player)
 		:Actor(scene)
 	{
-		MeshRenderer::CreateFromModel(this, "Assets/Models/gun/gun.obj");
+		MeshRenderer::CreateFromModel(this, "Assets/Models/gun_0/gun.obj");
 		PhongMaterial* mat = dynamic_cast<PhongMaterial*>(GetComponent<MeshRenderer>()->GetMaterial());
 		if (mat)
 		{
