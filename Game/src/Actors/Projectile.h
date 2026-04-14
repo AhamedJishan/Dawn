@@ -23,8 +23,8 @@ namespace Dawn
 		{
 			mCollider = new SphereCollider(this);
 			mCollider->SetIsTrigger(true);
-			mCollider->SetRadius(0.3f);
-			SetScale(glm::vec3(0.3f));
+			mCollider->SetRadius(0.75f);
+			SetScale(glm::vec3(0.5f));
 
 			MeshRenderer::CreateFromModel(this, "Assets/Models/ball/ball.obj");
 

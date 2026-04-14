@@ -35,6 +35,6 @@ namespace Dawn
 		glm::vec2 GetBounds() const { return mBounds; }
 
 	private:
-		glm::vec2 mBounds = glm::vec2(29.0f);
+		glm::vec2 mBounds = glm::vec2(28.0f);
 	};
 }

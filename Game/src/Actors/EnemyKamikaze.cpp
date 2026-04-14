@@ -12,13 +12,15 @@
 #include "Components/Damageable.h"
 #include "WaveManager.h"
 #include "Player.h"
+#include "Arena.h"
 
 namespace Dawn
 {
-	EnemyKamikaze::EnemyKamikaze(Scene* scene, Player* player, WaveManager* waveManager)
+	EnemyKamikaze::EnemyKamikaze(Scene* scene, Player* player, WaveManager* waveManager, Arena* arena)
 		:Actor(scene)
 		,mPlayer(player)
 		,mWaveManager(waveManager)
+		,mArena(arena)
 	{
 		LOG_INFO("Enemy spawned");
 
@@ -75,6 +77,25 @@ namespace Dawn
 
 	void EnemyKamikaze::Update(float deltaTime)
 	{
+		// Arena resolution
+		if (mArena->IsOutOfBounds(GetPosition()))
+		{
+			glm::vec3 pos = GetPosition();
+			glm::vec2 bounds = mArena->GetBounds();
+
+			if (pos.x > bounds.x)
+				pos.x = bounds.x;
+			if (pos.x < -bounds.x)
+				pos.x = -bounds.x;
+			if (pos.z > bounds.y)
+				pos.z = bounds.y;
+			if (pos.z < -bounds.y)
+				pos.z = -bounds.y;
+
+			SetPosition(pos);
+		}
+
+
 		if (mActionState == ActionState::Chasing)
 		{
 			Chase(deltaTime);
@@ -107,7 +128,6 @@ namespace Dawn
 			if (mFuseMaterial)
 				mFuseMaterial->SetEmissiveColor(mFuseColor);
 		}
-
 	}
 
 	float EnemyKamikaze::TakeDamage(float dmg)

@@ -3,13 +3,15 @@
 
 #include "Core/Scene.h"
 #include "Player.h"
+#include "Arena.h"
 #include "EnemyKamikaze.h"
 
 namespace Dawn
 {
-	WaveManager::WaveManager(Scene* scene, Player* player)
+	WaveManager::WaveManager(Scene* scene, Player* player, Arena* arena)
 		:Actor(scene)
 		,mPlayer(player)
+		,mArena(arena)
 	{
 		Init();
 	}
@@ -110,7 +112,7 @@ namespace Dawn
 					{
 						mSpawnQueue[spawnLocationIndex] -= 1;
 						mTimeSinceLastSpawn[spawnLocationIndex] = 0.0f;
-						EnemyKamikaze* enemy = new EnemyKamikaze(mScene, mPlayer, this);
+						EnemyKamikaze* enemy = new EnemyKamikaze(mScene, mPlayer, this, mArena);
 						enemy->SetPosition(mSpawnLocations[spawnLocationIndex]);
 						mEnemies.push_back(enemy);
 					}

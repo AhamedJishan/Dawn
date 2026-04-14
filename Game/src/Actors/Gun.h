@@ -63,7 +63,7 @@ namespace Dawn
 		// Recoil
 		glm::vec3 mRecoilOffset = glm::vec3(0.0f);
 		float mRecoilPitch = 0.0f;
-		const float mRecoilKickAmount = 0.1f;
+		const float mRecoilKickAmount = 0.05f;
 		const float mRecoilPitchAmount = 0.2f;
 		const float mRecoilRecoverySpeed = 5.0f;
 

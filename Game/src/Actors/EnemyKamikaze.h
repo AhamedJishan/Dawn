@@ -16,6 +16,7 @@ namespace Dawn
 	class WaveManager;
 	class Player;
 	class Audio;
+	class Arena;
 
 	class EnemyKamikaze : public Actor
 	{
@@ -27,7 +28,7 @@ namespace Dawn
 			Explode
 		};
 
-		EnemyKamikaze(Scene* scene, Player* player, WaveManager* waveManager);
+		EnemyKamikaze(Scene* scene, Player* player, WaveManager* waveManager, Arena* arena);
 		~EnemyKamikaze();
 
 		void Update(float deltaTime) override;
@@ -44,6 +45,7 @@ namespace Dawn
 	private:
 		WaveManager* mWaveManager = nullptr;
 		Player* mPlayer = nullptr;
+		Arena* mArena = nullptr;
 		SphereCollider* mCollider = nullptr;
 		PhongMaterial* mFuseMaterial = nullptr;
 		Audio* mAudioComponent = nullptr;
