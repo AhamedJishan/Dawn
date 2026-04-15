@@ -3,13 +3,28 @@
 #include "Input/Input.h"
 #include "Core/Assets.h"
 #include "GameScene.h"
-
-
 #include "Core/Application.h"
 #include "Audio/AudioSystem.h"
 
+#include "Actors/Arena.h"
+#include "Actors/SkyDome.h"
+#include "Actors/DummyCamera.h"
+#include "Actors/DummyEnemy.h"
+
 namespace Dawn
 {
+	MainMenuScene::MainMenuScene()
+	{
+		GetEnvironmentSettings().bloomRadius = 2.0f;
+		GetEnvironmentSettings().bloomStrength = 0.01f;
+		GetEnvironmentSettings().fogDensity = 0.02f;
+		GetEnvironmentSettings().fogColor = glm::vec3(0.06f, 0.075f, 0.10f) * 0.65f;
+		GetEnvironmentSettings().ambientColor = glm::vec3(0.09f);
+		GetEnvironmentSettings().directionalLight.color = glm::vec3(0.6f, 0.7f, 0.85f) * 1.3f;
+		GetEnvironmentSettings().directionalLight.direction = glm::vec3(-0.5f, -0.2f, -0.2f);
+		GetEnvironmentSettings().directionalLight.intensity = 1.0f;
+	}
+
 	MainMenuScene::~MainMenuScene()
 	{
 		if (mBgmSE.IsValid())
@@ -35,6 +50,20 @@ namespace Dawn
 		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/MainMenu.bank");
 		Application::Get()->GetAudioSystem()->LoadBank("Assets/Audio/UI.bank");
 		mBgmSE = Application::Get()->GetAudioSystem()->PlayEvent("event:/mainmenu_bgm");
+
+		// Populating the scene
+		DummyCamera* cameraActor = new DummyCamera(this);
+		cameraActor->SetPosition(glm::vec3(0, 2.0f, 0.0f));
+		Camera* cam = cameraActor->GetComponent<Camera>();
+		if (cam)
+		{
+			cam->SetFarPlane(1000.0f);	// So that skydome is visible
+			SetActiveCamera(cam);
+		}
+
+		Arena* arena = new Arena(this);
+		SkyDome* skydome = new SkyDome(this);
+		DummyEnemy* enemy = new DummyEnemy(this);
 	}
 
 	void MainMenuScene::Update(float deltaTime)
@@ -60,39 +89,39 @@ namespace Dawn
 			ImGuiWindowFlags_NoMove);
 
 		// --- BACKGROUND IMAGE ---
-		float imgWidth = mBGTexture->GetWidth();
-		float imgHeight = mBGTexture->GetHeight();
+		//float imgWidth = mBGTexture->GetWidth();
+		//float imgHeight = mBGTexture->GetHeight();
 
-		float windowAspect = windowSize.x / windowSize.y;
-		float imgAspect = imgWidth / imgHeight;
+		//float windowAspect = windowSize.x / windowSize.y;
+		//float imgAspect = imgWidth / imgHeight;
 
-		ImVec2 uv0 = ImVec2(0.0f, 0.0f);
-		ImVec2 uv1 = ImVec2(1.0f, 1.0f);
+		//ImVec2 uv0 = ImVec2(0.0f, 0.0f);
+		//ImVec2 uv1 = ImVec2(1.0f, 1.0f);
 
-		if (windowAspect > imgAspect)
-		{
-			// Window is wider than the image. Fit width, crop top/bottom.
-			float scale = windowSize.x / imgWidth;
-			// between 0-1 how much of top should be cropped
-			float vOffset = ((scale * imgHeight) - windowSize.y) / (2 * scale * imgHeight);
-			uv0.y = vOffset;
-			uv1.y = 1.0f - vOffset;
-		}
-		else
-		{
-			// Window is taller than the image. Fit height, crop left/right.
-			float scale = windowSize.y / imgHeight;
-			// between 0-1 how much of left should be cropped
-			float uOffset = ((scale * imgWidth) - windowSize.x) / (2 * scale * imgWidth);
-			uv0.x = uOffset;
-			uv1.x = 1.0f - uOffset;
-		}
-		// flip the image vertically
-		uv0.y = 1 - uv0.y;
-		uv1.y = 1 - uv1.y;
+		//if (windowAspect > imgAspect)
+		//{
+		//	// Window is wider than the image. Fit width, crop top/bottom.
+		//	float scale = windowSize.x / imgWidth;
+		//	// between 0-1 how much of top should be cropped
+		//	float vOffset = ((scale * imgHeight) - windowSize.y) / (2 * scale * imgHeight);
+		//	uv0.y = vOffset;
+		//	uv1.y = 1.0f - vOffset;
+		//}
+		//else
+		//{
+		//	// Window is taller than the image. Fit height, crop left/right.
+		//	float scale = windowSize.y / imgHeight;
+		//	// between 0-1 how much of left should be cropped
+		//	float uOffset = ((scale * imgWidth) - windowSize.x) / (2 * scale * imgWidth);
+		//	uv0.x = uOffset;
+		//	uv1.x = 1.0f - uOffset;
+		//}
+		//// flip the image vertically
+		//uv0.y = 1 - uv0.y;
+		//uv1.y = 1 - uv1.y;
 
-		ImGui::SetCursorPos(ImVec2(0, 0));
-		ImGui::Image((ImTextureID)(intptr_t)mBGTexture->GetId(), windowSize, uv0, uv1);
+		//ImGui::SetCursorPos(ImVec2(0, 0));
+		//ImGui::Image((ImTextureID)(intptr_t)mBGTexture->GetId(), windowSize, uv0, uv1);
 
 		// --- TITLE TEXT ---
 		ImGui::PushFont(mFontRegular, 75);

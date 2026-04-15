@@ -97,7 +97,7 @@ namespace Dawn
 				float radiiSum = radiusA + radiusB;
 				float overlap = radiiSum - distance;
 
-				if (distance >= radiiSum || distance == 0.0f)
+				if (distance >= radiiSum || distance <= 0.0001f)
 					continue;
 
 				bool aIsDynamic = a->IsDynamic();

@@ -35,7 +35,7 @@ namespace Dawn
 		const std::vector<MeshRenderer*> meshRenderers = GetComponents<MeshRenderer>();
 		for (MeshRenderer* meshRenderer : meshRenderers)
 		{
-			if (meshRenderer->GetMesh()->GetName() == "glow")
+			if (meshRenderer->GetMesh()->GetName() == "neon")
 			{
 				PhongMaterial* mat = dynamic_cast<PhongMaterial*>(meshRenderer->GetMaterial());
 				if (mat)
@@ -52,7 +52,11 @@ namespace Dawn
 		mEnemyPresence = mAudioComponent->PlayEvent("event:/enemy_presence");
 		mEnemyPresence.SetVolume(10.0f);
 
-		mMoveDirection = glm::normalize(mPlayer->GetPosition() - GetPosition());
+		glm::vec3 toPlayerDir = mPlayer->GetPosition() - GetPosition();
+		if (glm::length(toPlayerDir) < 0.0001f)
+			mMoveDirection = glm::vec3(0, 0, -1);
+		else
+			mMoveDirection = glm::normalize(toPlayerDir);
 
 		float variation = Random::Float(0.0f, 1.0f) * mSpeedVariation;
 		mSpeed += variation;

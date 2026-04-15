@@ -12,7 +12,7 @@ namespace Dawn
 	class MainMenuScene : public Scene
 	{
 	public:
-		MainMenuScene() {}
+		MainMenuScene();
 		~MainMenuScene();
 
 		void Init() override;

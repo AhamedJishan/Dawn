@@ -55,7 +55,7 @@ namespace Dawn
 		// PLAYER
 		FPSCameraActor* cameraActor = new FPSCameraActor(this);
 		mPlayer = new Player(this, cameraActor, arena);
-		mPlayer->SetPosition(glm::vec3(0, 0, 4));
+		//mPlayer->SetPosition(glm::vec3(0, 0, 4));
 		Gun* gun = new Gun(this, mPlayer);
 
 		// UPGRADE MANAGER
@@ -67,7 +67,7 @@ namespace Dawn
 		Camera* cam = cameraActor->GetComponent<Camera>();
 		if (cam)
 		{
-			cam->SetFarPlane(500.0f);	// So that skydome is visible
+			cam->SetFarPlane(1000.0f);	// So that skydome is visible
 			SetActiveCamera(cam);
 		}
 
