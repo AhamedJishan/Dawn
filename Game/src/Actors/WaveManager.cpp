@@ -23,8 +23,8 @@ namespace Dawn
 	{
 		// === WAVE 1 ===
 		Wave wave1;
-		wave1.phases.push_back(Phase(0.0f, 3, 0));
-		wave1.phases.push_back(Phase(5.0f, 5, 2));
+		wave1.phases.push_back(Phase(0.0f, 3, 2));
+		wave1.phases.push_back(Phase(5.0f, 5, 0));
 
 		// === WAVE 2 ===
 		Wave wave2;

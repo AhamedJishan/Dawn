@@ -69,7 +69,7 @@ namespace Dawn
 
 
 		// Sway
-		const float mSwaySmooth = 8.0f;
+		const float mSwaySmooth = 4.0f;
 		const float mSwayMoveStep = 0.02f;
 		const float mMaxSwayMoveStep = 0.12f;
 		const float mSwayRotationStep = 0.2f;
