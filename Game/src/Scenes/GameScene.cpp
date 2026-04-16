@@ -216,14 +216,22 @@ namespace Dawn
 	{
 		ImDrawList* drawList = ImGui::GetForegroundDrawList();
 
-		ImVec2 pos(10, 10);
-		ImVec2 size(200, 20);
+		ImVec2 displaySize = ImGui::GetIO().DisplaySize;
+
+		ImVec2 pos(20, displaySize.y - 50);
+		ImVec2 size(350, 15);
+
+		// Health Text
+		ImGui::PushFont(mFontLight, 20);
+		drawList->AddText(ImVec2(20, displaySize.y - 85), ImColor(ImVec4(1.0f, 1.0f, 1.0f, 0.6f)), "HEALTH");
+		ImGui::PopFont();
 
 		// Background
 		drawList->AddRectFilled(
 			pos,
 			ImVec2(pos.x + size.x, pos.y + size.y),
-			IM_COL32(40, 40, 40, 255)
+			IM_COL32(10, 10, 10, 255),
+			4.0f
 		);
 
 		// Health
@@ -231,7 +239,8 @@ namespace Dawn
 		drawList->AddRectFilled(
 			pos,
 			ImVec2(pos.x + fraction * size.x, pos.y + size.y),
-			IM_COL32(40, 200, 40, 255)
+			IM_COL32(47, 212, 184, 255),
+			4.0f
 		);
 	}
 
@@ -371,14 +380,20 @@ namespace Dawn
 		case Dawn::WaveState::WaveActive:
 		{
 			unsigned int enemiesRemaining = mWaveManager->GetWaveEnemiesRemaining();
-			ImGui::PushFont(mFontRegular, 25.0f);
-			ImGui::SetCursorPosX(viewPortCenterX);
+			const char* textEnemies = "ENEMIES";
+			ImGui::PushFont(mFontRegular, 20.0f);
+			ImGui::SetCursorPos(ImVec2(viewPortCenterX - ImGui::CalcTextSize(textEnemies).x/2.0f, 20));
+			ImGui::TextColored(ImVec4(1, 1, 1, 0.5f), textEnemies);
+			ImGui::PopFont();
+
+			ImGui::PushFont(mFontBold, 30.0f);
+			ImGui::SetCursorPos(ImVec2(viewPortCenterX - 10, 40));
 			ImGui::Text("%d", enemiesRemaining);
 			ImGui::PopFont();
 
 			ImVec2 displaySize = ImGui::GetIO().DisplaySize;
 
-			ImGui::PushFont(mFontRegular, 25.0f);
+			ImGui::PushFont(mFontBold, 25.0f);
 
 			const char* textShift = "SHIFT";
 			ImVec2 textShiftSize = ImGui::CalcTextSize(textShift);
@@ -388,7 +403,7 @@ namespace Dawn
 			textShiftPos.x = displaySize.x - textShiftSize.x - padding;
 			textShiftPos.y = displaySize.y - textShiftSize.y - padding;
 
-			ImVec4 normalColor = ImVec4(0.8f, 1.0f, 0.9f, 1.0f);
+			ImVec4 normalColor = ImVec4(0.9f, 1.0f, 0.99f, 1.0f);
 			ImVec4 highlightedColor = ImVec4(0.85f, 0.40f, 0.14f, 1.0f);
 
 			bool shiftPressed = Input::GetKey(Key::LeftShift);
@@ -418,7 +433,7 @@ namespace Dawn
 			int timeLeft = (int)ceil(duration - timer);
 
 			// Title
-			ImGui::PushFont(mFontLight, 35.0f);
+			ImGui::PushFont(mFontRegular, 35.0f);
 			std::string title = "CHOOSE UPGRADE (" + std::to_string(timeLeft) + ")";
 			ImVec2 titleSize = ImGui::CalcTextSize(title.c_str());
 			ImGui::SetCursorPos(ImVec2(viewPortCenterX - titleSize.x / 2.0f, viewPortCenterY - 100));
