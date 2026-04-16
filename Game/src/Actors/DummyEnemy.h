@@ -29,8 +29,8 @@ namespace Dawn
 
 	private:
 		float mTime;
-		const float mWaveSize = 0.25f;
-		const float mWaveSpeed = 3.0f;
+		const float mWaveSize = 0.2f;
+		const float mWaveSpeed = 1.0f;
 
 		const glm::vec3 mBasePosition = glm::vec3(0, 2, -7.0f);
 	};

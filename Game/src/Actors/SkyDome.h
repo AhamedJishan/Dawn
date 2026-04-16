@@ -26,7 +26,7 @@ namespace Dawn
 
 			mr->SetMaterial(skyMat);
 
-			SetScale(glm::vec3(100.0f));
+			SetScale(glm::vec3(500.0f));
 		}
 	};
 }
