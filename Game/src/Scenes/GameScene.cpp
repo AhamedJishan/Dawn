@@ -214,16 +214,25 @@ namespace Dawn
 
 	void GameScene::DrawHealthBar()
 	{
+		float healthFraction = mPlayerHealth / mMaxPlayerHealth;
+
 		ImDrawList* drawList = ImGui::GetForegroundDrawList();
 
 		ImVec2 displaySize = ImGui::GetIO().DisplaySize;
 
-		ImVec2 pos(20, displaySize.y - 50);
+		ImVec2 pos(50, displaySize.y - 65);
 		ImVec2 size(350, 15);
 
 		// Health Text
-		ImGui::PushFont(mFontLight, 20);
-		drawList->AddText(ImVec2(20, displaySize.y - 85), ImColor(ImVec4(1.0f, 1.0f, 1.0f, 0.6f)), "HEALTH");
+		ImGui::PushFont(mFontRegular, 20);
+		drawList->AddText(ImVec2(50, displaySize.y - 100), ImColor(ImVec4(1.0f, 1.0f, 1.0f, 1.0f)), "HEALTH");
+		ImGui::PopFont();
+
+		// Health Value
+		ImGui::PushFont(mFontBold, 25);
+		std::string healthValueText = std::to_string((int)(healthFraction * 100.0f));
+		ImVec2 healthValueTextSize = ImGui::CalcTextSize(healthValueText.c_str());
+		drawList->AddText(ImVec2(pos.x + size.x - healthValueTextSize.x, displaySize.y - 100), ImColor(ImVec4(0.22f, 1.0f, 0.86f, 1.0f)), healthValueText.c_str());
 		ImGui::PopFont();
 
 		// Background
@@ -235,11 +244,10 @@ namespace Dawn
 		);
 
 		// Health
-		float fraction = mPlayerHealth / mMaxPlayerHealth;
 		drawList->AddRectFilled(
 			pos,
-			ImVec2(pos.x + fraction * size.x, pos.y + size.y),
-			IM_COL32(47, 212, 184, 255),
+			ImVec2(pos.x + healthFraction * size.x, pos.y + size.y),
+			IM_COL32(56, 255, 220, 255),
 			4.0f
 		);
 	}
@@ -379,6 +387,7 @@ namespace Dawn
 		}
 		case Dawn::WaveState::WaveActive:
 		{
+			// ENEMY COUNTER
 			unsigned int enemiesRemaining = mWaveManager->GetWaveEnemiesRemaining();
 			const char* textEnemies = "ENEMIES";
 			ImGui::PushFont(mFontRegular, 20.0f);
@@ -391,29 +400,49 @@ namespace Dawn
 			ImGui::Text("%d", enemiesRemaining);
 			ImGui::PopFont();
 
+			bool shiftPressed = Input::GetKey(Key::LeftShift);
+			float shiftCooldownTimer = mPlayer->GetDashCooldownTimer();
+
+			// DASH
 			ImVec2 displaySize = ImGui::GetIO().DisplaySize;
+			ImVec2 dashIconPos = ImVec2(displaySize.x - 80, displaySize.y - 100);
 
-			ImGui::PushFont(mFontBold, 25.0f);
+			ImU32 iconColor = shiftCooldownTimer > 0.0f ? IM_COL32(255, 255, 255, 160) : IM_COL32(232, 137, 58, 255);
 
-			const char* textShift = "SHIFT";
-			ImVec2 textShiftSize = ImGui::CalcTextSize(textShift);
-			float padding = 30.0f;
+			ImDrawList* drawList = ImGui::GetForegroundDrawList();
+			ImVec2 points[3] = {
+				ImVec2(dashIconPos.x - 7.5f, dashIconPos.y - 10.0f),
+				ImVec2(dashIconPos.x + 7.5f, dashIconPos.y),
+				ImVec2(dashIconPos.x - 7.5f, dashIconPos.y + 10.0f),
+			};
+			drawList->AddPolyline(points, 3, iconColor, 0, 5.0f);
+			drawList->AddCircle(ImVec2(dashIconPos.x, dashIconPos.y), 30.0f, iconColor, 0, 5.0f);
 
-			ImVec2 textShiftPos;
-			textShiftPos.x = displaySize.x - textShiftSize.x - padding;
-			textShiftPos.y = displaySize.y - textShiftSize.y - padding;
+			ImGui::PushFont(mFontBold, 20.0f);
+
+			const char* dashText = "DASH";
+			ImVec2 dashTextSize = ImGui::CalcTextSize(dashText);
+
+			ImVec2 dashTextPos;
+			dashTextPos.x = dashIconPos.x - dashTextSize.x /2.0f;
+			dashTextPos.y = dashIconPos.y + 25 + dashTextSize.y/2.0f;
+			ImVec2 dashCooldownPos;
+			dashCooldownPos.x = dashIconPos.x - 12.5f;
+			dashCooldownPos.y = dashIconPos.y + 25 + 12.5f;
 
 			ImVec4 normalColor = ImVec4(0.9f, 1.0f, 0.99f, 1.0f);
 			ImVec4 highlightedColor = ImVec4(0.85f, 0.40f, 0.14f, 1.0f);
 
-			bool shiftPressed = Input::GetKey(Key::LeftShift);
-			float shiftCooldownTimer = mPlayer->GetDashCooldownTimer();
-
-			ImGui::SetCursorPos(textShiftPos);
 			if (shiftCooldownTimer <= 0.0f)
-				ImGui::TextColored(shiftPressed ? highlightedColor : normalColor, textShift);
+			{
+				ImGui::SetCursorPos(dashTextPos);
+				ImGui::TextColored(shiftPressed ? highlightedColor : normalColor, dashText);
+			}
 			else
+			{
+				ImGui::SetCursorPos(dashCooldownPos);
 				ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 0.4f), "%.1f", shiftCooldownTimer);
+			}
 
 			ImGui::PopFont();
 
@@ -426,7 +455,7 @@ namespace Dawn
 
 			drawList->AddRectFilled(ImVec2(viewPortCenterX - 300, viewPortCenterY - 200),
 				ImVec2(viewPortCenterX + 300, viewPortCenterY + 200),
-				ImGui::GetColorU32(ImVec4(0.1f, 0.1f, 0.1f, 0.3f)), 40.0f);
+				ImGui::GetColorU32(ImVec4(0.1f, 0.1f, 0.1f, 0.5f)), 40.0f);
 
 			float timer = mWaveManager->GetWaveTimer();
 			float duration = mWaveManager->GetWaveClearDuration();

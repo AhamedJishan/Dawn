@@ -77,12 +77,12 @@ namespace Dawn
 	
 	void MainMenuScene::DrawMainMenu()
 	{
-		ImGuiIO& io = ImGui::GetIO();
-		ImVec2 windowSize = io.DisplaySize;
+		ImVec2 screenSize = ImGui::GetIO().DisplaySize;
+		ImVec2 center(screenSize.x * 0.5f, screenSize.y * 0.5f);
 
 		// --- FullScreen Window ---
 		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(windowSize);
+		ImGui::SetNextWindowSize(screenSize);
 		ImGui::Begin("MainMenu", NULL,
 			ImGuiWindowFlags_NoDecoration |
 			ImGuiWindowFlags_NoBackground |
@@ -92,23 +92,29 @@ namespace Dawn
 		ImGui::PushFont(mFontLight, 60);
 		const char* title = "DAWN";
 		float titleTextWidth = ImGui::CalcTextSize(title).x;
-		float titleTexPosX = (windowSize.x - titleTextWidth) / 2.0f;
-		ImGui::SetCursorPos(ImVec2(titleTexPosX, 200));
+		float titleTexPosX = (screenSize.x - titleTextWidth) / 2.0f;
+		ImGui::SetCursorPos(ImVec2(titleTexPosX, center.y + 120.0f));
 		ImGui::Text(title);
 		ImGui::PopFont();
 
 		// --- MAIN MENU ---
-		ImGui::PushFont(mFontLight, 30);
+		ImGui::PushFont(mFontLight, 25);
 
 		float buttonHeight = ImGui::CalcTextSize("DUMMY").y + 4;
 		ImVec2 buttonSize(200, buttonHeight);
+
+		ImVec4 normalColor = ImVec4(1.0f, 1.0f, 1.0f, 0.8f);   // soft white, not full blast
+		ImVec4 hoverColor = ImVec4(0.18f, 0.85f, 1.0f, 1.0f);   // cyan on hover
+		ImVec4 selectedColor = ImVec4(0.91f, 0.54f, 0.23f, 1.0f); // orange — matches enemy eye
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0.8f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0.3f));
 
-		ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2.0f);
-		ImGui::SetCursorPosY(windowSize.y - 5 * buttonSize.y);
+		ImGui::PushStyleColor(ImGuiCol_Text, mStartButtonHovered ? hoverColor : normalColor);
+
+		ImGui::SetCursorPosX((screenSize.x - buttonSize.x) / 2.0f);
+		ImGui::SetCursorPosY(center.y + 250.0f);
 		if (ImGui::Button("START", buttonSize))
 		{
 			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
@@ -121,8 +127,11 @@ namespace Dawn
 		}
 		else if (!ImGui::IsItemHovered())
 			mStartButtonHovered = false;
+		ImGui::PopStyleColor();
 
-		ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2.0f);
+		ImGui::PushStyleColor(ImGuiCol_Text, mQuitButtonHovered ? hoverColor : normalColor);
+
+		ImGui::SetCursorPosX((screenSize.x - buttonSize.x) / 2.0f);
 		if (ImGui::Button("QUIT", buttonSize))
 		{
 			Application::Get()->GetAudioSystem()->PlayEvent("event:/button_click");
@@ -136,7 +145,7 @@ namespace Dawn
 		else if (!ImGui::IsItemHovered())
 			mQuitButtonHovered = false;
 
-		ImGui::PopStyleColor(3);
+		ImGui::PopStyleColor(4);
 		ImGui::PopFont();
 
 		ImGui::End();
