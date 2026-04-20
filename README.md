@@ -2,7 +2,7 @@
 
 > A wave-based arena shooter built on a custom C++ engine, written from scratch over ~2.5 months.
 
-https://github.com/user-attachments/assets/9e4a5ef2-10b7-48a9-b7d3-9432543e6095
+<video src="https://github.com/AhamedJishan/Dawn/blob/main/Assets/Videos/Dawn.mp4" width="100%" controls></video>
 
 **Language:** C++ &nbsp;|&nbsp; **Renderer:** OpenGL &nbsp;|&nbsp; **Build System:** Premake5 &nbsp;|&nbsp; **Platform:** Windows
 
