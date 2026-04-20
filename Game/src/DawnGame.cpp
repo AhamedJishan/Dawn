@@ -16,8 +16,6 @@ namespace Dawn
 	
 	void DawnGame::Start()
 	{
-		//For the final build
 		Application::Get()->LoadScene<MainMenuScene>();
-		//Application::Get()->LoadScene<GameScene>();
 	}
 }
