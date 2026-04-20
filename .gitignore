@@ -21,5 +21,9 @@ bin-int/
 *.pdb
 *.ilk
 *.exe
-*.dll
-*.lib
+
+# allow this specific folders
+!Engine/vendor/bin/
+!Engine/vendor/bin/**
+!Assets/
+!Assets/**
