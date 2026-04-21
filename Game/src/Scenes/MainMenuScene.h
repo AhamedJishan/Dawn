@@ -23,8 +23,6 @@ namespace Dawn
 		void DrawMainMenu();
 
 	private:
-		Texture* mBGTexture = nullptr;
-
 		ImFont* mFontBold = nullptr;
 		ImFont* mFontRegular = nullptr;
 		ImFont* mFontLight = nullptr;

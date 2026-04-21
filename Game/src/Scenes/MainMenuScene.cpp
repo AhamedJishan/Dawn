@@ -37,8 +37,6 @@ namespace Dawn
 	{
 		Input::SetCursorLocked(false);
 
-		mBGTexture = Assets::GetTexture("Assets/Textures/MainMenuBG_AI.png");
-
 		ImGuiIO& io = ImGui::GetIO();
 		mFontBold = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-SemiBold.ttf");
 		mFontRegular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Montserrat-Regular.ttf");
