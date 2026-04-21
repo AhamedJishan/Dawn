@@ -86,8 +86,6 @@ namespace Dawn
 
 		if (mIsGameOver)
 			mTimeSinceGameOver += deltaTime;
-
-		LOG_INFO("%.2f", GetActiveCamera()->GetFar());
 	}
 	
 	void GameScene::ImGuiRender()
